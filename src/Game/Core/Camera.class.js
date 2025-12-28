@@ -21,7 +21,12 @@ export default class Camera {
       near,
       far
     );
-    this.cameraInstance.position.set(17.54, 11.66, 25.84);
+
+    this.cameraInstance.position.set(
+      17.84938625934108,
+      9.437683136448264,
+      26.480550356456746
+    );
     this.scene.add(this.cameraInstance);
   }
 
