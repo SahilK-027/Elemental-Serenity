@@ -9,8 +9,17 @@ export default class Camera {
     this.sizes = this.game.sizes;
     this.scene = this.game.scene;
 
+    this.idealRatio = 16 / 9;
+    this.ratioOverflow = 0;
+    this.initialCameraPosition = null;
+    this.adjustedCameraPosition = null;
+    this.baseMaxDistance = 33.3;
+
     this.setPerspectiveCameraInstance(fov, near, far);
     this.setOrbitControls();
+
+    this.initialCameraPosition = this.cameraInstance.position.clone();
+    this.updateCameraForAspectRatio();
   }
 
   setPerspectiveCameraInstance(fov, near, far) {
@@ -23,9 +32,9 @@ export default class Camera {
     );
 
     this.cameraInstance.position.set(
-      17.84938625934108,
-      9.437683136448264,
-      26.480550356456746
+      17.597935731576186,
+      10.305503178423523,
+      26.32487914932968
     );
     this.scene.add(this.cameraInstance);
   }
@@ -37,13 +46,31 @@ export default class Camera {
     this.controls.enableZoom = true;
     this.controls.maxPolarAngle = Math.PI / 2.2;
     this.controls.minPolarAngle = Math.PI / 4;
-    this.controls.maxDistance = 33.3;
+    this.controls.maxDistance = this.baseMaxDistance;
+  }
+
+  updateCameraForAspectRatio() {
+    const currentRatio = this.sizes.width / this.sizes.height;
+    this.ratioOverflow = Math.max(1, this.idealRatio / currentRatio) - 1;
+
+    const baseDistance = this.initialCameraPosition.length();
+    const additionalDistance = baseDistance * this.ratioOverflow * 0.1;
+
+    const direction = this.initialCameraPosition.clone().normalize();
+    const newDistance = baseDistance + additionalDistance;
+
+    this.adjustedCameraPosition = direction.multiplyScalar(newDistance);
+    this.cameraInstance.position.copy(this.adjustedCameraPosition);
+
+    this.controls.maxDistance = Math.max(this.baseMaxDistance, newDistance * 1.2);
   }
 
   resize() {
     const aspectRatio = this.sizes.width / this.sizes.height;
     this.cameraInstance.aspect = aspectRatio;
     this.cameraInstance.updateProjectionMatrix();
+
+    this.updateCameraForAspectRatio();
   }
 
   update() {
