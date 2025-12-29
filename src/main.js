@@ -1,6 +1,7 @@
 import Game from './Game/Game.class.js';
 import ResourceLoader from './Game/Utils/ResourceLoader.class.js';
 import SeasonManager from './Game/World/Managers/SeasonManager/SeasonManager.class.js';
+import EnvironmentTimeManager from './Game/World/Managers/EnvironmentManager/EnvironmentManager.class.js';
 import ASSETS from './config/assets.js';
 import reveal from './reveal.js';
 
@@ -20,9 +21,15 @@ const loaderProgress = document.querySelector('.loader-progress-bar');
 const shaderCanvas = document.getElementById('shader-overlay');
 const seasonMenu = document.getElementById('season-menu');
 const seasonButtons = document.querySelectorAll('.season-button');
+const dayNightToggle = document.getElementById('daynight-toggle');
+const dayNightButtons = document.querySelectorAll('.daynight-button');
+const controlPanel = document.getElementById('control-panel');
+const pageTitle = document.getElementById('page-title');
 
 // Initialize Season Manager
 const seasonManager = SeasonManager.getInstance();
+// Initialize Environment Time Manager
+const environmentTimeManager = EnvironmentTimeManager.getInstance();
 
 const shaderReveal = new reveal(shaderCanvas);
 
@@ -153,11 +160,14 @@ resources.on('loaded', () => {
 
       setTimeout(() => {
         loader.remove();
-        // Show season menu after loader is removed
+        // Show control panel after loader is removed
         setTimeout(() => {
-          seasonMenu.classList.add('show');
+          controlPanel.classList.add('show');
+          pageTitle.classList.add('show');
           // Initialize season UI with current season
           initializeSeasonUI();
+          // Initialize day/night UI with current time
+          initializeDayNightUI();
         }, 500);
         // Dispatch game started event
         document.dispatchEvent(new CustomEvent('gameStarted'));
@@ -244,6 +254,65 @@ const initializeSeasonUI = () => {
     if (button.dataset.season === uiSeason) {
       button.classList.add('active');
       console.log(`Set ${uiSeason} button as active`);
+    }
+  });
+};
+
+// Day/Night Toggle Functionality
+// Day/Night toggle handler
+const handleDayNightToggle = (event) => {
+  const clickedButton = event.currentTarget;
+  const selectedTime = clickedButton.dataset.time;
+  
+  // Remove active class from all buttons
+  dayNightButtons.forEach(button => {
+    button.classList.remove('active');
+  });
+  
+  // Add active class to clicked button
+  clickedButton.classList.add('active');
+  
+  // Update environment time manager
+  environmentTimeManager.setTime(selectedTime);
+  
+  console.log(`Time changed to: ${selectedTime}`);
+};
+
+// Add event listeners to day/night buttons
+dayNightButtons.forEach(button => {
+  button.addEventListener('click', handleDayNightToggle);
+});
+
+// Listen to environment time manager changes and update UI
+environmentTimeManager.onChange((newTime, oldTime) => {
+  console.log(`Environment Time Manager: Changed from ${oldTime} to ${newTime}`);
+  
+  // Update UI to reflect the current time
+  dayNightButtons.forEach(button => {
+    button.classList.remove('active');
+    if (button.dataset.time === newTime) {
+      button.classList.add('active');
+    }
+  });
+  
+  // Dispatch custom event for other parts of the game to listen to
+  window.dispatchEvent(new CustomEvent('timeChange', {
+    detail: { 
+      time: newTime, 
+      oldTime: oldTime
+    }
+  }));
+});
+
+// Initialize UI with current time
+const initializeDayNightUI = () => {
+  const currentTime = environmentTimeManager.envTime;
+  console.log(`Initializing day/night UI: Current time = ${currentTime}`);
+  dayNightButtons.forEach(button => {
+    button.classList.remove('active');
+    if (button.dataset.time === currentTime) {
+      button.classList.add('active');
+      console.log(`Set ${currentTime} button as active`);
     }
   });
 };

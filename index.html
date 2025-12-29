@@ -49,7 +49,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        z-index: 999;
+        z-index: 1001;
         pointer-events: none;
         opacity: 0;
       }
@@ -215,11 +215,25 @@
         font-size: 0.75rem;
       }
 
+      /* Right Side Control Panel */
+      #control-panel {
+        position: fixed;
+        right: 24px;
+        bottom: 24px;
+        display: none;
+        flex-direction: column;
+        gap: 16px;
+        z-index: 1000;
+      }
+
+      #control-panel.show {
+        display: flex;
+        animation: controlPanelFadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+          forwards;
+      }
+
       /* Music Control Button */
       #music-control {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
         width: 56px;
         height: 56px;
         border-radius: 50%;
@@ -227,11 +241,10 @@
         border: 1.5px solid rgba(0, 0, 0, 0.1);
         color: #000;
         cursor: pointer;
-        display: none;
+        display: flex;
         align-items: center;
         justify-content: center;
         font-size: 1.1rem;
-        z-index: 1000;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1),
           inset 0 1px 0 rgba(255, 255, 255, 0.8);
@@ -249,12 +262,7 @@
 
       #music-control:active {
         transform: translateY(-1px) scale(1.02);
-        background: #e5dfd9;
-      }
-
-      #music-control.show {
-        display: flex;
-        animation: musicControlFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        background: #ede8e4;
       }
 
       #music-control.muted {
@@ -269,40 +277,108 @@
         border-color: rgba(0, 0, 0, 0.15);
       }
 
-      @keyframes musicControlFadeIn {
-        0% {
-          opacity: 0;
-          transform: translateY(20px) scale(0.8);
-        }
-        100% {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-        }
+      /* Day/Night Toggle */
+      #daynight-toggle {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        background: #ede8e4;
+        backdrop-filter: blur(16px);
+        border-radius: 32px;
+        padding: 8px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08),
+          0 2px 12px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+        border: 0.5px solid rgba(0, 0, 0, 0.04);
+      }
+
+      .daynight-button {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        color: rgba(0, 0, 0, 0.6);
+        background: transparent;
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .daynight-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 50%;
+        background: transparent;
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        z-index: -1;
+        opacity: 0;
+      }
+
+      .daynight-button:hover {
+        transform: scale(1.08) translateY(-1px);
+        color: rgba(0, 0, 0, 0.8);
+      }
+
+      .daynight-button:hover::before {
+        background: rgba(0, 0, 0, 0.08);
+        opacity: 1;
+      }
+
+      .daynight-button:active {
+        transform: scale(1.04);
+      }
+
+      .daynight-button.active {
+        color: white;
+        transform: scale(1.1);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .daynight-button.active::before {
+        opacity: 1;
+      }
+
+      /* Day/Night specific gradients */
+      .daynight-button.active.day::before {
+        background: linear-gradient(
+          135deg,
+          #ffe658 0%,
+          #fdcb44 30%,
+          #fdc13c 70%,
+          #ffb300 100%
+        );
+      }
+
+      .daynight-button.active.night::before {
+        background: linear-gradient(
+          135deg,
+          #5c6bc0 0%,
+          #3f51b5 30%,
+          #303f9f 70%,
+          #1a237e 100%
+        );
       }
 
       /* Season Toggle Menu */
       #season-menu {
-        position: fixed;
-        bottom: 24px;
-        left: 50%;
-        transform: translateX(-50%);
-        display: none;
-        align-items: center;
-        gap: 6px;
-        background: rgba(255, 255, 255, 0.92);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        background: #ede8e4;
         backdrop-filter: blur(16px);
         border-radius: 32px;
-        padding: 6px;
+        padding: 8px;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08),
           0 2px 12px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.7);
-        z-index: 1000;
         border: 0.5px solid rgba(0, 0, 0, 0.04);
-      }
-
-      #season-menu.show {
-        display: flex;
-        animation: seasonMenuFadeIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)
-          forwards;
       }
 
       .season-button {
@@ -315,7 +391,7 @@
         align-items: center;
         justify-content: center;
         font-size: 1.1rem;
-        color: rgba(0, 0, 0, 0.45);
+        color: rgba(0, 0, 0, 0.6);
         background: transparent;
         transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         position: relative;
@@ -338,11 +414,11 @@
 
       .season-button:hover {
         transform: scale(1.08) translateY(-1px);
-        color: rgba(0, 0, 0, 0.7);
+        color: rgba(0, 0, 0, 0.8);
       }
 
       .season-button:hover::before {
-        background: rgba(0, 0, 0, 0.06);
+        background: rgba(0, 0, 0, 0.08);
         opacity: 1;
       }
 
@@ -353,8 +429,7 @@
       .season-button.active {
         color: white;
         transform: scale(1.1);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12),
-          0 2px 8px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1);
       }
 
       .season-button.active::before {
@@ -364,31 +439,31 @@
       /* Refined Season-specific gradients */
       .season-button.active.spring::before {
         background: linear-gradient(
-          90deg,
-          rgba(95, 175, 184, 1) 0%,
-          rgba(87, 199, 133, 1) 31%,
-          rgba(140, 207, 115, 1) 68%,
-          rgba(237, 221, 83, 1) 100%
+          135deg,
+          #4caf50 0%,
+          #388e3c 30%,
+          #2e7d32 70%,
+          #1b5e20 100%
         );
       }
 
       .season-button.active.autumn::before {
         background: linear-gradient(
           135deg,
-          #ffde0b 0%,
-          #f69e02 30%,
-          #fa5a03 60%,
-          #bf0505 100%
+          #ff8f00 0%,
+          #f57c00 30%,
+          #ef6c00 70%,
+          #e65100 100%
         );
       }
 
       .season-button.active.winter::before {
         background: linear-gradient(
-          90deg,
-          rgb(95, 165, 184) 0%,
-          rgba(87, 167, 199, 1) 32%,
-          rgba(105, 169, 224, 1) 69%,
-          rgba(83, 121, 237, 1) 100%
+          135deg,
+          #42a5f5 0%,
+          #1e88e5 30%,
+          #1976d2 70%,
+          #0d47a1 100%
         );
       }
 
@@ -402,15 +477,77 @@
         );
       }
 
-      @keyframes seasonMenuFadeIn {
+      @keyframes controlPanelFadeIn {
         0% {
           opacity: 0;
-          transform: translateX(-50%) translateY(20px) scale(0.9);
+          transform: translateY(30px) translateX(30px) scale(0.9);
         }
         100% {
           opacity: 1;
-          transform: translateX(-50%) translateY(0) scale(1);
+          transform: translateY(0) translateX(0) scale(1);
         }
+      }
+
+      /* Page Title */
+      #page-title {
+        position: fixed;
+        left: 28px;
+        bottom: 24px;
+        display: none;
+        flex-direction: column;
+        gap: 16px;
+        z-index: 1000;
+        font-family: 'Schoolbell', sans-serif;
+        font-size: 3rem;
+        font-weight: 700;
+        color: #ede8e4;
+        text-align: left;
+        position: relative;
+        text-shadow: 4px 4px 4px #0000005c;
+      }
+
+      #page-title.show {
+        display: flex;
+        animation: pageTitleFadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+          forwards;
+      }
+
+      #page-title .fa-square {
+        position: absolute;
+        top: -0.4em;
+        left: -0.8em;
+        font-size: 0.55em;
+        background: linear-gradient(
+          135deg,
+          #fde61b 0%,
+          #f69e02 30%,
+          #fa5a03 60%,
+          #bf0505 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        transform: rotate(-25deg);
+        animation: leafFloat 3s ease-in-out infinite;
+      }
+
+      @keyframes pageTitleFadeIn {
+        0% {
+          opacity: 0;
+          transform: translateY(30px) translateX(-30px) scale(0.9);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0) translateX(0) scale(1);
+        }
+      }
+
+      #page-title {
+        position: fixed;
+        left: 24px;
+        bottom: 24px;
+        gap: 16px;
+        z-index: 1000;
       }
     </style>
     <title>Elemental Serenity</title>
@@ -423,29 +560,54 @@
     <!-- Shader Reveal Overlay -->
     <canvas id="shader-overlay"></canvas>
 
-    <!-- Music Control Button -->
-    <button id="music-control" title="Toggle Music">
-      <i class="fas fa-music"></i>
-    </button>
+    <!-- Right Side Control Panel -->
+    <div id="control-panel">
+      <!-- Day/Night Toggle -->
+      <div id="daynight-toggle">
+        <button class="daynight-button active day" data-time="day" title="Day">
+          <i class="fas fa-sun"></i>
+        </button>
+        <button class="daynight-button night" data-time="night" title="Night">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
 
-    <!-- Season Toggle Menu -->
-    <div id="season-menu">
-      <button
-        class="season-button active spring"
-        data-season="spring"
-        title="Spring"
-      >
-        <i class="fas fa-seedling"></i>
+      <!-- Season Toggle Menu -->
+      <div id="season-menu">
+        <button
+          class="season-button active spring"
+          data-season="spring"
+          title="Spring"
+        >
+          <i class="fas fa-seedling"></i>
+        </button>
+        <button
+          class="season-button autumn"
+          data-season="autumn"
+          title="Autumn"
+        >
+          <i class="fas fa-leaf"></i>
+        </button>
+        <button
+          class="season-button winter"
+          data-season="winter"
+          title="Winter"
+        >
+          <i class="fas fa-snowflake"></i>
+        </button>
+        <button class="season-button rain" data-season="rain" title="Rain">
+          <i class="fas fa-cloud-rain"></i>
+        </button>
+      </div>
+
+      <!-- Music Control Button -->
+      <button id="music-control" title="Toggle Music">
+        <i class="fas fa-music"></i>
       </button>
-      <button class="season-button autumn" data-season="autumn" title="Autumn">
-        <i class="fas fa-leaf"></i>
-      </button>
-      <button class="season-button winter" data-season="winter" title="Winter">
-        <i class="fas fa-snowflake"></i>
-      </button>
-      <button class="season-button rain" data-season="rain" title="Rain">
-        <i class="fas fa-cloud-rain"></i>
-      </button>
+    </div>
+
+    <div id="page-title">
+      <i class="fa-regular fa-square"></i>Elemental Serenity
     </div>
 
     <!-- Loader Screen -->
