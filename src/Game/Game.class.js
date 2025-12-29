@@ -7,7 +7,8 @@ import World from './World/World.class';
 import DebugGUI from './Utils/DebugGUI.class';
 import AudioManager from './Utils/AudioManager.class';
 import MusicManager from './Utils/MusicManager.class';
-import ToastManager from './Utils/ToastManager.class';
+import ToastManager from './UI/ToastManager.class';
+import MusicControlUI from './UI/MusicControlUI.class';
 import EnvironmentTimeManager from './World/Managers/EnvironmentManager/EnvironmentManager.class';
 import SeasonManager from './World/Managers/SeasonManager/SeasonManager.class';
 
@@ -43,6 +44,10 @@ export default class Game {
     // Initialize music manager and toast manager
     this.toastManager = new ToastManager();
     this.musicManager = new MusicManager(this.audioManager);
+    
+    // Initialize music control UI
+    this.musicControlUI = new MusicControlUI(this.musicManager, this.toastManager);
+    this.musicControlUI.setInitialState(this.withMusic);
     
     // Listen for track changes to show toast notifications
     this.musicManager.on('trackChanged', (track) => {
@@ -216,6 +221,9 @@ export default class Game {
     if (this.toastManager) {
       this.toastManager.destroy();
     }
+    if (this.musicControlUI) {
+      this.musicControlUI.destroy();
+    }
 
     this.scene.traverse((child) => {
       if (child instanceof THREE.Mesh) {
@@ -259,5 +267,6 @@ export default class Game {
     this.audioManager = null;
     this.musicManager = null;
     this.toastManager = null;
+    this.musicControlUI = null;
   }
 }

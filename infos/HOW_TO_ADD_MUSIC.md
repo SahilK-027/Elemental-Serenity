@@ -73,4 +73,16 @@ public/audio/musics/
 └── your_new_song.mp3  ← Add here
 ```
 
+## 🏗️ **Project Structure**
+```
+src/Game/
+├── UI/                          ← UI Classes
+│   ├── ToastManager.class.js    ← Toast notifications
+│   └── MusicControlUI.class.js  ← Music control button
+├── Utils/                       ← Utility Classes
+│   ├── AudioManager.class.js    ← Audio system
+│   └── MusicManager.class.js    ← Music playlist
+└── Game.class.js               ← Main game class
+```
+
 That's it! Your new music will be part of the random background music system! 🎶

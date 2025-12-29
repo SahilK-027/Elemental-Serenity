@@ -21,7 +21,7 @@ export default class ToastManager {
       pointer-events: none;
       font-family: 'Inter', sans-serif;
     `;
-    
+
     // Ensure document.body exists
     if (document.body) {
       document.body.appendChild(this.toastContainer);
@@ -36,10 +36,10 @@ export default class ToastManager {
   showMusicToast(trackName) {
     // Remove any existing music toasts
     this.clearMusicToasts();
-    
+
     const toast = document.createElement('div');
     toast.className = 'music-toast';
-    
+
     // Professional styling with better visual hierarchy
     toast.style.cssText = `
       background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(20, 20, 20, 0.95) 100%);
@@ -63,11 +63,11 @@ export default class ToastManager {
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(20px);
       max-width: 240px;
-      min-width: 160px;
+      min-width: 170px;
       position: relative;
       overflow: hidden;
     `;
-    
+
     // Add subtle animated background gradient
     const backgroundOverlay = document.createElement('div');
     backgroundOverlay.style.cssText = `
@@ -80,7 +80,7 @@ export default class ToastManager {
       animation: shimmer 3s ease-in-out infinite;
       pointer-events: none;
     `;
-    
+
     // Create music icon with better styling
     const iconContainer = document.createElement('div');
     iconContainer.style.cssText = `
@@ -94,7 +94,7 @@ export default class ToastManager {
       flex-shrink: 0;
       border: 1px solid rgba(255, 255, 255, 0.1);
     `;
-    
+
     const icon = document.createElement('i');
     icon.className = 'fas fa-music';
     icon.style.cssText = `
@@ -102,9 +102,9 @@ export default class ToastManager {
       color: rgba(255, 255, 255, 0.9);
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     `;
-    
+
     iconContainer.appendChild(icon);
-    
+
     // Create text content with better typography
     const textContent = document.createElement('div');
     textContent.style.cssText = `
@@ -114,7 +114,7 @@ export default class ToastManager {
       flex: 1;
       min-width: 0;
     `;
-    
+
     const label = document.createElement('div');
     label.textContent = 'Now Playing';
     label.style.cssText = `
@@ -125,7 +125,7 @@ export default class ToastManager {
       font-weight: 600;
       margin-bottom: 2px;
     `;
-    
+
     const title = document.createElement('div');
     title.textContent = trackName;
     title.style.cssText = `
@@ -138,7 +138,7 @@ export default class ToastManager {
       overflow: hidden;
       text-overflow: ellipsis;
     `;
-    
+
     // Add progress indicator
     const progressBar = document.createElement('div');
     progressBar.style.cssText = `
@@ -150,15 +150,15 @@ export default class ToastManager {
       width: 0%;
       transition: width 4s linear;
     `;
-    
+
     textContent.appendChild(label);
     textContent.appendChild(title);
-    
+
     toast.appendChild(backgroundOverlay);
     toast.appendChild(iconContainer);
     toast.appendChild(textContent);
     toast.appendChild(progressBar);
-    
+
     // Add shimmer animation keyframes to document if not already added
     if (!document.getElementById('toast-animations')) {
       const style = document.createElement('style');
@@ -172,60 +172,60 @@ export default class ToastManager {
       `;
       document.head.appendChild(style);
     }
-    
+
     this.toastContainer.appendChild(toast);
     this.activeToasts.push(toast);
-    
+
     // Force reflow to ensure initial state is applied
     toast.offsetHeight;
-    
+
     // Animate in with proper timing
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         toast.style.transform = 'translateX(0)';
         toast.style.opacity = '1';
-        
+
         // Start progress bar animation
         setTimeout(() => {
           progressBar.style.width = '100%';
         }, 100);
       });
     });
-    
+
     // Auto hide after 4 seconds
     setTimeout(() => {
       this.hideToast(toast);
     }, 4000);
-    
+
     return toast;
   }
 
   hideToast(toast) {
     if (!toast || !toast.parentNode) return;
-    
+
     toast.style.transform = 'translateX(-320px)';
     toast.style.opacity = '0';
-    
+
     setTimeout(() => {
       if (toast.parentNode) {
         toast.parentNode.removeChild(toast);
       }
-      this.activeToasts = this.activeToasts.filter(t => t !== toast);
+      this.activeToasts = this.activeToasts.filter((t) => t !== toast);
     }, 500);
   }
 
   clearMusicToasts() {
-    const musicToasts = this.activeToasts.filter(toast => 
-      toast.className === 'music-toast'
+    const musicToasts = this.activeToasts.filter(
+      (toast) => toast.className === 'music-toast'
     );
-    
-    musicToasts.forEach(toast => this.hideToast(toast));
+
+    musicToasts.forEach((toast) => this.hideToast(toast));
   }
 
   showToast(message, type = 'info', duration = 3000) {
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
-    
+
     let backgroundColor, textColor, borderColor;
     switch (type) {
       case 'success':
@@ -248,12 +248,11 @@ export default class ToastManager {
         textColor = 'rgba(255, 255, 255, 0.95)';
         borderColor = 'rgba(255, 255, 255, 0.1)';
     }
-    
+
     toast.style.cssText = `
       background: ${backgroundColor};
       color: ${textColor};
       padding: 12px 16px;
-      border-radius: 0;
       font-size: 0.85rem;
       font-weight: 500;
       letter-spacing: 0.3px;
@@ -264,17 +263,18 @@ export default class ToastManager {
       border: 1.5px solid ${borderColor};
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
       backdrop-filter: blur(10px);
-      max-width: 280px;
+      width: fit-content !important;
+      border-radius: 8px;
     `;
-    
+
     toast.textContent = message;
-    
+
     this.toastContainer.appendChild(toast);
     this.activeToasts.push(toast);
-    
+
     // Force reflow to ensure initial state is applied
     toast.offsetHeight;
-    
+
     // Animate in with proper timing
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -282,12 +282,12 @@ export default class ToastManager {
         toast.style.opacity = '1';
       });
     });
-    
+
     // Auto hide
     setTimeout(() => {
       this.hideToast(toast);
     }, duration);
-    
+
     return toast;
   }
 

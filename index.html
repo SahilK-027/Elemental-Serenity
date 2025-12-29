@@ -214,6 +214,75 @@
         transition: transform 0.3s ease;
         font-size: 0.75rem;
       }
+
+      /* Music Control Button */
+      #music-control {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: #ede8e4;
+        border: 1.5px solid rgba(0, 0, 0, 0.1);
+        color: #000;
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        z-index: 1000;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 
+          0 8px 32px rgba(0, 0, 0, 0.15),
+          0 2px 8px rgba(0, 0, 0, 0.1),
+          inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        font-family: 'Inter', sans-serif;
+      }
+
+      #music-control:hover {
+        transform: translateY(-2px) scale(1.05);
+        background: #f5f0ec;
+        border-color: rgba(0, 0, 0, 0.2);
+        color: #000;
+        box-shadow: 
+          0 12px 40px rgba(0, 0, 0, 0.2),
+          0 4px 12px rgba(0, 0, 0, 0.15),
+          inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      }
+
+      #music-control:active {
+        transform: translateY(-1px) scale(1.02);
+        background: #e5dfd9;
+      }
+
+      #music-control.show {
+        display: flex;
+        animation: musicControlFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      }
+
+      #music-control.muted {
+        background: #d0c8c0;
+        color: rgba(0, 0, 0, 0.5);
+        border-color: rgba(0, 0, 0, 0.08);
+      }
+
+      #music-control.muted:hover {
+        background: #c8bfb7;
+        color: rgba(0, 0, 0, 0.7);
+        border-color: rgba(0, 0, 0, 0.15);
+      }
+
+      @keyframes musicControlFadeIn {
+        0% {
+          opacity: 0;
+          transform: translateY(20px) scale(0.8);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
     </style>
     <title>Elemental Serenity</title>
   </head>
@@ -224,6 +293,11 @@
 
     <!-- Shader Reveal Overlay -->
     <canvas id="shader-overlay"></canvas>
+
+    <!-- Music Control Button -->
+    <button id="music-control" title="Toggle Music">
+      <i class="fas fa-music"></i>
+    </button>
 
     <!-- Loader Screen -->
     <div id="loader">
