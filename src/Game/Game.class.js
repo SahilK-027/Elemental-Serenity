@@ -6,6 +6,8 @@ import Renderer from './Core/Renderer.class';
 import World from './World/World.class';
 import DebugGUI from './Utils/DebugGUI.class';
 import AudioManager from './Utils/AudioManager.class';
+import MusicManager from './Utils/MusicManager.class';
+import ToastManager from './Utils/ToastManager.class';
 import EnvironmentTimeManager from './World/Managers/EnvironmentManager/EnvironmentManager.class';
 import SeasonManager from './World/Managers/SeasonManager/SeasonManager.class';
 
@@ -38,11 +40,20 @@ export default class Game {
     this.audioManager = new AudioManager(this.resources);
     this.audioManager.addListenerToCamera(this.camera);
     
+    // Initialize music manager and toast manager
+    this.toastManager = new ToastManager();
+    this.musicManager = new MusicManager(this.audioManager);
+    
+    // Listen for track changes to show toast notifications
+    this.musicManager.on('trackChanged', (track) => {
+      this.toastManager.showMusicToast(track.name);
+    });
+    
     this.world = new World();
 
     // Start background music if enabled
     if (this.withMusic) {
-      this.audioManager.playMusic('morningPetalsMusic');
+      this.musicManager.startRandomMusic();
     }
 
     this.time.on('animate', () => {
@@ -148,9 +159,10 @@ export default class Game {
       masterVolume: this.audioManager.masterVolume,
       musicVolume: this.audioManager.musicVolume,
       soundVolume: this.audioManager.soundVolume,
+      startRandomMusic: () => this.musicManager.startRandomMusic(),
+      stopMusic: () => this.musicManager.stopMusic(),
       playMorningPetals: () => this.audioManager.playMusic('morningPetalsMusic'),
       playWindowLight: () => this.audioManager.playMusic('windowLightMusic'),
-      stopMusic: () => this.audioManager.stopMusic(),
       playRain: () => this.audioManager.playSound('rainSound', null, true),
       playFire: () => this.audioManager.playSound('fireBurningSound', null, true),
       playBirds: () => this.audioManager.playSound(this.audioManager.getRandomBirdSound()),
@@ -178,9 +190,10 @@ export default class Game {
       onChange: (value) => this.audioManager.setSoundVolume(value)
     }, 'Audio');
 
+    this.debug.add(audioControls, 'startRandomMusic', { label: 'Start Random Music' }, 'Audio');
+    this.debug.add(audioControls, 'stopMusic', { label: 'Stop Music' }, 'Audio');
     this.debug.add(audioControls, 'playMorningPetals', { label: 'Play Morning Petals' }, 'Audio');
     this.debug.add(audioControls, 'playWindowLight', { label: 'Play Window Light' }, 'Audio');
-    this.debug.add(audioControls, 'stopMusic', { label: 'Stop Music' }, 'Audio');
     this.debug.add(audioControls, 'playRain', { label: 'Play Rain (Loop)' }, 'Audio');
     this.debug.add(audioControls, 'playFire', { label: 'Play Fire (Loop)' }, 'Audio');
     this.debug.add(audioControls, 'playBirds', { label: 'Play Random Birds' }, 'Audio');
@@ -192,8 +205,14 @@ export default class Game {
     this.time.off('animate');
 
     // Cleanup audio
+    if (this.musicManager) {
+      this.musicManager.stopMusic();
+    }
     if (this.audioManager) {
       this.audioManager.dispose();
+    }
+    if (this.toastManager) {
+      this.toastManager.destroy();
     }
 
     this.scene.traverse((child) => {
@@ -236,5 +255,7 @@ export default class Game {
     this.world = null;
     this.debug = null;
     this.audioManager = null;
+    this.musicManager = null;
+    this.toastManager = null;
   }
 }
