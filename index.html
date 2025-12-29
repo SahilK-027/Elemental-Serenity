@@ -233,9 +233,7 @@
         font-size: 1.1rem;
         z-index: 1000;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 
-          0 8px 32px rgba(0, 0, 0, 0.15),
-          0 2px 8px rgba(0, 0, 0, 0.1),
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1),
           inset 0 1px 0 rgba(255, 255, 255, 0.8);
         font-family: 'Inter', sans-serif;
       }
@@ -245,10 +243,8 @@
         background: #f5f0ec;
         border-color: rgba(0, 0, 0, 0.2);
         color: #000;
-        box-shadow: 
-          0 12px 40px rgba(0, 0, 0, 0.2),
-          0 4px 12px rgba(0, 0, 0, 0.15),
-          inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2),
+          0 4px 12px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.9);
       }
 
       #music-control:active {
@@ -283,6 +279,139 @@
           transform: translateY(0) scale(1);
         }
       }
+
+      /* Season Toggle Menu */
+      #season-menu {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: none;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(16px);
+        border-radius: 32px;
+        padding: 6px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08),
+          0 2px 12px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+        z-index: 1000;
+        border: 0.5px solid rgba(0, 0, 0, 0.04);
+      }
+
+      #season-menu.show {
+        display: flex;
+        animation: seasonMenuFadeIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+          forwards;
+      }
+
+      .season-button {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        color: rgba(0, 0, 0, 0.45);
+        background: transparent;
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .season-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 50%;
+        background: transparent;
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        z-index: -1;
+        opacity: 0;
+      }
+
+      .season-button:hover {
+        transform: scale(1.08) translateY(-1px);
+        color: rgba(0, 0, 0, 0.7);
+      }
+
+      .season-button:hover::before {
+        background: rgba(0, 0, 0, 0.06);
+        opacity: 1;
+      }
+
+      .season-button:active {
+        transform: scale(1.04);
+      }
+
+      .season-button.active {
+        color: white;
+        transform: scale(1.1);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12),
+          0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+
+      .season-button.active::before {
+        opacity: 1;
+      }
+
+      /* Refined Season-specific gradients */
+      .season-button.active.spring::before {
+        background: linear-gradient(
+          90deg,
+          rgba(95, 175, 184, 1) 0%,
+          rgba(87, 199, 133, 1) 31%,
+          rgba(140, 207, 115, 1) 68%,
+          rgba(237, 221, 83, 1) 100%
+        );
+      }
+
+      .season-button.active.autumn::before {
+        background: linear-gradient(
+          135deg,
+          #ffde0b 0%,
+          #f69e02 30%,
+          #fa5a03 60%,
+          #bf0505 100%
+        );
+      }
+
+      .season-button.active.winter::before {
+        background: linear-gradient(
+          90deg,
+          rgb(95, 165, 184) 0%,
+          rgba(87, 167, 199, 1) 32%,
+          rgba(105, 169, 224, 1) 69%,
+          rgba(83, 121, 237, 1) 100%
+        );
+      }
+
+      .season-button.active.rain::before {
+        background: linear-gradient(
+          135deg,
+          #78909c 0%,
+          #546e7a 30%,
+          #37474f 70%,
+          #263238 100%
+        );
+      }
+
+      @keyframes seasonMenuFadeIn {
+        0% {
+          opacity: 0;
+          transform: translateX(-50%) translateY(20px) scale(0.9);
+        }
+        100% {
+          opacity: 1;
+          transform: translateX(-50%) translateY(0) scale(1);
+        }
+      }
     </style>
     <title>Elemental Serenity</title>
   </head>
@@ -298,6 +427,26 @@
     <button id="music-control" title="Toggle Music">
       <i class="fas fa-music"></i>
     </button>
+
+    <!-- Season Toggle Menu -->
+    <div id="season-menu">
+      <button
+        class="season-button active spring"
+        data-season="spring"
+        title="Spring"
+      >
+        <i class="fas fa-seedling"></i>
+      </button>
+      <button class="season-button autumn" data-season="autumn" title="Autumn">
+        <i class="fas fa-leaf"></i>
+      </button>
+      <button class="season-button winter" data-season="winter" title="Winter">
+        <i class="fas fa-snowflake"></i>
+      </button>
+      <button class="season-button rain" data-season="rain" title="Rain">
+        <i class="fas fa-cloud-rain"></i>
+      </button>
+    </div>
 
     <!-- Loader Screen -->
     <div id="loader">

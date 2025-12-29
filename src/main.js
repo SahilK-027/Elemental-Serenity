@@ -1,5 +1,6 @@
 import Game from './Game/Game.class.js';
 import ResourceLoader from './Game/Utils/ResourceLoader.class.js';
+import SeasonManager from './Game/World/Managers/SeasonManager/SeasonManager.class.js';
 import ASSETS from './config/assets.js';
 import reveal from './reveal.js';
 
@@ -17,6 +18,11 @@ const exploreWithoutMusic = document.getElementById('explore-without-music');
 const loaderTitle = document.querySelector('.loader-title');
 const loaderProgress = document.querySelector('.loader-progress-bar');
 const shaderCanvas = document.getElementById('shader-overlay');
+const seasonMenu = document.getElementById('season-menu');
+const seasonButtons = document.querySelectorAll('.season-button');
+
+// Initialize Season Manager
+const seasonManager = SeasonManager.getInstance();
 
 const shaderReveal = new reveal(shaderCanvas);
 
@@ -147,6 +153,14 @@ resources.on('loaded', () => {
 
       setTimeout(() => {
         loader.remove();
+        // Show season menu after loader is removed
+        setTimeout(() => {
+          seasonMenu.classList.add('show');
+          // Initialize season UI with current season
+          initializeSeasonUI();
+        }, 500);
+        // Dispatch game started event
+        document.dispatchEvent(new CustomEvent('gameStarted'));
       }, 500);
     }, 200);
   };
@@ -154,3 +168,82 @@ resources.on('loaded', () => {
   exploreWithMusic.addEventListener('click', () => startGame(true));
   exploreWithoutMusic.addEventListener('click', () => startGame(false));
 });
+
+// Season Toggle Functionality
+// Map UI season names to SeasonManager season names
+const seasonMapping = {
+  'spring': 'spring',
+  'autumn': 'autumn', 
+  'winter': 'winter',
+  'rain': 'rainy'
+};
+
+// Reverse mapping for UI updates
+const reverseSeasonMapping = {
+  'spring': 'spring',
+  'autumn': 'autumn',
+  'winter': 'winter', 
+  'rainy': 'rain'
+};
+
+// Season toggle handler
+const handleSeasonToggle = (event) => {
+  const clickedButton = event.currentTarget;
+  const uiSeason = clickedButton.dataset.season;
+  const managerSeason = seasonMapping[uiSeason];
+  
+  // Remove active class from all buttons
+  seasonButtons.forEach(button => {
+    button.classList.remove('active');
+  });
+  
+  // Add active class to clicked button
+  clickedButton.classList.add('active');
+  
+  // Update season manager
+  seasonManager.setSeason(managerSeason);
+  
+  console.log(`Season changed to: ${managerSeason} (UI: ${uiSeason})`);
+};
+
+// Add event listeners to season buttons
+seasonButtons.forEach(button => {
+  button.addEventListener('click', handleSeasonToggle);
+});
+
+// Listen to season manager changes and update UI
+seasonManager.onChange((newSeason, oldSeason) => {
+  console.log(`Season Manager: Changed from ${oldSeason} to ${newSeason}`);
+  
+  // Update UI to reflect the current season
+  const uiSeason = reverseSeasonMapping[newSeason];
+  seasonButtons.forEach(button => {
+    button.classList.remove('active');
+    if (button.dataset.season === uiSeason) {
+      button.classList.add('active');
+    }
+  });
+  
+  // Dispatch custom event for other parts of the game to listen to
+  window.dispatchEvent(new CustomEvent('seasonChange', {
+    detail: { 
+      season: newSeason, 
+      oldSeason: oldSeason,
+      config: seasonManager.getSeasonConfig(newSeason)
+    }
+  }));
+});
+
+// Initialize UI with current season
+const initializeSeasonUI = () => {
+  const currentSeason = seasonManager.currentSeason;
+  const uiSeason = reverseSeasonMapping[currentSeason];
+  console.log(`Initializing season UI: Manager season = ${currentSeason}, UI season = ${uiSeason}`);
+  seasonButtons.forEach(button => {
+    button.classList.remove('active');
+    if (button.dataset.season === uiSeason) {
+      button.classList.add('active');
+      console.log(`Set ${uiSeason} button as active`);
+    }
+  });
+};
