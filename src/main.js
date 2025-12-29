@@ -15,7 +15,7 @@ const exploreButtons = document.getElementById('explore-buttons');
 const exploreWithMusic = document.getElementById('explore-with-music');
 const exploreWithoutMusic = document.getElementById('explore-without-music');
 const loaderTitle = document.querySelector('.loader-title');
-const loaderProgress = document.querySelector('.loader-progress');
+const loaderProgress = document.querySelector('.loader-progress-bar');
 const shaderCanvas = document.getElementById('shader-overlay');
 
 const shaderReveal = new reveal(shaderCanvas);
@@ -78,8 +78,6 @@ const getLoadingMessage = (id, itemsLoaded, itemsTotal) => {
   return `${baseMessage}${dots} ${assetType} (${itemsLoaded}/${itemsTotal})`;
 };
 
-let messageIndex = 0;
-
 resources.on('progress', ({ id, itemsLoaded, itemsTotal, percent }) => {
   progressBar.style.width = `${percent}%`;
 
@@ -114,7 +112,7 @@ resources.on('error', ({ id, url, itemsLoaded, itemsTotal }) => {
 });
 
 resources.on('loaded', () => {
-  loaderText.textContent = 'Serenity achieved... Welcome to your sanctuary';
+  loaderText.textContent = 'Serenity achieved... Welcome to your sanctuary!';
 
   if (isDebugMode) {
     if (Object.keys(resources.items).length) {

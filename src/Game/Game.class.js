@@ -5,11 +5,12 @@ import Camera from './Core/Camera.class';
 import Renderer from './Core/Renderer.class';
 import World from './World/World.class';
 import DebugGUI from './Utils/DebugGUI.class';
+import AudioManager from './Utils/AudioManager.class';
 import EnvironmentTimeManager from './World/Managers/EnvironmentManager/EnvironmentManager.class';
 import SeasonManager from './World/Managers/SeasonManager/SeasonManager.class';
 
 export default class Game {
-  constructor(canvas, resources, isDebugMode) {
+  constructor(canvas, resources, isDebugMode, withMusic = true) {
     // Singleton
     if (Game.instance) {
       return Game.instance;
@@ -17,6 +18,8 @@ export default class Game {
     Game.instance = this;
 
     this.isDebugMode = isDebugMode;
+    this.withMusic = withMusic;
+    
     if (this.isDebugMode) {
       this.debug = new DebugGUI();
     }
@@ -30,7 +33,17 @@ export default class Game {
     this.scene = new THREE.Scene();
     this.camera = new Camera();
     this.renderer = new Renderer();
+    
+    // Initialize audio manager
+    this.audioManager = new AudioManager(this.resources);
+    this.audioManager.addListenerToCamera(this.camera);
+    
     this.world = new World();
+
+    // Start background music if enabled
+    if (this.withMusic) {
+      this.audioManager.playMusic('morningPetalsMusic');
+    }
 
     this.time.on('animate', () => {
       this.update();
@@ -129,11 +142,59 @@ export default class Game {
       },
       'Environment'
     );
+
+    // Audio controls
+    const audioControls = {
+      masterVolume: this.audioManager.masterVolume,
+      musicVolume: this.audioManager.musicVolume,
+      soundVolume: this.audioManager.soundVolume,
+      playMorningPetals: () => this.audioManager.playMusic('morningPetalsMusic'),
+      playWindowLight: () => this.audioManager.playMusic('windowLightMusic'),
+      stopMusic: () => this.audioManager.stopMusic(),
+      playRain: () => this.audioManager.playSound('rainSound', null, true),
+      playFire: () => this.audioManager.playSound('fireBurningSound', null, true),
+      playBirds: () => this.audioManager.playSound(this.audioManager.getRandomBirdSound()),
+      stopAllSounds: () => {
+        Object.keys(this.audioManager.sounds).forEach(soundId => {
+          if (!soundId.includes('Music')) {
+            this.audioManager.stopSound(soundId);
+          }
+        });
+      }
+    };
+
+    this.debug.add(audioControls, 'masterVolume', {
+      min: 0, max: 1, step: 0.1,
+      onChange: (value) => this.audioManager.setMasterVolume(value)
+    }, 'Audio');
+
+    this.debug.add(audioControls, 'musicVolume', {
+      min: 0, max: 1, step: 0.1,
+      onChange: (value) => this.audioManager.setMusicVolume(value)
+    }, 'Audio');
+
+    this.debug.add(audioControls, 'soundVolume', {
+      min: 0, max: 1, step: 0.1,
+      onChange: (value) => this.audioManager.setSoundVolume(value)
+    }, 'Audio');
+
+    this.debug.add(audioControls, 'playMorningPetals', { label: 'Play Morning Petals' }, 'Audio');
+    this.debug.add(audioControls, 'playWindowLight', { label: 'Play Window Light' }, 'Audio');
+    this.debug.add(audioControls, 'stopMusic', { label: 'Stop Music' }, 'Audio');
+    this.debug.add(audioControls, 'playRain', { label: 'Play Rain (Loop)' }, 'Audio');
+    this.debug.add(audioControls, 'playFire', { label: 'Play Fire (Loop)' }, 'Audio');
+    this.debug.add(audioControls, 'playBirds', { label: 'Play Random Birds' }, 'Audio');
+    this.debug.add(audioControls, 'stopAllSounds', { label: 'Stop All Sounds' }, 'Audio');
   }
 
   destroy() {
     this.sizes.off('resize');
     this.time.off('animate');
+
+    // Cleanup audio
+    if (this.audioManager) {
+      this.audioManager.dispose();
+    }
 
     this.scene.traverse((child) => {
       if (child instanceof THREE.Mesh) {
@@ -164,7 +225,9 @@ export default class Game {
 
     this.camera.controls.dispose();
     this.renderer.rendererInstance.dispose();
-    this.debug.gui.destroy();
+    if (this.debug) {
+      this.debug.gui.destroy();
+    }
 
     this.canvas = null;
     this.scene = null;
@@ -172,5 +235,6 @@ export default class Game {
     this.renderer = null;
     this.world = null;
     this.debug = null;
+    this.audioManager = null;
   }
 }

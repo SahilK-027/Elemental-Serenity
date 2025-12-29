@@ -1,6 +1,7 @@
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
+import { AudioLoader } from 'three/src/loaders/AudioLoader.js';
 import * as THREE from 'three';
 import EventEmitter from './EventEmitter.class';
 
@@ -111,6 +112,7 @@ export default class ResourceLoader extends EventEmitter {
     this.loaders.textureLoader = new THREE.TextureLoader(this.manager);
     this.loaders.hdriLoader = new HDRLoader(this.manager);
     this.loaders.cubeTextureLoader = new THREE.CubeTextureLoader(this.manager);
+    this.loaders.audioLoader = new AudioLoader(this.manager);
   }
 
   initLoading() {
@@ -137,6 +139,9 @@ export default class ResourceLoader extends EventEmitter {
           break;
         case 'cubeMap':
           this.loaders.cubeTextureLoader.load(path, onLoad, onProgress);
+          break;
+        case 'audio':
+          this.loaders.audioLoader.load(path, onLoad, onProgress);
           break;
         default:
           console.warn(`Unknown asset type: ${type}`);

@@ -158,6 +158,89 @@ const ASSETS = [
     type: 'texture',
     path: ['/textures/flowers/flower_2_128x128.png'],
   },
+  // Music
+  {
+    id: 'morningPetalsMusic',
+    type: 'audio',
+    path: ['/audio/musics/morning_petals.mp3'],
+  },
+  {
+    id: 'windowLightMusic',
+    type: 'audio',
+    path: ['/audio/musics/window_light.mp3'],
+  },
+  // Nature Sounds
+  {
+    id: 'birds1Sound',
+    type: 'audio',
+    path: ['/audio/sounds/birds/birds_1.mp3'],
+  },
+  {
+    id: 'birds2Sound',
+    type: 'audio',
+    path: ['/audio/sounds/birds/birds_2.mp3'],
+  },
+  {
+    id: 'birds3Sound',
+    type: 'audio',
+    path: ['/audio/sounds/birds/birds_3.mp3'],
+  },
+  {
+    id: 'birds4Sound',
+    type: 'audio',
+    path: ['/audio/sounds/birds/birds_4.mp3'],
+  },
+  {
+    id: 'cricketsSound',
+    type: 'audio',
+    path: ['/audio/sounds/crickets/crickets.mp3'],
+  },
+  {
+    id: 'fireBurningSound',
+    type: 'audio',
+    path: ['/audio/sounds/fire/fire_burning.mp3'],
+  },
+  {
+    id: 'owlHowlingSound',
+    type: 'audio',
+    path: ['/audio/sounds/owl/owl_howling.mp3'],
+  },
+  {
+    id: 'rainSound',
+    type: 'audio',
+    path: ['/audio/sounds/rain/rain.mp3'],
+  },
+  {
+    id: 'lakeWavesSound',
+    type: 'audio',
+    path: ['/audio/sounds/waves/lake_waves.mp3'],
+  },
+  {
+    id: 'wolfHowlingSound',
+    type: 'audio',
+    path: ['/audio/sounds/wolf/wolf_howling.mp3'],
+  },
+  {
+    id: 'thunderDistantSound',
+    type: 'audio',
+    path: ['/audio/sounds/thunder/distant/thunder_distant.mp3'],
+  },
+  {
+    id: 'thunderStrikeSound',
+    type: 'audio',
+    path: ['/audio/sounds/thunder/near/thunder_strike.mp3'],
+  },
+  // UI Sounds
+  {
+    id: 'clickSound',
+    type: 'audio',
+    path: ['/audio/sounds/ui_interactions/click.mp3'],
+  },
+  {
+    id: 'hoverSound',
+    type: 'audio',
+    path: ['/audio/sounds/ui_interactions/hover.mp3'],
+  },
 ];
 
 export default ASSETS;
