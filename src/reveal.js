@@ -16,7 +16,7 @@ export default class ShaderReveal {
     this.uniforms = {};
     this.startTime = 0;
     this.duration = 4500;
-    this.textDisplayDuration = 8000;
+    this.textDisplayDuration = 10000;
     this.hasStarted = false;
     this.textOverlay = null;
 
@@ -131,7 +131,7 @@ export default class ShaderReveal {
           margin: 0 0 1.5rem 0;
           opacity: 0;
           transition: opacity 1.2s ease-out;
-        ">About Experience</h1>
+        ">A Dream Realized</h1>
         
         <div class="reveal-description" style="
           font-family: 'Inter', sans-serif;
@@ -144,16 +144,23 @@ export default class ShaderReveal {
             margin: 0.2rem 0;
             opacity: 0;
             transition: opacity 0.8s ease-out;
-          ">Welcome to a tranquil digital sanctuary where nature's elements come alive through procedural generation, ambient soundscapes, and the gentle passage of time.</p>
-          
+          "> For as long as I can remember, I've dreamed of creating a quiet digital corner where stylised nature could breathe, seasons freely shifting, days fading into nights, leaves whispering in an invisible breeze.
+          <br>
+          <br>
+          And this project turned that dream into reality, built one shader, one texture, and one late night at a time. Countless tutorials, devlogs, and fellow creators kept me going and reminded me that shared passion multiplies.
+          <br>
+          <br>
+          Thank you for visiting. I hope it brings you a moment of quiet wonder!
+          </p>
           <p class="reveal-footer" style="
             margin: 0.8rem 0 0 0;
-            font-size: 0.8em;
-            color: rgba(0, 0, 0, 0.4);
             font-style: italic;
             opacity: 0;
             transition: opacity 0.8s ease-out;
-          ">Built with Three.js, WebGL shaders, and a deep love for nature's beauty.</p>
+            text-align: right;
+          ">
+          — Sahil K.
+          </p>
         </div>
       </div>
     `;
