@@ -5,6 +5,7 @@ import particleFragmentShader from '../../../../Shaders/Materials/fire/fragment.
 import * as MATH from '../../../Utils/Math.class';
 import * as PARTICLES from '../../Systems/ParticleSystem.class';
 import EnvironmentTimeManager from '../../Managers/EnvironmentManager/EnvironmentManager.class';
+import SeasonManager from '../../Managers/SeasonManager/SeasonManager.class';
 
 export default class Fire {
   #particleSystem = null;
@@ -20,16 +21,11 @@ export default class Fire {
     this.resources = this.game.resources;
     this.debugGUI = this.game.debug;
     this.environmentTimeManager = EnvironmentTimeManager.getInstance();
+    this.seasonManager = SeasonManager.getInstance();
     this.envTime = this.environmentTimeManager.envTime;
+    this.currentSeason = this.seasonManager.currentSeason;
 
-    this.smokeAlphaConfig = {
-      day: {
-        secondStopValue: 0.1,
-      },
-      night: {
-        secondStopValue: 0.05,
-      },
-    };
+    this.smokeAlphaConfig = this.seasonManager.getColorConfig('fire');
 
     this.flickerTime = 0;
     this.flickerSpeed = 10.0;
@@ -54,6 +50,10 @@ export default class Fire {
 
     this.environmentTimeManager.onChange((newValue, oldValue) => {
       this.onEnvTimeChanged(newValue, oldValue);
+    });
+
+    this.seasonManager.onChange((newSeason, oldSeason) => {
+      this.onSeasonChanged(newSeason, oldSeason);
     });
   }
 
@@ -88,7 +88,7 @@ export default class Fire {
       { time: 0.5, value: 60 },
       { time: 1.0, value: 20 },
     ];
-    const smokeAlphaValue = this.smokeAlphaConfig[this.envTime].secondStopValue;
+    const smokeAlphaValue = this.smokeAlphaConfig[this.envTime].smokeAlphaSecondStop;
     this.smokeAlphaStops = [
       { time: 0.0, value: 0.0 },
       { time: 0.1, value: smokeAlphaValue },
@@ -853,12 +853,21 @@ export default class Fire {
 
   onEnvTimeChanged(newValue, oldValue) {
     this.envTime = newValue;
+    this.updateSmokeAlpha();
+  }
 
+  onSeasonChanged(newSeason, oldSeason) {
+    this.currentSeason = newSeason;
+    this.smokeAlphaConfig = this.seasonManager.getColorConfig('fire');
+    this.updateSmokeAlpha();
+  }
+
+  updateSmokeAlpha() {
     if (!this.smokeAlphaStops) return;
 
-    const config = this.smokeAlphaConfig[newValue];
+    const config = this.smokeAlphaConfig[this.envTime];
 
-    this.smokeAlphaStops[1].value = config.secondStopValue;
+    this.smokeAlphaStops[1].value = config.smokeAlphaSecondStop;
 
     this._buildSmokeInterpolantsAndTextures();
   }

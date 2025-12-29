@@ -4,6 +4,7 @@ import BushVertexShader from '../../../../Shaders/Materials/bush/vertex.glsl';
 import BushFragmentShader from '../../../../Shaders/Materials/bush/fragment.glsl';
 import { BushManager } from '../../Managers/BushManager/BushManager.class';
 import EnvironmentTimeManager from '../../Managers/EnvironmentManager/EnvironmentManager.class';
+import SeasonManager from '../../Managers/SeasonManager/SeasonManager.class';
 
 export default class Bush {
   constructor() {
@@ -13,39 +14,12 @@ export default class Bush {
     this.debugGUI = this.game.debug;
     this.keyLight = this.scene.getObjectByName('keyLight');
     this.environmentTimeManager = EnvironmentTimeManager.getInstance();
+    this.seasonManager = SeasonManager.getInstance();
     this.currentEnvTime = this.environmentTimeManager.envTime;
+    this.currentSeason = this.seasonManager.currentSeason;
     this.isDebugMode = this.game.isDebugMode;
 
-    this.COLOR_PRESETS = {
-      day: {
-        shadowColor: [0.003, 0.074, 0.003],
-        midColor: [0.06, 0.23, 0],
-        highlightColor: [0.44, 0.5, 0.0],
-        colorMultiplier: [0.46, 0.65, 0.3],
-        // Tree leaves colors
-        treeShadowColor: [0.03, 0.07, 0.003],
-        treeColorMultiplier: [0.77, 0.71, 0.35],
-        // Birch colors
-        birchShadowColor: [0.09, 0.03, 0],
-        birchMidColor: [0.2, 0.03, 0],
-        birchHighlightColor: [1, 0.58, 0.1],
-        birchColorMultiplier: [0.68, 0.56, 0.22],
-      },
-      night: {
-        shadowColor: [0.001, 0.03, 0.02],
-        midColor: [0.02, 0.08, 0.05],
-        highlightColor: [0.15, 0.2, 0.15],
-        colorMultiplier: [0.09, 0.13, 0.007],
-        // Tree leaves colors at night
-        treeShadowColor: [0.01, 0.03, 0.001],
-        treeColorMultiplier: [0.25, 0.24, 0.001],
-        // Birch colors at night
-        birchShadowColor: [0.03, 0.015, 0],
-        birchMidColor: [0.08, 0.015, 0],
-        birchHighlightColor: [0.3, 0.17, 0.03],
-        birchColorMultiplier: [0.3, 0.2, 0.01],
-      },
-    };
+    this.COLOR_PRESETS = this.seasonManager.getColorConfig('bush');
 
     this.BUSH_DEFINITIONS = [
       // bottom right cluster
@@ -116,6 +90,10 @@ export default class Bush {
 
     this.environmentTimeManager.onChange((newValue, oldValue) => {
       this.onEnvTimeChanged(newValue, oldValue);
+    });
+
+    this.seasonManager.onChange((newSeason, oldSeason) => {
+      this.onSeasonChanged(newSeason, oldSeason);
     });
   }
 
@@ -270,7 +248,17 @@ export default class Bush {
 
   onEnvTimeChanged(newValue, oldValue) {
     this.currentEnvTime = newValue;
-    const preset = this.COLOR_PRESETS[newValue];
+    this.updateColors();
+  }
+
+  onSeasonChanged(newSeason, oldSeason) {
+    this.currentSeason = newSeason;
+    this.COLOR_PRESETS = this.seasonManager.getColorConfig('bush');
+    this.updateColors();
+  }
+
+  updateColors() {
+    const preset = this.COLOR_PRESETS[this.currentEnvTime];
 
     this.material.uniforms.uShadowColor.value.setRGB(
       preset.shadowColor[0],
@@ -390,6 +378,7 @@ export default class Bush {
 
   dispose() {
     this.environmentTimeManager.offChange();
+    this.seasonManager.offChange();
 
     if (this.bushManager && typeof this.bushManager.dispose === 'function') {
       this.bushManager.dispose();

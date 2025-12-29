@@ -3,14 +3,18 @@ import gsap from 'gsap';
 import Game from '../../../Game.class';
 import windLinesVertexShader from '../../../../Shaders/Materials/windLines/vertex.glsl';
 import windLinesFragmentShader from '../../../../Shaders/Materials/windLines/fragment.glsl';
+import SeasonManager from '../../Managers/SeasonManager/SeasonManager.class';
 
 class WindLine {
   constructor() {
     this.game = Game.getInstance();
     this.available = true;
+    this.seasonManager = SeasonManager.getInstance();
+    this.currentSeason = this.seasonManager.currentSeason;
 
     const geometry = this.createGeometry();
 
+    const windColor = this.seasonManager.getColorConfig('windLines').color;
     this.material = new THREE.ShaderMaterial({
       transparent: true,
       side: THREE.DoubleSide,
@@ -18,7 +22,7 @@ class WindLine {
       uniforms: {
         uThickness: { value: 0.1 },
         uProgress: { value: 0.0 },
-        uColor: { value: new THREE.Color(0xffffff) },
+        uColor: { value: windColor.clone() },
         uTangent: { value: new THREE.Vector3(0, 1, -1).normalize() },
       },
       vertexShader: windLinesVertexShader,
@@ -31,6 +35,16 @@ class WindLine {
     this.mesh.visible = false;
 
     this.game.scene.add(this.mesh);
+
+    this.seasonManager.onChange((newSeason, oldSeason) => {
+      this.onSeasonChanged(newSeason, oldSeason);
+    });
+  }
+
+  onSeasonChanged(newSeason, oldSeason) {
+    this.currentSeason = newSeason;
+    const windColor = this.seasonManager.getColorConfig('windLines').color;
+    this.material.uniforms.uColor.value.copy(windColor);
   }
 
   createGeometry(length = 11, handlesCount = 4, amplitude = 1, divisions = 30) {

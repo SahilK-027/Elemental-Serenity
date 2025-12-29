@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import Game from '../../../Game.class';
 import EnvironmentTimeManager from '../../Managers/EnvironmentManager/EnvironmentManager.class';
+import SeasonManager from '../../Managers/SeasonManager/SeasonManager.class';
 
 export default class Tent {
   constructor() {
@@ -8,6 +9,8 @@ export default class Tent {
     this.scene = this.game.scene;
     this.resources = this.game.resources;
     this.envManager = EnvironmentTimeManager.getInstance();
+    this.seasonManager = SeasonManager.getInstance();
+    this.currentSeason = this.seasonManager.currentSeason;
 
     this.lampMeshes = [];
 
@@ -36,6 +39,19 @@ export default class Tent {
 
     this.envManager.onChange((newValue, oldValue) => {
       this.applyLampConfig(newValue);
+    });
+
+    this.seasonManager.onChange((newSeason, oldSeason) => {
+      this.onSeasonChanged(newSeason, oldSeason);
+    });
+  }
+
+  onSeasonChanged(newSeason, oldSeason) {
+    this.currentSeason = newSeason;
+    const lampColor = this.seasonManager.getColorConfig('tent').lampColor;
+    
+    this.lampMeshes.forEach((mesh) => {
+      mesh.material.emissive.copy(lampColor);
     });
   }
 
@@ -68,8 +84,9 @@ export default class Tent {
       }
 
       if (child.material.name === 'Lamp glass.001') {
+        const lampColor = this.seasonManager.getColorConfig('tent').lampColor;
         child.material = new THREE.MeshStandardMaterial({
-          emissive: new THREE.Color(0xffe286),
+          emissive: lampColor.clone(),
         });
         this.lampMeshes.push(child);
       }

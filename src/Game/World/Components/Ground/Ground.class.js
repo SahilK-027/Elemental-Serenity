@@ -4,6 +4,7 @@ import { BiomeManager } from '../../Managers/BiomeManager/BiomeManager.class';
 import { GrassManager } from '../../Managers/GrassManager/GrassManager.class';
 import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js';
 import EnvironmentTimeManager from '../../Managers/EnvironmentManager/EnvironmentManager.class';
+import SeasonManager from '../../Managers/SeasonManager/SeasonManager.class';
 import groundVertexCommonChunk from '../../../../Shaders/Chunks/ground/ground.vertex_common_chunk.glsl';
 import groundVertexBeginChunk from '../../../../Shaders/Chunks/ground/ground.vertex_begin_chunk.glsl';
 import groundFragmentCommonChunk from '../../../../Shaders/Chunks/ground/ground.fragment_common_chunk.glsl';
@@ -31,18 +32,11 @@ export default class Ground {
     this.gridSpacing = gridSpacing ?? this.GROUND_SIZE;
     this.gridY = gridY;
     this.environmentTimeManager = EnvironmentTimeManager.getInstance();
+    this.seasonManager = SeasonManager.getInstance();
     this.envTime = this.environmentTimeManager.envTime;
+    this.currentSeason = this.seasonManager.currentSeason;
 
-    this.colorConfig = {
-      day: {
-        uGroundColorDark: new THREE.Color(0.94, 0.58, 0.22),
-        uWaterShallow: new THREE.Color(1.0, 0.4, 0.0),
-      },
-      night: {
-        uGroundColorDark: new THREE.Color(0.804, 0.5411, 0.278),
-        uWaterShallow: new THREE.Color(0.52, 0.207, 0.0),
-      },
-    };
+    this.colorConfig = this.seasonManager.getColorConfig('ground');
 
     this.debugGUI = this.game.debug;
 
@@ -73,6 +67,10 @@ export default class Ground {
 
     this.environmentTimeManager.onChange((newValue, oldValue) => {
       this.onEnvTimeChanged(newValue, oldValue);
+    });
+
+    this.seasonManager.onChange((newSeason, oldSeason) => {
+      this.onSeasonChanged(newSeason, oldSeason);
     });
   }
 
@@ -116,14 +114,14 @@ export default class Ground {
       uPerlinNoise: { value: perlinNoise },
       uGroundRockMap: { value: groundRockMap },
       uGroundRockAO: { value: groundRockAO },
-      uGroundColorLight: { value: new THREE.Color(0.2784, 0.1372, 0.0235) },
+      uGroundColorLight: { value: colors.uGroundColorLight.clone() },
       uGroundColorDark: { value: colors.uGroundColorDark.clone() },
-      uGroundColorBelowGrass: { value: new THREE.Color(0.12, 0.15, 0.03) },
-      uRockColor: { value: new THREE.Color(1.0, 0.78, 0.47) },
+      uGroundColorBelowGrass: { value: colors.uGroundColorBelowGrass.clone() },
+      uRockColor: { value: colors.uRockColor.clone() },
       uHeightMap: { value: groundRockMap },
       uRockTiling: { value: 6.0 },
       uWaterShallow: { value: colors.uWaterShallow.clone() },
-      uWaterDeep: { value: new THREE.Color(0.06, 0.5, 0.51) },
+      uWaterDeep: { value: colors.uWaterDeep.clone() },
       uWaterDepthIntensity: { value: 1.0 },
     };
 
@@ -199,15 +197,38 @@ export default class Ground {
 
   onEnvTimeChanged(newValue, oldValue) {
     this.envTime = newValue;
+    this.updateColors();
+  }
 
+  onSeasonChanged(newSeason, oldSeason) {
+    this.currentSeason = newSeason;
+    this.colorConfig = this.seasonManager.getColorConfig('ground');
+    this.updateColors();
+  }
+
+  updateColors() {
     if (!this.customGroundUniforms) return;
 
-    const colors = this.colorConfig[newValue];
+    const colors = this.colorConfig[this.envTime];
 
+    this.customGroundUniforms.uGroundColorLight.value.copy(
+      colors.uGroundColorLight
+    );
     this.customGroundUniforms.uGroundColorDark.value.copy(
       colors.uGroundColorDark
     );
-    this.customGroundUniforms.uWaterShallow.value.copy(colors.uWaterShallow);
+    this.customGroundUniforms.uGroundColorBelowGrass.value.copy(
+      colors.uGroundColorBelowGrass
+    );
+    this.customGroundUniforms.uRockColor.value.copy(
+      colors.uRockColor
+    );
+    this.customGroundUniforms.uWaterShallow.value.copy(
+      colors.uWaterShallow
+    );
+    this.customGroundUniforms.uWaterDeep.value.copy(
+      colors.uWaterDeep
+    );
   }
 
   addWaterRipples() {
@@ -445,6 +466,9 @@ export default class Ground {
   }
 
   dispose() {
+    this.environmentTimeManager.offChange();
+    this.seasonManager.offChange();
+
     if (this.grassManager) {
       this.grassManager.dispose();
     }

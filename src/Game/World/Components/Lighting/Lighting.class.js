@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import Game from '../../../Game.class';
 import EnvironmentTimeManager from '../../Managers/EnvironmentManager/EnvironmentManager.class';
+import SeasonManager from '../../Managers/SeasonManager/SeasonManager.class';
 
 export default class Lighting {
   constructor({ helperEnabled = false } = {}) {
@@ -9,7 +10,9 @@ export default class Lighting {
     this.resources = this.game.resources;
     this.helperEnabled = helperEnabled;
     this.environmentTimeManager = EnvironmentTimeManager.getInstance();
+    this.seasonManager = SeasonManager.getInstance();
     this.envTime = this.environmentTimeManager.envTime;
+    this.currentSeason = this.seasonManager.currentSeason;
     this.debugGUI = this.game.debug;
 
     this.lights = {
@@ -20,7 +23,7 @@ export default class Lighting {
       lamp: null,
     };
 
-    this.presets = this.createLightingPresets();
+    this.presets = this.seasonManager.getColorConfig('lighting');
 
     this.initialize();
 
@@ -32,6 +35,10 @@ export default class Lighting {
 
     this.environmentTimeManager.onChange((newValue, oldValue) => {
       this.onEnvTimeChanged(newValue, oldValue);
+    });
+
+    this.seasonManager.onChange((newSeason, oldSeason) => {
+      this.onSeasonChanged(newSeason, oldSeason);
     });
   }
 
@@ -181,6 +188,12 @@ export default class Lighting {
 
   onEnvTimeChanged(newValue, oldValue) {
     this.applyPreset(newValue);
+  }
+
+  onSeasonChanged(newSeason, oldSeason) {
+    this.currentSeason = newSeason;
+    this.presets = this.seasonManager.getColorConfig('lighting');
+    this.applyPreset(this.envTime);
   }
 
   applyPreset(timeOfDay) {
@@ -453,6 +466,7 @@ export default class Lighting {
 
   dispose() {
     this.environmentTimeManager.offChange();
+    this.seasonManager.offChange();
 
     Object.values(this.lights).forEach((light) => {
       if (light) {

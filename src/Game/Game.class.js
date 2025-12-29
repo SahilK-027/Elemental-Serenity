@@ -6,6 +6,7 @@ import Renderer from './Core/Renderer.class';
 import World from './World/World.class';
 import DebugGUI from './Utils/DebugGUI.class';
 import EnvironmentTimeManager from './World/Managers/EnvironmentManager/EnvironmentManager.class';
+import SeasonManager from './World/Managers/SeasonManager/SeasonManager.class';
 
 export default class Game {
   constructor(canvas, resources, isDebugMode) {
@@ -23,6 +24,7 @@ export default class Game {
     this.canvas = canvas;
     this.resources = resources;
     this.environmentTimeManager = EnvironmentTimeManager.getInstance();
+    this.seasonManager = SeasonManager.getInstance();
     this.sizes = new Sizes();
     this.time = new Time();
     this.scene = new THREE.Scene();
@@ -77,6 +79,15 @@ export default class Game {
       },
     };
 
+    const seasonProxy = {
+      get season() {
+        return Game.instance.seasonManager.currentSeason;
+      },
+      set season(value) {
+        Game.instance.seasonManager.setSeason(value);
+      },
+    };
+
     this.debug.add(
       envTimeProxy,
       'time',
@@ -86,6 +97,35 @@ export default class Game {
         onChange: (value) => {
           this.environmentTimeManager.setTime(value);
         },
+      },
+      'Environment'
+    );
+
+    this.debug.add(
+      seasonProxy,
+      'season',
+      {
+        options: ['spring', 'winter', 'autumn', 'rainy'],
+        label: 'Season',
+        onChange: (value) => {
+          this.seasonManager.setSeason(value);
+        },
+      },
+      'Environment'
+    );
+
+    // Add season toggle button
+    const seasonControls = {
+      toggleSeason: () => {
+        this.seasonManager.toggle();
+      }
+    };
+
+    this.debug.add(
+      seasonControls,
+      'toggleSeason',
+      {
+        label: 'Toggle Season'
       },
       'Environment'
     );

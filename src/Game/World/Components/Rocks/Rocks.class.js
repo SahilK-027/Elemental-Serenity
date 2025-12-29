@@ -1,5 +1,7 @@
 import Game from '../../../Game.class';
 import * as THREE from 'three';
+import EnvironmentTimeManager from '../../Managers/EnvironmentManager/EnvironmentManager.class';
+import SeasonManager from '../../Managers/SeasonManager/SeasonManager.class';
 import rocksVertexCommonChunk from '../../../../Shaders/Chunks/rocks/rocks.vertex_common_chunk.glsl';
 import rocksVertexBeginChunk from '../../../../Shaders/Chunks/rocks/rocks.vertex_begin_chunk.glsl';
 import rocksFragmentCommonChunk from '../../../../Shaders/Chunks/rocks/rocks.fragment_common_chunk.glsl';
@@ -11,6 +13,10 @@ export default class Rocks {
     this.scene = this.game.scene;
     this.resources = this.game.resources;
     this.debugGUI = this.game.debug;
+    this.environmentTimeManager = EnvironmentTimeManager.getInstance();
+    this.seasonManager = SeasonManager.getInstance();
+    this.envTime = this.environmentTimeManager.envTime;
+    this.currentSeason = this.seasonManager.currentSeason;
 
     this.addRocks();
 
@@ -18,6 +24,36 @@ export default class Rocks {
     if (this.isDebugMode) {
       this.initGUI();
     }
+
+    this.environmentTimeManager.onChange((newValue, oldValue) => {
+      this.onEnvTimeChanged(newValue, oldValue);
+    });
+
+    this.seasonManager.onChange((newSeason, oldSeason) => {
+      this.onSeasonChanged(newSeason, oldSeason);
+    });
+  }
+
+  onEnvTimeChanged(newValue, oldValue) {
+    this.envTime = newValue;
+    this.updateColors();
+  }
+
+  onSeasonChanged(newSeason, oldSeason) {
+    this.currentSeason = newSeason;
+    this.updateColors();
+  }
+
+  updateColors() {
+    const colors = this.seasonManager.getColorConfig('rocks', this.envTime);
+    if (!colors || !this.customRockUniforms) return;
+
+    this.customRockUniforms.uRockColor1.value.copy(colors.uRockColor1);
+    this.customRockUniforms.uRockColor2.value.copy(colors.uRockColor2);
+    this.customRockUniforms.uRockColor3.value.copy(colors.uRockColor3);
+    this.customRockUniforms.uMossColor1.value.copy(colors.uMossColor1);
+    this.customRockUniforms.uMossColor2.value.copy(colors.uMossColor2);
+    this.customRockUniforms.uMossColor3.value.copy(colors.uMossColor3);
   }
 
   addRocks() {
@@ -42,15 +78,17 @@ export default class Rocks {
     const perlinNoise = this.game.resources.items.perlinNoise;
     perlinNoise.wrapS = perlinNoise.wrapT = THREE.RepeatWrapping;
 
+    const colors = this.seasonManager.getColorConfig('rocks', this.envTime);
+
     this.customRockUniforms = {
       uDisplacementMap: { value: displacementTexture },
       uPerlinNoise: { value: perlinNoise },
-      uRockColor1: { value: new THREE.Color(0.96, 0.86, 0.54) },
-      uRockColor2: { value: new THREE.Color(0.97, 0.82, 0.42) },
-      uRockColor3: { value: new THREE.Color(0.31, 0.24, 0.06) },
-      uMossColor1: { value: new THREE.Color(0.97, 0.82, 0.42) },
-      uMossColor2: { value: new THREE.Color(0.97, 0.82, 0.42) },
-      uMossColor3: { value: new THREE.Color(0.14, 0.17, 0.003) },
+      uRockColor1: { value: colors.uRockColor1.clone() },
+      uRockColor2: { value: colors.uRockColor2.clone() },
+      uRockColor3: { value: colors.uRockColor3.clone() },
+      uMossColor1: { value: colors.uMossColor1.clone() },
+      uMossColor2: { value: colors.uMossColor2.clone() },
+      uMossColor3: { value: colors.uMossColor3.clone() },
       uMossNoiseFactor: { value: 1.2 },
       uMossVisibility: { value: 3.0 },
     };
@@ -129,5 +167,10 @@ export default class Rocks {
       { min: 0.0, max: 5.0, step: 0.01, label: 'Rock Moss Noise Visibility' },
       'Rock'
     );
+  }
+
+  dispose() {
+    this.environmentTimeManager.offChange();
+    this.seasonManager.offChange();
   }
 }

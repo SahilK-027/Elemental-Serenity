@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import Game from '../../../Game.class';
+import SeasonManager from '../../Managers/SeasonManager/SeasonManager.class';
 
 export default class FallingLeavesSystem {
   constructor(geometry, bounds) {
@@ -7,9 +8,12 @@ export default class FallingLeavesSystem {
     this.count = 35;
     this.scene = this.game.scene;
     this.bounds = bounds;
+    this.seasonManager = SeasonManager.getInstance();
+    this.currentSeason = this.seasonManager.currentSeason;
 
+    const leafColor = this.seasonManager.getColorConfig('fallingLeaves').color;
     this.material = new THREE.MeshStandardMaterial({
-      color: new THREE.Color(0xff6f0d),
+      color: leafColor,
     });
 
     this.mesh = new THREE.InstancedMesh(geometry, this.material, this.count);
@@ -31,6 +35,16 @@ export default class FallingLeavesSystem {
       this.particles[i].pos.y =
         Math.random() * (bounds.yMax - bounds.yMin) + bounds.yMin;
     }
+
+    this.seasonManager.onChange((newSeason, oldSeason) => {
+      this.onSeasonChanged(newSeason, oldSeason);
+    });
+  }
+
+  onSeasonChanged(newSeason, oldSeason) {
+    this.currentSeason = newSeason;
+    const leafColor = this.seasonManager.getColorConfig('fallingLeaves').color;
+    this.material.color.copy(leafColor);
   }
 
   respawn(p) {

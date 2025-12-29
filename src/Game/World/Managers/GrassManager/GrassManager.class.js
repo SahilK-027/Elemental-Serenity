@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import EnvironmentTimeManager from '../EnvironmentManager/EnvironmentManager.class';
+import SeasonManager from '../SeasonManager/SeasonManager.class';
 import gsap from 'gsap';
 import * as MATH from '../../../Utils/Math.class';
 import grassVertexCommonChunk from '../../../../Shaders/Chunks/grass/grass.vertex_common_chunk.glsl';
@@ -24,7 +25,9 @@ export class GrassManager {
     this.scene = game.scene;
     this.biomeManager = biomeManager;
     this.environmentTimeManager = EnvironmentTimeManager.getInstance();
+    this.seasonManager = SeasonManager.getInstance();
     this.envTime = this.environmentTimeManager.envTime;
+    this.currentSeason = this.seasonManager.currentSeason;
     this.debugGUI = this.game.debug;
 
     this.WORLD_SIZE = worldSize;
@@ -44,20 +47,7 @@ export class GrassManager {
     this.sharedUniforms = null;
     this.grassInstancedMesh = null;
 
-    this.colorConfig = {
-      day: {
-        shadow: new THREE.Color(0.01, 0.16, 0.0),
-        dark: new THREE.Color(0.0, 0.29, 0.02),
-        light: new THREE.Color(0.48, 0.68, 0.007),
-        flowerVisibility: 1.0,
-      },
-      night: {
-        shadow: new THREE.Color(0.0023, 0.04, 0.0),
-        dark: new THREE.Color(0.0, 0.23, 0.015),
-        light: new THREE.Color(0.227, 0.31, 0.027),
-        flowerVisibility: 0.15,
-      },
-    };
+    this.colorConfig = this.seasonManager.getColorConfig('grass');
 
     this.init();
 
@@ -67,6 +57,10 @@ export class GrassManager {
     }
     this.environmentTimeManager.onChange((newValue, oldValue) => {
       this.onEnvTimeChanged(newValue, oldValue);
+    });
+
+    this.seasonManager.onChange((newSeason, oldSeason) => {
+      this.onSeasonChanged(newSeason, oldSeason);
     });
   }
 
@@ -125,10 +119,19 @@ export class GrassManager {
 
   onEnvTimeChanged(newValue, oldValue) {
     this.envTime = newValue;
+    this.updateColors();
+  }
 
+  onSeasonChanged(newSeason, oldSeason) {
+    this.currentSeason = newSeason;
+    this.colorConfig = this.seasonManager.getColorConfig('grass');
+    this.updateColors();
+  }
+
+  updateColors() {
     if (!this.sharedUniforms) return;
 
-    const colors = this.colorConfig[newValue];
+    const colors = this.colorConfig[this.envTime];
 
     gsap.to(this.sharedUniforms.uShadowColor.value, {
       r: colors.shadow.r,
@@ -431,6 +434,7 @@ export class GrassManager {
 
   dispose() {
     this.environmentTimeManager.offChange();
+    this.seasonManager.offChange();
 
     if (this.grassInstancedMesh) {
       this.scene.remove(this.grassInstancedMesh);
