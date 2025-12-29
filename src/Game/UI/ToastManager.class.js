@@ -15,7 +15,7 @@ export default class ToastManager {
     this.toastContainer.id = 'toast-container';
     this.toastContainer.style.cssText = `
       position: fixed;
-      bottom: 20px;
+      top: 20px;
       left: 20px;
       z-index: 10000;
       pointer-events: none;

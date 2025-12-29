@@ -35,7 +35,7 @@ export class GrassManager {
     this.gridCols = gridCols;
     this.gridRows = gridRows;
     this.gridSpacing = gridSpacing;
-    this.grassSize = 1.2;
+    this.grassSize = 1.185;
     this.GRASS_PER_TILE = 12500;
 
     this.FLOWERS_PER_TILE = 20;

@@ -31,7 +31,7 @@ const ASSETS = [
   {
     id: 'grassPathDensityDataTexture',
     type: 'texture',
-    path: ['/textures/grass/path_data_rgb_768x768.png'],
+    path: ['/textures/grass/path_data_rgb_768x768_test.png'],
   },
   {
     id: 'displacedNormalMap',
@@ -66,7 +66,7 @@ const ASSETS = [
   {
     id: 'tentModel',
     type: 'gltfModelCompressed',
-    path: ['/models/tent.glb'],
+    path: ['/models/tent_2.glb'],
   },
   {
     id: 'bridgeModel',

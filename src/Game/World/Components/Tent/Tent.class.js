@@ -58,7 +58,7 @@ export default class Tent {
   addTent() {
     this.tentModel = this.resources.items.tentModel.scene;
     this.tentModel.scale.set(1.1, 1.1, 1.1);
-    this.tentModel.position.set(2.5, 0.9, -10);
+    this.tentModel.position.set(2.5, 0.6, -9);
     this.tentModel.rotation.y = -Math.PI / 60;
     this.scene.add(this.tentModel);
 
