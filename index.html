@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <!-- 
     font-family: "Amatic SC", sans-serif;
     font-family: "Schoolbell", cursive;
@@ -12,6 +18,7 @@
     -->
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Schoolbell&display=swap');
+      @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
 
       * {
         margin: 0;
@@ -30,6 +37,177 @@
         left: 0;
         outline: none;
       }
+
+      #shader-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 999;
+        pointer-events: none;
+        opacity: 0;
+      }
+
+      #loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #ede8e4;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        transition: opacity 0.5s ease-out;
+        gap: 24px;
+      }
+
+      #loader.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .loader-title {
+        font-family: 'Schoolbell', sans-serif;
+        font-size: 3rem;
+        font-weight: 700;
+        color: #000;
+        text-align: center;
+        position: relative;
+        display: inline-block;
+        margin-bottom: 0;
+      }
+
+      .loader-title .fa-canadian-maple-leaf {
+        position: absolute;
+        top: -0.4em;
+        left: -0.6em;
+        font-size: 0.7em;
+        background: linear-gradient(
+          135deg,
+          #fde61b 0%,
+          #f69e02 30%,
+          #fa5a03 60%,
+          #bf0505 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        transform: rotate(-25deg);
+        animation: leafFloat 3s ease-in-out infinite;
+      }
+
+      @keyframes leafFloat {
+        0%,
+        100% {
+          transform: rotate(-25deg) translateY(0px);
+        }
+        50% {
+          transform: rotate(-20deg) translateY(-3px);
+        }
+      }
+
+      .loader-progress {
+        height: 2px;
+        background-color: rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+        margin: 0;
+        border-radius: 1px;
+      }
+
+      .loader-progress-bar {
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        width: 0%;
+        transition: width 0.3s ease-out;
+        border-radius: 1px;
+      }
+
+      .loader-text {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.85rem;
+        color: rgba(0, 0, 0, 0.5);
+        text-align: center;
+        line-height: 1.5;
+        max-width: 400px;
+        margin: 0;
+        min-height: 40px;
+      }
+
+      .explore-buttons {
+        display: flex;
+        gap: 16px;
+        opacity: 0;
+        transform: translateY(15px);
+        transition: all 0.25s ease;
+        visibility: hidden;
+      }
+
+      .explore-button {
+        padding: 14px 24px;
+        border-radius: 0;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.85rem;
+        font-weight: 500;
+        letter-spacing: 0.6px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.25s ease;
+        margin: 0;
+        border: 1.5px solid;
+      }
+
+      .explore-button-light {
+        background: transparent;
+        border-color: rgba(0, 0, 0, 0.6);
+        color: rgba(0, 0, 0, 0.8);
+      }
+
+      .explore-button-light:hover {
+        background: rgba(0, 0, 0, 0.04);
+        border-color: rgba(0, 0, 0, 0.9);
+        color: rgba(0, 0, 0, 1);
+        transform: translateY(-1px);
+      }
+
+      .explore-button-light:active {
+        transform: translateY(0px);
+        background: rgba(0, 0, 0, 0.08);
+      }
+
+      .explore-button-dark {
+        background: rgba(0, 0, 0, 0.9);
+        border-color: rgba(0, 0, 0, 0.9);
+        color: rgba(255, 255, 255, 0.95);
+      }
+
+      .explore-button-dark:hover {
+        background: rgba(0, 0, 0, 1);
+        border-color: rgba(0, 0, 0, 1);
+        color: rgba(255, 255, 255, 1);
+        transform: translateY(-1px);
+      }
+
+      .explore-button-dark:active {
+        transform: translateY(0px);
+        background: rgba(0, 0, 0, 0.8);
+      }
+
+      .explore-buttons.show {
+        opacity: 1;
+        transform: translateY(0px);
+        visibility: visible;
+      }
+
+      .explore-button i {
+        transition: transform 0.3s ease;
+        font-size: 0.75rem;
+      }
     </style>
     <title>Elemental Serenity</title>
   </head>
@@ -37,7 +215,37 @@
   <body>
     <div id="app"></div>
     <canvas id="three"></canvas>
+
+    <!-- Shader Reveal Overlay -->
+    <canvas id="shader-overlay"></canvas>
+
+    <!-- Loader Screen -->
+    <div id="loader">
+      <div class="loader-title">
+        <i class="fa-brands fa-canadian-maple-leaf"></i>Elemental Serenity
+      </div>
+      <div class="loader-progress">
+        <div class="loader-progress-bar" id="progress-bar"></div>
+      </div>
+      <div class="loader-text" id="loader-text">Loading assets...</div>
+      <div class="explore-buttons" id="explore-buttons">
+        <button
+          class="explore-button explore-button-light"
+          id="explore-with-music"
+        >
+          <i class="fas fa-music"></i>
+          <span>Explore with Music</span>
+        </button>
+        <button
+          class="explore-button explore-button-dark"
+          id="explore-without-music"
+        >
+          <i class="fas fa-volume-mute"></i>
+          <span>Explore in Silence</span>
+        </button>
+      </div>
+    </div>
+
     <script type="module" src="/src/main.js"></script>
   </body>
-
 </html>
