@@ -27,7 +27,7 @@ export default class Fire {
         secondStopValue: 0.1,
       },
       night: {
-        secondStopValue: 0.02,
+        secondStopValue: 0.05,
       },
     };
 
@@ -92,8 +92,8 @@ export default class Fire {
     this.smokeAlphaStops = [
       { time: 0.0, value: 0.0 },
       { time: 0.1, value: smokeAlphaValue },
-      { time: 0.55, value: 0.01 },
-      { time: 1.0, value: 0.00 },
+      { time: 0.55, value: 0.04 },
+      { time: 1.0, value: 0.01 },
     ];
     this.smokeColorStops = [
       { time: 0.0, value: new THREE.Color(0xfff1cc) },
@@ -393,9 +393,9 @@ export default class Fire {
     smokeEmitterParams.rotation = new THREE.Quaternion();
     smokeEmitterParams.rotation.setFromAxisAngle(
       new THREE.Vector3(1, 0, 0),
-      -Math.PI / 12
+      -Math.PI / 8
     );
-    smokeEmitterParams.rotationAngularVariance = Math.PI / 6;
+    smokeEmitterParams.rotationAngularVariance = Math.PI / 8;
     smokeEmitterParams.swirlX = 0.02;
     smokeEmitterParams.swirlZ = 0.01;
 

@@ -42,7 +42,7 @@ export default class Camera {
   setOrbitControls() {
     this.controls = new OrbitControls(this.cameraInstance, this.canvas);
     this.controls.enableDamping = true;
-    this.controls.enablePan = true;
+    this.controls.enablePan = false;
     this.controls.enableZoom = true;
     this.controls.maxPolarAngle = Math.PI / 2.2;
     this.controls.minPolarAngle = Math.PI / 4;
