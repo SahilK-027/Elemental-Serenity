@@ -82,14 +82,46 @@ export default class AudioManager extends EventEmitter {
     if (!this.currentMusic || !this.currentMusic.isPlaying) return;
 
     if (fadeOut) {
+      const musicToStop = this.currentMusic; // Store reference
       this.fadeVolume(this.currentMusic, 0, fadeDuration, () => {
-        this.currentMusic.stop();
-        this.currentMusic = null;
+        if (musicToStop && musicToStop.isPlaying) {
+          musicToStop.stop();
+        }
+        if (this.currentMusic === musicToStop) {
+          this.currentMusic = null;
+        }
       });
     } else {
       this.currentMusic.stop();
       this.currentMusic = null;
     }
+  }
+
+  // Force stop all music regardless of state
+  forceStopAllMusic() {
+    // Stop current music without checks
+    if (this.currentMusic) {
+      try {
+        this.currentMusic.stop();
+      } catch (e) {
+        console.warn('Error stopping current music:', e);
+      }
+      this.currentMusic = null;
+    }
+    
+    // Stop all music sounds directly
+    Object.keys(this.sounds).forEach(soundId => {
+      if (soundId.includes('Music')) {
+        const sound = this.sounds[soundId];
+        if (sound && sound.isPlaying) {
+          try {
+            sound.stop();
+          } catch (e) {
+            console.warn(`Error stopping ${soundId}:`, e);
+          }
+        }
+      }
+    });
   }
 
   // Sound effects

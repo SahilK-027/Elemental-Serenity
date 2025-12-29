@@ -13,9 +13,11 @@ export default class MusicManager extends EventEmitter {
     
     this.currentTrackIndex = -1;
     this.isPlaying = false;
+    this.isPaused = false;
     this.fadeInDuration = 2000;
     this.fadeOutDuration = 1000;
     this.trackCheckInterval = null;
+    this.pausedTrackId = null;
     
     this.init();
   }
@@ -28,11 +30,56 @@ export default class MusicManager extends EventEmitter {
     if (this.isPlaying) return;
     
     this.isPlaying = true;
+    this.isPaused = false;
+    this.playNextRandomTrack();
+  }
+
+  pauseMusic() {
+    if (!this.isPlaying) return;
+    
+    this.isPaused = true;
+    this.isPlaying = false;
+    
+    // Store current track info for resuming
+    if (this.audioManager.currentMusic && this.audioManager.currentMusic.isPlaying) {
+      this.pausedTrackId = this.getCurrentTrack()?.id;
+      this.audioManager.stopMusic(true, this.fadeOutDuration);
+    }
+    
+    if (this.trackCheckInterval) {
+      clearInterval(this.trackCheckInterval);
+      this.trackCheckInterval = null;
+    }
+  }
+
+  resumeMusic() {
+    if (!this.isPaused) {
+      // If not paused, start fresh
+      this.startRandomMusic();
+      return;
+    }
+    
+    this.isPlaying = true;
+    this.isPaused = false;
+    
+    // Resume the same track that was paused
+    if (this.pausedTrackId && this.currentTrackIndex >= 0) {
+      const track = this.musicTracks[this.currentTrackIndex];
+      if (track && track.id === this.pausedTrackId) {
+        this.playTrackWithoutLoop(track);
+        this.startTrackMonitoring(track.id);
+        return;
+      }
+    }
+    
+    // Fallback: play next random track if we can't resume
     this.playNextRandomTrack();
   }
 
   stopMusic() {
     this.isPlaying = false;
+    this.isPaused = false;
+    this.pausedTrackId = null;
     this.audioManager.stopMusic(true, this.fadeOutDuration);
     this.currentTrackIndex = -1;
     

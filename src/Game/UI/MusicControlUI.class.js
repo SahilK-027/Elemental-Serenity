@@ -57,16 +57,16 @@ export default class MusicControlUI {
   }
 
   enableMusic() {
-    // Start the music system
-    this.musicManager.startRandomMusic();
+    // Resume music if it was paused, otherwise start fresh
+    this.musicManager.resumeMusic();
     
     // Show toast notification
     this.toastManager.showToast('Music enabled', 'success', 2000);
   }
 
   disableMusic() {
-    // Stop the music system
-    this.musicManager.stopMusic();
+    // Pause the music system (preserves current track)
+    this.musicManager.pauseMusic();
     
     // Show toast notification
     this.toastManager.showToast('Music disabled', 'info', 2000);
@@ -95,6 +95,7 @@ export default class MusicControlUI {
     this.handleWindowFocus = this.handleWindowFocus.bind(this);
     this.handleBeforeUnload = this.handleBeforeUnload.bind(this);
     this.handlePageHide = this.handlePageHide.bind(this);
+    this.handleUnload = this.handleUnload.bind(this);
 
     // Handle page visibility changes (user switching tabs, minimizing window, etc.)
     document.addEventListener('visibilitychange', this.handleVisibilityChange);
@@ -108,6 +109,9 @@ export default class MusicControlUI {
 
     // Handle pagehide (more reliable for mobile)
     window.addEventListener('pagehide', this.handlePageHide);
+    
+    // Handle unload as additional backup
+    window.addEventListener('unload', this.handleUnload);
   }
 
   handleVisibilityChange() {
@@ -115,15 +119,17 @@ export default class MusicControlUI {
       // Page is hidden - pause music if it's playing
       if (this.isMusicEnabled && this.musicManager.isPlaying) {
         this.wasPlayingBeforeHide = true;
-        this.musicManager.stopMusic();
+        this.musicManager.pauseMusic();
       }
+      // Force stop all music as backup
+      this.musicManager.audioManager.forceStopAllMusic();
     } else {
       // Page is visible again - resume music if it was playing before
       if (this.isMusicEnabled && this.wasPlayingBeforeHide) {
         this.wasPlayingBeforeHide = false;
         // Small delay to ensure smooth transition
         setTimeout(() => {
-          this.musicManager.startRandomMusic();
+          this.musicManager.resumeMusic();
         }, 500);
       }
     }
@@ -132,29 +138,36 @@ export default class MusicControlUI {
   handleWindowBlur() {
     if (this.isMusicEnabled && this.musicManager.isPlaying) {
       this.wasPlayingBeforeHide = true;
-      this.musicManager.stopMusic();
+      this.musicManager.pauseMusic();
     }
+    // Force stop all music as backup
+    this.musicManager.audioManager.forceStopAllMusic();
   }
 
   handleWindowFocus() {
     if (this.isMusicEnabled && this.wasPlayingBeforeHide) {
       this.wasPlayingBeforeHide = false;
       setTimeout(() => {
-        this.musicManager.startRandomMusic();
+        this.musicManager.resumeMusic();
       }, 500);
     }
   }
 
   handleBeforeUnload() {
-    if (this.musicManager.isPlaying) {
-      this.musicManager.stopMusic();
-    }
+    // Force stop all music
+    this.musicManager.audioManager.forceStopAllMusic();
+    this.musicManager.stopMusic();
   }
 
   handlePageHide() {
-    if (this.musicManager.isPlaying) {
-      this.musicManager.stopMusic();
-    }
+    // Force stop all music
+    this.musicManager.audioManager.forceStopAllMusic();
+    this.musicManager.stopMusic();
+  }
+
+  handleUnload() {
+    // Force stop all music
+    this.musicManager.audioManager.forceStopAllMusic();
   }
 
   // Set initial state based on whether music was enabled at startup
@@ -180,5 +193,6 @@ export default class MusicControlUI {
     window.removeEventListener('focus', this.handleWindowFocus);
     window.removeEventListener('beforeunload', this.handleBeforeUnload);
     window.removeEventListener('pagehide', this.handlePageHide);
+    window.removeEventListener('unload', this.handleUnload);
   }
 }
