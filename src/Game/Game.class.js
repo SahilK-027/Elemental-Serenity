@@ -7,6 +7,7 @@ import World from './World/World.class';
 import DebugGUI from './Utils/DebugGUI.class';
 import AudioManager from './Utils/AudioManager.class';
 import MusicManager from './Utils/MusicManager.class';
+import AmbientSoundManager from './Utils/AmbientSoundManager.class';
 import ToastManager from './UI/ToastManager.class';
 import MusicControlUI from './UI/MusicControlUI.class';
 import EnvironmentTimeManager from './World/Managers/EnvironmentManager/EnvironmentManager.class';
@@ -48,6 +49,9 @@ export default class Game {
     // Initialize music control UI
     this.musicControlUI = new MusicControlUI(this.musicManager, this.toastManager);
     this.musicControlUI.setInitialState(this.withMusic);
+    
+    // Initialize ambient sound manager (after musicControlUI)
+    this.ambientSoundManager = new AmbientSoundManager(this.environmentTimeManager, this.seasonManager, this.audioManager, this.musicControlUI);
     
     // Listen for track changes to show toast notifications
     this.musicManager.on('trackChanged', (track) => {
@@ -205,6 +209,24 @@ export default class Game {
     this.debug.add(audioControls, 'playFire', { label: 'Play Fire (Loop)' }, 'Audio');
     this.debug.add(audioControls, 'playBirds', { label: 'Play Random Birds' }, 'Audio');
     this.debug.add(audioControls, 'stopAllSounds', { label: 'Stop All Sounds' }, 'Audio');
+
+    // Ambient sound controls
+    const ambientControls = {
+      ambientVolume: this.ambientSoundManager.config.baseVolume,
+      stopAllAmbient: () => this.ambientSoundManager.stopAllAmbientSounds(),
+      updateAmbient: () => this.ambientSoundManager.updateAmbientSounds()
+    };
+
+    this.debug.add(ambientControls, 'ambientVolume', {
+      min: 0, max: 1, step: 0.1,
+      onChange: (value) => {
+        this.ambientSoundManager.config.baseVolume = value;
+        this.ambientSoundManager.setMasterVolume(1.0); // Refresh volumes
+      }
+    }, 'Ambient Sounds');
+
+    this.debug.add(ambientControls, 'stopAllAmbient', { label: 'Stop All Ambient' }, 'Ambient Sounds');
+    this.debug.add(ambientControls, 'updateAmbient', { label: 'Update Ambient' }, 'Ambient Sounds');
   }
 
   destroy() {
@@ -212,6 +234,9 @@ export default class Game {
     this.time.off('animate');
 
     // Cleanup audio
+    if (this.ambientSoundManager) {
+      this.ambientSoundManager.dispose();
+    }
     if (this.musicManager) {
       this.musicManager.stopMusic();
     }
@@ -265,6 +290,7 @@ export default class Game {
     this.world = null;
     this.debug = null;
     this.audioManager = null;
+    this.ambientSoundManager = null;
     this.musicManager = null;
     this.toastManager = null;
     this.musicControlUI = null;

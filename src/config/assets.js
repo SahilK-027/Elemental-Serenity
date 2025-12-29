@@ -211,6 +211,11 @@ const ASSETS = [
     path: ['/audio/sounds/owl/owl_howling.mp3'],
   },
   {
+    id: 'owlHootingSound',
+    type: 'audio',
+    path: ['/audio/sounds/owl/owl_hooting.mp3'],
+  },
+  {
     id: 'rainSound',
     type: 'audio',
     path: ['/audio/sounds/rain/rain.mp3'],
