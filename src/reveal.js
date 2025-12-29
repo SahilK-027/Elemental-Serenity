@@ -15,9 +15,10 @@ export default class ShaderReveal {
     this.program = null;
     this.uniforms = {};
     this.startTime = 0;
-    this.duration = 5000;
-    this.isAnimating = false;
+    this.duration = 4500;
+    this.textDisplayDuration = 8000;
     this.hasStarted = false;
+    this.textOverlay = null;
 
     this.init();
   }
@@ -113,37 +114,180 @@ export default class ShaderReveal {
     }
   }
 
+  createTextOverlay() {
+    this.textOverlay = document.createElement('div');
+    this.textOverlay.innerHTML = `
+      <div class="reveal-content" style="
+        text-align: center; 
+        font-family: 'Inter', sans-serif;
+        max-width: 600px;
+        margin: 0 auto;
+      ">
+        <h1 class="reveal-title" style="
+          font-family: 'Schoolbell', sans-serif;
+          font-size: clamp(2.5rem, 6vw, 3rem);
+          font-weight: 700;
+          color: #000;
+          margin: 0 0 1.5rem 0;
+          opacity: 0;
+          transition: opacity 1.2s ease-out;
+        ">About Experience</h1>
+        
+        <div class="reveal-description" style="
+          font-family: 'Inter', sans-serif;
+          font-size: clamp(0.85rem, 2vw, 1rem);
+          line-height: 1.7;
+          color: rgba(0, 0, 0, 0.6);
+          font-weight: 400;
+        ">
+          <p class="reveal-line" style="
+            margin: 0.2rem 0;
+            opacity: 0;
+            transition: opacity 0.8s ease-out;
+          ">Welcome to a tranquil digital sanctuary where nature's elements come alive through procedural generation, ambient soundscapes, and the gentle passage of time.</p>
+          
+          <p class="reveal-footer" style="
+            margin: 0.8rem 0 0 0;
+            font-size: 0.8em;
+            color: rgba(0, 0, 0, 0.4);
+            font-style: italic;
+            opacity: 0;
+            transition: opacity 0.8s ease-out;
+          ">Built with Three.js, WebGL shaders, and a deep love for nature's beauty.</p>
+        </div>
+      </div>
+    `;
+
+    this.textOverlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #ede8e4;
+      z-index: 1001;
+      opacity: 1;
+      pointer-events: none;
+      padding: 2rem;
+      box-sizing: border-box;
+    `;
+
+    document.body.appendChild(this.textOverlay);
+
+    this.animateTextReveal();
+  }
+
+  animateTextReveal() {
+    if (!this.textOverlay) return;
+
+    setTimeout(() => {
+      const title = this.textOverlay.querySelector('.reveal-title');
+      if (title) {
+        title.style.opacity = '1';
+      }
+    }, 200);
+
+    setTimeout(() => {
+      const line = this.textOverlay.querySelector('.reveal-line');
+      if (line) {
+        line.style.opacity = '1';
+      }
+    }, 800);
+
+    setTimeout(() => {
+      const footer = this.textOverlay.querySelector('.reveal-footer');
+      if (footer) {
+        footer.style.opacity = '1';
+      }
+    }, 1400);
+  }
+
   start() {
     if (this.hasStarted) {
       console.log('Shader reveal already started, ignoring duplicate call');
       return;
     }
 
+    console.log('Starting unified reveal experience');
     this.hasStarted = true;
 
-    if (!this.gl || !this.program) {
-      this.canvas.style.opacity = '1';
-      this.canvas.style.background = '#ede8e4';
-      this.canvas.style.transition = 'opacity 2.5s ease-out';
+    this.createTextOverlay();
 
+    this.canvas.style.opacity = '0';
+
+    if (!this.gl || !this.program) {
       setTimeout(() => {
-        this.canvas.style.opacity = '0';
+        this.animateTextExit();
         setTimeout(() => {
-          this.canvas.style.display = 'none';
-        }, 2500);
-      }, 100);
+          if (this.textOverlay) {
+            this.textOverlay.style.transition = 'opacity 1s ease-out';
+            this.textOverlay.style.opacity = '0';
+          }
+        }, 800);
+      }, this.textDisplayDuration - 1000);
       return;
+    }
+
+    setTimeout(() => {
+      this.animateTextExit();
+    }, this.textDisplayDuration - 1200);
+
+    setTimeout(() => {
+      this.startRevealAnimation();
+    }, this.textDisplayDuration - 400);
+  }
+
+  animateTextExit() {
+    if (!this.textOverlay) return;
+
+    setTimeout(() => {
+      const footer = this.textOverlay.querySelector('.reveal-footer');
+      if (footer) {
+        footer.style.transition = 'opacity 0.4s ease-out';
+        footer.style.opacity = '0';
+      }
+    }, 0);
+
+    setTimeout(() => {
+      const line = this.textOverlay.querySelector('.reveal-line');
+      if (line) {
+        line.style.transition = 'opacity 0.4s ease-out';
+        line.style.opacity = '0';
+      }
+    }, 150);
+
+    setTimeout(() => {
+      const title = this.textOverlay.querySelector('.reveal-title');
+      if (title) {
+        title.style.transition = 'opacity 0.4s ease-out';
+        title.style.opacity = '0';
+      }
+    }, 300);
+  }
+
+  startRevealAnimation() {
+    console.log('Starting reveal animation');
+
+    if (this.textOverlay) {
+      this.textOverlay.style.transition = 'opacity 0.5s ease-out';
+      this.textOverlay.style.opacity = '0';
+      setTimeout(() => {
+        if (this.textOverlay) {
+          this.textOverlay.remove();
+          this.textOverlay = null;
+        }
+      }, 500);
     }
 
     this.canvas.style.opacity = '1';
     this.startTime = performance.now();
-    this.isAnimating = true;
     this.animate();
   }
 
   animate() {
-    if (!this.isAnimating) return;
-
     const currentTime = performance.now();
     const elapsed = currentTime - this.startTime;
     const progress = Math.min(elapsed / this.duration, 1);
@@ -179,7 +323,7 @@ export default class ShaderReveal {
   }
 
   finish() {
-    this.isAnimating = false;
+    this.hasStarted = false;
 
     this.canvas.style.transition = 'opacity 1.5s ease-out';
     this.canvas.style.opacity = '0';
@@ -191,8 +335,17 @@ export default class ShaderReveal {
 
   reset() {
     this.hasStarted = false;
-    this.isAnimating = false;
     this.canvas.style.opacity = '0';
     this.canvas.style.display = 'block';
+    this.canvas.style.transition = '';
+
+    if (this.textOverlay && this.textOverlay.parentNode) {
+      this.textOverlay.parentNode.removeChild(this.textOverlay);
+      this.textOverlay = null;
+    }
+  }
+
+  destroy() {
+    this.reset();
   }
 }
