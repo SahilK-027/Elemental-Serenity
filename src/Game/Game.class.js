@@ -163,6 +163,7 @@ export default class Game {
       stopMusic: () => this.musicManager.stopMusic(),
       playMorningPetals: () => this.audioManager.playMusic('morningPetalsMusic'),
       playWindowLight: () => this.audioManager.playMusic('windowLightMusic'),
+      playForestDreams: () => this.audioManager.playMusic('forestDreamsMusic'),
       playRain: () => this.audioManager.playSound('rainSound', null, true),
       playFire: () => this.audioManager.playSound('fireBurningSound', null, true),
       playBirds: () => this.audioManager.playSound(this.audioManager.getRandomBirdSound()),
@@ -194,6 +195,7 @@ export default class Game {
     this.debug.add(audioControls, 'stopMusic', { label: 'Stop Music' }, 'Audio');
     this.debug.add(audioControls, 'playMorningPetals', { label: 'Play Morning Petals' }, 'Audio');
     this.debug.add(audioControls, 'playWindowLight', { label: 'Play Window Light' }, 'Audio');
+    this.debug.add(audioControls, 'playForestDreams', { label: 'Play Forest Dreams' }, 'Audio');
     this.debug.add(audioControls, 'playRain', { label: 'Play Rain (Loop)' }, 'Audio');
     this.debug.add(audioControls, 'playFire', { label: 'Play Fire (Loop)' }, 'Audio');
     this.debug.add(audioControls, 'playBirds', { label: 'Play Random Birds' }, 'Audio');

@@ -169,6 +169,11 @@ const ASSETS = [
     type: 'audio',
     path: ['/audio/musics/window_light.mp3'],
   },
+  {
+    id: 'forestDreamsMusic',
+    type: 'audio',
+    path: ['/audio/musics/forest_dreams.mp3'],
+  },
   // Nature Sounds
   {
     id: 'birds1Sound',

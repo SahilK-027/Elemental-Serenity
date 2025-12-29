@@ -26,6 +26,7 @@ export default class AudioManager extends EventEmitter {
       // Music
       'morningPetalsMusic',
       'windowLightMusic',
+      'forestDreamsMusic',
       // Nature sounds
       'birds1Sound', 'birds2Sound', 'birds3Sound', 'birds4Sound',
       'cricketsSound', 'fireBurningSound', 'owlHowlingSound',

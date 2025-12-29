@@ -7,7 +7,8 @@ export default class MusicManager extends EventEmitter {
     this.audioManager = audioManager;
     this.musicTracks = [
       { id: 'morningPetalsMusic', name: 'Morning Petals' },
-      { id: 'windowLightMusic', name: 'Window Light' }
+      { id: 'windowLightMusic', name: 'Window Light' },
+      { id: 'forestDreamsMusic', name: 'Forest Dreams' }
     ];
     
     this.currentTrackIndex = -1;
