@@ -38,7 +38,8 @@ export default class Renderer {
 
     this.rendererInstance = new THREE.WebGLRenderer({
       canvas: this.canvas,
-      antialias: true,
+      antialias: false,
+      powerPreference: 'high-performance',
     });
 
     this.updateToneMapping();
@@ -60,9 +61,9 @@ export default class Renderer {
 
     this.rendererInstance.toneMappingExposure = 1.75;
     this.rendererInstance.shadowMap.enabled = true;
-    this.rendererInstance.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.rendererInstance.shadowMap.type = THREE.PCFShadowMap; // Use faster shadow type
     this.rendererInstance.setSize(this.sizes.width, this.sizes.height);
-    this.rendererInstance.setPixelRatio(this.sizes.pixelRatio);
+    this.rendererInstance.setPixelRatio(Math.min(this.sizes.pixelRatio, 2)); // Cap pixel ratio
 
     if (this.isDebugMode) {
       this.setUpPerformanceMonitor();

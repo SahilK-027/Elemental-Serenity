@@ -88,7 +88,8 @@ export default class Fire {
       { time: 0.5, value: 60 },
       { time: 1.0, value: 20 },
     ];
-    const smokeAlphaValue = this.smokeAlphaConfig[this.envTime].smokeAlphaSecondStop;
+    const smokeAlphaValue =
+      this.smokeAlphaConfig[this.envTime].smokeAlphaSecondStop;
     this.smokeAlphaStops = [
       { time: 0.0, value: 0.0 },
       { time: 0.1, value: smokeAlphaValue },
@@ -381,8 +382,8 @@ export default class Fire {
     smokeEmitterParams.shape = new PARTICLES.PointShape();
     smokeEmitterParams.shape.position.set(-5.4, 1.9, -6.9);
     smokeEmitterParams.shape.positionRadiusVariance = 0.4;
-    smokeEmitterParams.emissionRate = 60;
-    smokeEmitterParams.maxParticles = 180;
+    smokeEmitterParams.emissionRate = 50;
+    smokeEmitterParams.maxParticles = 150;
     smokeEmitterParams.maxEmission = Infinity;
     smokeEmitterParams.maxLife = 3;
     smokeEmitterParams.gravity = false;

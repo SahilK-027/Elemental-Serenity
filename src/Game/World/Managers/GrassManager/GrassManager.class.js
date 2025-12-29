@@ -35,8 +35,8 @@ export class GrassManager {
     this.gridCols = gridCols;
     this.gridRows = gridRows;
     this.gridSpacing = gridSpacing;
-    this.grassSize = 1.1;
-    this.GRASS_PER_TILE = 15000;
+    this.grassSize = 1.2;
+    this.GRASS_PER_TILE = 12500;
 
     this.FLOWERS_PER_TILE = 20;
     this.flowerInstancedMesh = null;
@@ -246,7 +246,8 @@ export class GrassManager {
       totalCount
     );
     this.grassInstancedMesh.receiveShadow = true;
-    this.grassInstancedMesh.frustumCulled = true;
+    this.grassInstancedMesh.frustumCulled = false;
+    this.grassInstancedMesh.castShadow = false;
 
     const baseScales = new Float32Array(totalCount);
     const worldPositions = new Float32Array(totalCount * 2);
@@ -424,7 +425,7 @@ export class GrassManager {
 
   update() {
     if (this.sharedUniforms) {
-      this.sharedUniforms.uTime.value += 0.016;
+      this.sharedUniforms.uTime.value += 0.012;
     }
 
     if (this.flowerMaterial) {
