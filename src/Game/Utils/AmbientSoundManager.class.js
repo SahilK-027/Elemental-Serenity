@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import EventEmitter from './EventEmitter.class.js';
 
 export default class AmbientSoundManager extends EventEmitter {
@@ -18,6 +19,10 @@ export default class AmbientSoundManager extends EventEmitter {
       thunderLongGapMin: 8000,
       thunderLongGapMax: 10000,
       baseVolume: 0.8,
+      // Distance-based sound positions
+      firePosition: new THREE.Vector3(-5.4, 1.0, -6.9),
+      lakePosition: new THREE.Vector3(0, 0, 0),
+      maxDistance: 35, // Maximum distance for volume calculation
     };
 
     // Active ambient sounds tracking
@@ -183,6 +188,8 @@ export default class AmbientSoundManager extends EventEmitter {
     this.handleRain(season, timeOfDay);
     this.handleThunder(season, timeOfDay);
     this.handleWolf(season, timeOfDay);
+    this.handleFire(season, timeOfDay);
+    this.handleLakeWaves(season, timeOfDay);
   }
 
   handleBirds(season, timeOfDay) {
@@ -258,6 +265,24 @@ export default class AmbientSoundManager extends EventEmitter {
     }
   }
 
+  handleFire(season, timeOfDay) {
+    // When: all seasons except rainy (day or night)
+    const shouldPlay = season !== 'rainy';
+    
+    if (shouldPlay) {
+      this.playContinuousSoundWithDistance('fireBurningSound', this.config.firePosition);
+    }
+  }
+
+  handleLakeWaves(season, timeOfDay) {
+    // When: all seasons (day or night)
+    const shouldPlay = true;
+    
+    if (shouldPlay) {
+      this.playContinuousSoundWithDistance('lakeWavesSound', this.config.lakePosition);
+    }
+  }
+
   // Sound playing methods
   playRandomBird() {
     const birdSoundId = this.audioManager.getRandomBirdSound();
@@ -308,6 +333,38 @@ export default class AmbientSoundManager extends EventEmitter {
     if (this.activeContinuousSounds.has(soundId)) {
       this.audioManager.stopSound(soundId);
       this.activeContinuousSounds.delete(soundId);
+    }
+  }
+
+  // Distance-based continuous sound management
+  playContinuousSoundWithDistance(soundId, soundPosition) {
+    if (!this.activeContinuousSounds.has(soundId)) {
+      const volume = this.calculateDistanceBasedVolume(soundPosition);
+      this.audioManager.playSound(soundId, volume, true);
+      this.activeContinuousSounds.add(soundId);
+    } else {
+      // Update volume based on current distance
+      this.updateSoundVolume(soundId, soundPosition);
+    }
+  }
+
+  calculateDistanceBasedVolume(soundPosition) {
+    const cameraPosition = this.audioManager.listener.parent.position;
+    const distance = cameraPosition.distanceTo(soundPosition);
+    
+    // Calculate volume based on distance (inverse relationship)
+    // At distance 0: full volume, at maxDistance: 0 volume
+    const normalizedDistance = Math.min(distance / this.config.maxDistance, 1.0);
+    const volume = (1.0 - normalizedDistance) * this.config.baseVolume * 0.7;
+    
+    return Math.max(volume, 0); // Ensure volume doesn't go negative
+  }
+
+  updateSoundVolume(soundId, soundPosition) {
+    const sound = this.audioManager.sounds[soundId];
+    if (sound && sound.isPlaying) {
+      const volume = this.calculateDistanceBasedVolume(soundPosition);
+      sound.setVolume(volume);
     }
   }
 
@@ -443,6 +500,17 @@ export default class AmbientSoundManager extends EventEmitter {
     );
     // Resume ambient sounds based on current conditions
     this.updateAmbientSounds();
+  }
+
+  // Update method for distance-based volume adjustment
+  update() {
+    // Update volume for distance-based sounds
+    if (this.activeContinuousSounds.has('fireBurningSound')) {
+      this.updateSoundVolume('fireBurningSound', this.config.firePosition);
+    }
+    if (this.activeContinuousSounds.has('lakeWavesSound')) {
+      this.updateSoundVolume('lakeWavesSound', this.config.lakePosition);
+    }
   }
 
   // Cleanup

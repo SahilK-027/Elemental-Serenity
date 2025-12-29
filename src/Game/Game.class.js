@@ -100,6 +100,11 @@ export default class Game {
     this.camera.update();
     this.world.update(this.time.delta, this.time.elapsedTime);
     this.renderer.update();
+    
+    // Update ambient sounds for distance-based volume
+    if (this.ambientSoundManager) {
+      this.ambientSoundManager.update();
+    }
   }
 
   initGUI() {

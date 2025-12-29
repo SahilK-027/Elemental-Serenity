@@ -9,7 +9,7 @@ export default class AudioManager extends EventEmitter {
     this.listener = new THREE.AudioListener();
     this.sounds = {};
     this.currentMusic = null;
-    this.masterVolume = 0.6;
+    this.masterVolume = 0.5;
     this.musicVolume = 0.5;
     this.soundVolume = 0.5;
 
@@ -182,6 +182,8 @@ export default class AudioManager extends EventEmitter {
       'rainSound',
       'wolfHowlingSound',
       'thunderDistantSound',
+      'fireBurningSound',
+      'lakeWavesSound',
     ];
 
     ambientSoundIds.forEach((soundId) => {
