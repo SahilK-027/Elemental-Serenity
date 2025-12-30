@@ -60,15 +60,14 @@ export default class MusicControlUI {
     // Resume music if it was paused, otherwise start fresh
     this.musicManager.resumeMusic();
     
-    // Show toast notification
-    this.toastManager.showToast('Music enabled', 'success', 2000);
+    // Don't show toast here - the music toast will appear when track starts playing
   }
 
   disableMusic() {
     // Pause the music system (preserves current track)
     this.musicManager.pauseMusic();
     
-    // Show toast notification
+    // Show toast notification for disable only
     this.toastManager.showToast('Music disabled', 'info', 2000);
   }
 

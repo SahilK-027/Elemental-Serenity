@@ -4,6 +4,7 @@ import SeasonManager from './Game/World/Managers/SeasonManager/SeasonManager.cla
 import EnvironmentTimeManager from './Game/World/Managers/EnvironmentManager/EnvironmentManager.class.js';
 import ASSETS from './config/assets.js';
 import reveal from './reveal.js';
+import ToastManager from './Game/UI/ToastManager.class.js';
 
 // Debug mode is enabled only when URL has ?mode=debug
 const isDebugMode =
@@ -182,74 +183,82 @@ resources.on('loaded', () => {
 // Season Toggle Functionality
 // Map UI season names to SeasonManager season names
 const seasonMapping = {
-  'spring': 'spring',
-  'autumn': 'autumn', 
-  'winter': 'winter',
-  'rain': 'rainy'
+  spring: 'spring',
+  autumn: 'autumn',
+  winter: 'winter',
+  rain: 'rainy',
 };
 
 // Reverse mapping for UI updates
 const reverseSeasonMapping = {
-  'spring': 'spring',
-  'autumn': 'autumn',
-  'winter': 'winter', 
-  'rainy': 'rain'
+  spring: 'spring',
+  autumn: 'autumn',
+  winter: 'winter',
+  rainy: 'rain',
 };
+
+const toastManager = new ToastManager();
 
 // Season toggle handler
 const handleSeasonToggle = (event) => {
   const clickedButton = event.currentTarget;
   const uiSeason = clickedButton.dataset.season;
   const managerSeason = seasonMapping[uiSeason];
-  
+
   // Remove active class from all buttons
-  seasonButtons.forEach(button => {
+  seasonButtons.forEach((button) => {
     button.classList.remove('active');
   });
-  
+
   // Add active class to clicked button
   clickedButton.classList.add('active');
-  
+
   // Update season manager
   seasonManager.setSeason(managerSeason);
-  
+
+  toastManager.showSeasonToast(managerSeason);
+
   console.log(`Season changed to: ${managerSeason} (UI: ${uiSeason})`);
 };
 
 // Add event listeners to season buttons
-seasonButtons.forEach(button => {
+seasonButtons.forEach((button) => {
   button.addEventListener('click', handleSeasonToggle);
 });
 
 // Listen to season manager changes and update UI
 seasonManager.onChange((newSeason, oldSeason) => {
   console.log(`Season Manager: Changed from ${oldSeason} to ${newSeason}`);
-  
+
   // Update UI to reflect the current season
   const uiSeason = reverseSeasonMapping[newSeason];
-  seasonButtons.forEach(button => {
+  seasonButtons.forEach((button) => {
     button.classList.remove('active');
     if (button.dataset.season === uiSeason) {
       button.classList.add('active');
     }
   });
-  
+
   // Dispatch custom event for other parts of the game to listen to
-  window.dispatchEvent(new CustomEvent('seasonChange', {
-    detail: { 
-      season: newSeason, 
-      oldSeason: oldSeason,
-      config: seasonManager.getSeasonConfig(newSeason)
-    }
-  }));
+  window.dispatchEvent(
+    new CustomEvent('seasonChange', {
+      detail: {
+        season: newSeason,
+        oldSeason: oldSeason,
+        config: seasonManager.getSeasonConfig(newSeason),
+      },
+    })
+  );
 });
 
 // Initialize UI with current season
 const initializeSeasonUI = () => {
   const currentSeason = seasonManager.currentSeason;
   const uiSeason = reverseSeasonMapping[currentSeason];
-  console.log(`Initializing season UI: Manager season = ${currentSeason}, UI season = ${uiSeason}`);
-  seasonButtons.forEach(button => {
+  console.log(
+    `Initializing season UI: Manager season = ${currentSeason}, UI season = ${uiSeason}`
+  );
+  seasonButtons.forEach((button) => {
     button.classList.remove('active');
     if (button.dataset.season === uiSeason) {
       button.classList.add('active');
@@ -263,52 +272,58 @@ const initializeSeasonUI = () => {
 const handleDayNightToggle = (event) => {
   const clickedButton = event.currentTarget;
   const selectedTime = clickedButton.dataset.time;
-  
+
   // Remove active class from all buttons
-  dayNightButtons.forEach(button => {
+  dayNightButtons.forEach((button) => {
     button.classList.remove('active');
   });
-  
+
   // Add active class to clicked button
   clickedButton.classList.add('active');
-  
+
   // Update environment time manager
   environmentTimeManager.setTime(selectedTime);
-  
+
+  toastManager.showDayNightToast(selectedTime);
+
   console.log(`Time changed to: ${selectedTime}`);
 };
 
 // Add event listeners to day/night buttons
-dayNightButtons.forEach(button => {
+dayNightButtons.forEach((button) => {
   button.addEventListener('click', handleDayNightToggle);
 });
 
 // Listen to environment time manager changes and update UI
 environmentTimeManager.onChange((newTime, oldTime) => {
-  console.log(`Environment Time Manager: Changed from ${oldTime} to ${newTime}`);
-  
+  console.log(
+    `Environment Time Manager: Changed from ${oldTime} to ${newTime}`
+  );
+
   // Update UI to reflect the current time
-  dayNightButtons.forEach(button => {
+  dayNightButtons.forEach((button) => {
     button.classList.remove('active');
     if (button.dataset.time === newTime) {
       button.classList.add('active');
     }
   });
-  
+
   // Dispatch custom event for other parts of the game to listen to
-  window.dispatchEvent(new CustomEvent('timeChange', {
-    detail: { 
-      time: newTime, 
-      oldTime: oldTime
-    }
-  }));
+  window.dispatchEvent(
+    new CustomEvent('timeChange', {
+      detail: {
+        time: newTime,
+        oldTime: oldTime,
+      },
+    })
+  );
 });
 
 // Initialize UI with current time
 const initializeDayNightUI = () => {
   const currentTime = environmentTimeManager.envTime;
   console.log(`Initializing day/night UI: Current time = ${currentTime}`);
-  dayNightButtons.forEach(button => {
+  dayNightButtons.forEach((button) => {
     button.classList.remove('active');
     if (button.dataset.time === currentTime) {
       button.classList.add('active');
