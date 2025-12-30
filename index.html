@@ -51,7 +51,6 @@
         height: 100%;
         z-index: 1001;
         pointer-events: none;
-        opacity: 0;
       }
 
       #loader {
@@ -65,7 +64,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        z-index: 1000;
+        z-index: 1002;
         transition: opacity 0.5s ease-out;
         gap: 24px;
       }
@@ -234,8 +233,8 @@
 
       /* Music Control Button */
       #music-control {
-        width: 56px;
-        height: 56px;
+        width: 46px;
+        height: 46px;
         border-radius: 50%;
         background: #ede8e4;
         border: 1.5px solid rgba(0, 0, 0, 0.1);
@@ -244,7 +243,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.1rem;
+        font-size: 1rem;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1),
           inset 0 1px 0 rgba(255, 255, 255, 0.8);
@@ -289,11 +288,12 @@
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08),
           0 2px 12px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.7);
         border: 0.5px solid rgba(0, 0, 0, 0.04);
+        width: fit-content;
       }
 
       .daynight-button {
-        width: 44px;
-        height: 44px;
+        width: 32px;
+        height: 32px;
         border-radius: 50%;
         border: none;
         cursor: pointer;
@@ -379,11 +379,12 @@
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08),
           0 2px 12px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.7);
         border: 0.5px solid rgba(0, 0, 0, 0.04);
+        width: fit-content;
       }
 
       .season-button {
-        width: 44px;
-        height: 44px;
+        width: 32px;
+        height: 32px;
         border-radius: 50%;
         border: none;
         cursor: pointer;
@@ -503,7 +504,7 @@
         color: #ede8e4;
         text-align: left;
         position: relative;
-        text-shadow: 4px 4px 4px #0000005c;
+        text-shadow: 4px 4px 4px #00000045;
       }
 
       #page-title.show {

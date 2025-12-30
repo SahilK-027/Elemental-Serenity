@@ -16,7 +16,8 @@ export default class ShaderReveal {
     this.uniforms = {};
     this.startTime = 0;
     this.duration = 4500;
-    this.textDisplayDuration = 7000;
+    // this.textDisplayDuration = 7000;
+    this.textDisplayDuration = 0; // DEBUG
     this.hasStarted = false;
     this.textOverlay = null;
 
@@ -223,8 +224,6 @@ export default class ShaderReveal {
 
     this.createTextOverlay();
 
-    this.canvas.style.opacity = '0';
-
     if (!this.gl || !this.program) {
       setTimeout(() => {
         this.animateTextExit();
@@ -276,8 +275,6 @@ export default class ShaderReveal {
   }
 
   startRevealAnimation() {
-    console.log('Starting reveal animation');
-
     if (this.textOverlay) {
       this.textOverlay.style.transition = 'opacity 0.5s ease-out';
       this.textOverlay.style.opacity = '0';
@@ -289,7 +286,6 @@ export default class ShaderReveal {
       }, 500);
     }
 
-    this.canvas.style.opacity = '1';
     this.startTime = performance.now();
     this.animate();
   }
@@ -332,9 +328,6 @@ export default class ShaderReveal {
   finish() {
     this.hasStarted = false;
 
-    this.canvas.style.transition = 'opacity 1.5s ease-out';
-    this.canvas.style.opacity = '0';
-
     setTimeout(() => {
       this.canvas.style.display = 'none';
     }, 1500);
@@ -342,7 +335,6 @@ export default class ShaderReveal {
 
   reset() {
     this.hasStarted = false;
-    this.canvas.style.opacity = '0';
     this.canvas.style.display = 'block';
     this.canvas.style.transition = '';
 
