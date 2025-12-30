@@ -550,6 +550,504 @@
         gap: 16px;
         z-index: 1000;
       }
+
+      /* Hamburger Menu Button */
+      #hamburger-menu {
+        position: fixed;
+        top: 24px;
+        right: 24px;
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: #ede8e4;
+        border: 1.5px solid rgba(0, 0, 0, 0.1);
+        color: #000;
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1),
+          inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        font-family: 'Inter', sans-serif;
+        z-index: 1000;
+      }
+
+      #hamburger-menu.show {
+        display: flex;
+        animation: controlPanelFadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+          forwards;
+      }
+
+      #hamburger-menu:hover {
+        transform: translateY(-2px) scale(1.05);
+        background: #f5f0ec;
+        border-color: rgba(0, 0, 0, 0.2);
+        color: #000;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2),
+          0 4px 12px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      }
+
+      #hamburger-menu:active {
+        transform: translateY(-1px) scale(1.02);
+        background: #ede8e4;
+      }
+
+      /* Modal Styles */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(8px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .modal-overlay.show {
+        display: flex;
+        opacity: 1;
+      }
+
+      .modal-container {
+        background: #ede8e4;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 600px;
+        max-height: 80vh;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        transform: scale(0.9) translateY(20px);
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        overflow: hidden;
+      }
+
+      .modal-overlay.show .modal-container {
+        transform: scale(1) translateY(0);
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 32px 16px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      .modal-title {
+        font-family: 'Schoolbell', cursive;
+        font-size: 2rem;
+        color: #000;
+        margin: 0;
+      }
+
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        color: rgba(0, 0, 0, 0.6);
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+      }
+
+      .modal-close:hover {
+        background: rgba(0, 0, 0, 0.1);
+        color: rgba(0, 0, 0, 0.8);
+      }
+
+      .modal-tabs {
+        display: flex;
+        background: rgba(0, 0, 0, 0.05);
+        padding: 0;
+      }
+
+      .tab-button {
+        flex: 1;
+        padding: 16px 24px;
+        background: none;
+        border: none;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.6);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border-bottom: 2px solid transparent;
+      }
+
+      .tab-button:hover {
+        color: rgba(0, 0, 0, 0.8);
+        background: rgba(0, 0, 0, 0.05);
+      }
+
+      .tab-button.active {
+        color: #000;
+        background: #ede8e4;
+        border-bottom-color: #000;
+      }
+
+      .modal-content {
+        max-height: 60vh;
+        overflow-y: auto;
+        padding: 0;
+      }
+
+      .tab-content {
+        display: none;
+        padding: 32px;
+        font-family: 'Inter', sans-serif;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      /* Settings Tab Styles */
+      .settings-section {
+        margin-bottom: 32px;
+      }
+
+      .section-title {
+        font-family: 'Schoolbell', cursive;
+        font-size: 1.4rem;
+        color: #000;
+        margin: 0 0 16px 0;
+      }
+
+      .setting-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      .setting-item:last-child {
+        border-bottom: none;
+      }
+
+      .setting-item label {
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.8);
+      }
+
+      .volume-control {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      #volume-slider {
+        width: 120px;
+        height: 4px;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 2px;
+        outline: none;
+        -webkit-appearance: none;
+      }
+
+      #volume-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 16px;
+        height: 16px;
+        background: #000;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+
+      .volume-value {
+        font-size: 0.85rem;
+        color: rgba(0, 0, 0, 0.6);
+        min-width: 35px;
+      }
+
+      .custom-select {
+        position: relative;
+        display: inline-block;
+      }
+
+      .custom-select select {
+        padding: 8px 32px 8px 12px;
+        border: 1.5px solid rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+        background: #ede8e4;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.9rem;
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        min-width: 120px;
+        transition: all 0.2s ease;
+      }
+
+      .custom-select select:hover {
+        border-color: rgba(0, 0, 0, 0.4);
+        background: #f5f0ec;
+      }
+
+      .custom-select select:focus {
+        outline: none;
+        border-color: rgba(0, 0, 0, 0.6);
+        background: #f5f0ec;
+      }
+
+      .custom-select::after {
+        content: '▼';
+        position: absolute;
+        top: 50%;
+        right: 12px;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: rgba(0, 0, 0, 0.6);
+        font-size: 0.7rem;
+      }
+
+      .toggle-switch {
+        position: relative;
+        width: 48px;
+        height: 24px;
+      }
+
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.2);
+        transition: 0.3s;
+        border-radius: 24px;
+      }
+
+      .toggle-slider:before {
+        position: absolute;
+        content: '';
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.3s;
+        border-radius: 50%;
+      }
+
+      input:checked + .toggle-slider {
+        background-color: #000;
+      }
+
+      input:checked + .toggle-slider:before {
+        transform: translateX(24px);
+      }
+
+      /* About Tab Styles */
+      .about-section {
+        line-height: 1.6;
+      }
+
+      .about-text {
+        color: rgba(0, 0, 0, 0.7);
+        margin-bottom: 24px;
+        font-size: 0.95rem;
+      }
+
+      .tech-title {
+        font-family: 'Schoolbell', cursive;
+        font-size: 1.2rem;
+        color: #000;
+        margin: 24px 0 12px 0;
+      }
+
+      .tech-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+
+      .tech-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 8px;
+        font-size: 0.85rem;
+        color: rgba(0, 0, 0, 0.7);
+      }
+
+      .tech-item i {
+        font-size: 1rem;
+        color: rgba(0, 0, 0, 0.6);
+      }
+
+      .feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .feature-list li {
+        padding: 6px 0;
+        color: rgba(0, 0, 0, 0.7);
+        font-size: 0.9rem;
+        position: relative;
+        padding-left: 20px;
+      }
+
+      .feature-list li:before {
+        content: '•';
+        color: rgba(0, 0, 0, 0.4);
+        position: absolute;
+        left: 0;
+      }
+
+      /* Credits Tab Styles */
+      .credits-section {
+        line-height: 1.6;
+      }
+
+      .credit-category {
+        margin-bottom: 24px;
+      }
+
+      .credit-title {
+        font-family: 'Schoolbell', cursive;
+        font-size: 1.2rem;
+        color: #000;
+        margin: 0 0 12px 0;
+      }
+
+      .credit-item {
+        padding: 4px 0;
+        color: rgba(0, 0, 0, 0.7);
+        font-size: 0.9rem;
+      }
+
+      .credit-item strong {
+        color: rgba(0, 0, 0, 0.8);
+      }
+
+      .version-info {
+        text-align: center;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 0.85rem;
+      }
+
+      /* Scrollbar Styles */
+      .modal-content::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .modal-content::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      .modal-content::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 3px;
+      }
+
+      .modal-content::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 0, 0, 0.5);
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .modal-container {
+          width: 95%;
+          max-height: 85vh;
+        }
+
+        .modal-header {
+          padding: 20px 24px 12px;
+        }
+
+        .modal-title {
+          font-size: 1.6rem;
+        }
+
+        .tab-content {
+          padding: 24px 20px;
+        }
+
+        .tech-grid {
+          grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        }
+
+        .setting-item {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
+        }
+
+        .volume-control {
+          width: 100%;
+          justify-content: space-between;
+        }
+
+        #volume-slider {
+          width: 150px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        #hamburger-menu {
+          top: 16px;
+          right: 16px;
+          width: 42px;
+          height: 42px;
+        }
+
+        .modal-container {
+          width: 98%;
+          max-height: 90vh;
+        }
+
+        .modal-header {
+          padding: 16px 20px 8px;
+        }
+
+        .modal-title {
+          font-size: 1.4rem;
+        }
+
+        .tab-button {
+          padding: 12px 16px;
+          font-size: 0.85rem;
+        }
+
+        .tab-content {
+          padding: 20px 16px;
+        }
+
+        .section-title {
+          font-size: 1.2rem;
+        }
+      }
     </style>
     <title>Elemental Serenity</title>
   </head>
@@ -560,6 +1058,11 @@
 
     <!-- Shader Reveal Overlay -->
     <canvas id="shader-overlay"></canvas>
+
+    <!-- Hamburger Menu Button -->
+    <button id="hamburger-menu" title="Settings">
+      <i class="fas fa-bars"></i>
+    </button>
 
     <!-- Right Side Control Panel -->
     <div id="control-panel">
@@ -611,6 +1114,171 @@
       <i class="fa-regular fa-square"></i>Elemental Serenity
     </div>
 
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal-overlay">
+      <div class="modal-container">
+        <div class="modal-header">
+          <h2 class="modal-title">Settings</h2>
+          <button class="modal-close" id="modal-close">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="modal-tabs">
+          <button class="tab-button active" data-tab="settings">
+            Settings
+          </button>
+          <button class="tab-button" data-tab="about">About</button>
+          <button class="tab-button" data-tab="credits">Credits</button>
+        </div>
+
+        <div class="modal-content">
+          <!-- Settings Tab -->
+          <div class="tab-content active" id="settings-tab">
+            <div class="settings-section">
+              <h3 class="section-title">Audio Settings</h3>
+              <div class="setting-item">
+                <label for="volume-slider">Master Volume</label>
+                <div class="volume-control">
+                  <input
+                    type="range"
+                    id="volume-slider"
+                    min="0"
+                    max="100"
+                    value="50"
+                  />
+                  <span class="volume-value">50%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <h3 class="section-title">Graphics Settings</h3>
+              <div class="setting-item">
+                <label for="graphics-quality">Quality Preset</label>
+                <div class="custom-select">
+                  <select id="graphics-quality">
+                    <option value="low">Low</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="high">High</option>
+                    <option value="ultra">Ultra</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- About Tab -->
+          <div class="tab-content" id="about-tab">
+            <div class="about-section">
+              <h3 class="section-title">Elemental Serenity</h3>
+              <p class="about-text">
+                An immersive 3D nature experience built with cutting-edge web
+                technologies. Explore a dynamic world that changes with seasons
+                and time, featuring realistic grass simulation, particle
+                effects, and atmospheric lighting.
+              </p>
+
+              <h4 class="tech-title">Technology Stack</h4>
+              <div class="tech-grid">
+                <div class="tech-item">
+                  <i class="fab fa-js-square"></i>
+                  <span>Three.js</span>
+                </div>
+                <div class="tech-item">
+                  <i class="fas fa-cube"></i>
+                  <span>WebGL</span>
+                </div>
+                <div class="tech-item">
+                  <i class="fas fa-code"></i>
+                  <span>GLSL Shaders</span>
+                </div>
+                <div class="tech-item">
+                  <i class="fas fa-magic"></i>
+                  <span>GSAP</span>
+                </div>
+                <div class="tech-item">
+                  <i class="fas fa-fire"></i>
+                  <span>Particle Systems</span>
+                </div>
+                <div class="tech-item">
+                  <i class="fas fa-leaf"></i>
+                  <span>Procedural Generation</span>
+                </div>
+              </div>
+
+              <h4 class="tech-title">Features</h4>
+              <ul class="feature-list">
+                <li>Dynamic day/night cycle with realistic lighting</li>
+                <li>Seasonal changes affecting environment and atmosphere</li>
+                <li>Advanced grass rendering with wind simulation</li>
+                <li>Realistic fire and smoke particle effects</li>
+                <li>Procedural terrain generation</li>
+                <li>Immersive audio design</li>
+                <li>Optimized performance across devices</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Credits Tab -->
+          <div class="tab-content" id="credits-tab">
+            <div class="credits-section">
+              <h3 class="section-title">Credits & Resources</h3>
+
+              <div class="credit-category">
+                <h4 class="credit-title">Development Team</h4>
+                <div class="credit-item">
+                  <strong>Lead Developer:</strong> Alex Thompson
+                </div>
+                <div class="credit-item">
+                  <strong>3D Artist:</strong> Sarah Chen
+                </div>
+                <div class="credit-item">
+                  <strong>Shader Programming:</strong> Marcus Rodriguez
+                </div>
+                <div class="credit-item">
+                  <strong>Audio Design:</strong> Emma Wilson
+                </div>
+              </div>
+
+              <div class="credit-category">
+                <h4 class="credit-title">Assets & Resources</h4>
+                <div class="credit-item">
+                  <strong>3D Models:</strong> Custom created with Blender
+                </div>
+                <div class="credit-item">
+                  <strong>Textures:</strong> Procedural and hand-painted
+                </div>
+                <div class="credit-item">
+                  <strong>Audio:</strong> Freesound.org contributors
+                </div>
+                <div class="credit-item">
+                  <strong>Fonts:</strong> Google Fonts (Inter, Schoolbell)
+                </div>
+              </div>
+
+              <div class="credit-category">
+                <h4 class="credit-title">Special Thanks</h4>
+                <div class="credit-item">
+                  Three.js community for excellent documentation
+                </div>
+                <div class="credit-item">
+                  WebGL and GLSL shader tutorials by various contributors
+                </div>
+                <div class="credit-item">
+                  Open source libraries that made this project possible
+                </div>
+              </div>
+
+              <div class="version-info">
+                <p>Version 1.0.0 | Built with ❤️ for the web</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Loader Screen -->
     <div id="loader">
       <div class="loader-title">
@@ -639,5 +1307,511 @@
     </div>
 
     <script type="module" src="/src/main.js"></script>
+
+    <script>
+      // Settings Modal Functionality
+      class SettingsManager {
+        constructor() {
+          this.hamburgerMenu = document.getElementById('hamburger-menu');
+          this.settingsModal = document.getElementById('settings-modal');
+          this.modalClose = document.getElementById('modal-close');
+          this.tabButtons = document.querySelectorAll('.tab-button');
+          this.tabContents = document.querySelectorAll('.tab-content');
+          this.volumeSlider = document.getElementById('volume-slider');
+          this.volumeValue = document.querySelector('.volume-value');
+          this.graphicsQuality = document.getElementById('graphics-quality');
+
+          // Load settings from localStorage or use defaults
+          const savedSettings = this.loadSettings();
+          this.settings = {
+            volume: savedSettings.volume || 50, // Default to 50% (0.5 in AudioManager)
+            graphicsQuality: savedSettings.graphicsQuality || 'medium',
+          };
+
+          // Initialize previousVolume for music toggle functionality
+          this.previousVolume = undefined;
+
+          // Apply the loaded graphics quality to the dropdown
+          this.graphicsQuality.value = this.settings.graphicsQuality;
+
+          // Apply the loaded volume to the slider
+          this.volumeSlider.value = this.settings.volume;
+          this.volumeValue.textContent = this.settings.volume + '%';
+
+          this.init();
+        }
+
+        init() {
+          // Show hamburger menu when control panel is shown
+          const controlPanel = document.getElementById('control-panel');
+          const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+              if (
+                mutation.type === 'attributes' &&
+                mutation.attributeName === 'class'
+              ) {
+                if (controlPanel.classList.contains('show')) {
+                  this.hamburgerMenu.classList.add('show');
+                  // Initialize volume based on game state
+                  this.initializeVolumeFromGame();
+                  // Set up music control UI listener
+                  this.setupMusicControlListener();
+                }
+              }
+            });
+          });
+          observer.observe(controlPanel, { attributes: true });
+
+          // Event listeners
+          this.hamburgerMenu.addEventListener('click', () => this.openModal());
+          this.modalClose.addEventListener('click', () => this.closeModal());
+          this.settingsModal.addEventListener('click', (e) => {
+            if (e.target === this.settingsModal) this.closeModal();
+          });
+
+          // Tab switching
+          this.tabButtons.forEach((button) => {
+            button.addEventListener('click', () =>
+              this.switchTab(button.dataset.tab)
+            );
+          });
+
+          // Volume control
+          this.volumeSlider.addEventListener('input', (e) => {
+            this.settings.volume = parseInt(e.target.value);
+            this.volumeValue.textContent = this.settings.volume + '%';
+            this.saveSettings(); // Save to localStorage
+            this.updateAudioVolume(this.settings.volume / 100);
+          });
+
+          // Graphics quality
+          this.graphicsQuality.addEventListener('change', (e) => {
+            const oldQuality = this.settings.graphicsQuality;
+            this.settings.graphicsQuality = e.target.value;
+            this.saveSettings(); // Save to localStorage
+            this.updateGraphicsQuality(e.target.value);
+
+            // Show reload banner if antialiasing setting changed
+            const qualitySettings = this.getQualitySettings();
+            const oldSettings = qualitySettings[oldQuality];
+            const newSettings = qualitySettings[e.target.value];
+
+            if (
+              oldSettings &&
+              newSettings &&
+              oldSettings.antialias !== newSettings.antialias
+            ) {
+              this.showReloadBanner();
+            }
+          });
+
+          // ESC key to close modal
+          document.addEventListener('keydown', (e) => {
+            if (
+              e.key === 'Escape' &&
+              this.settingsModal.classList.contains('show')
+            ) {
+              this.closeModal();
+            }
+          });
+        }
+
+        setupMusicControlListener() {
+          // Listen for music control button clicks to sync volume UI
+          const musicControlButton = document.getElementById('music-control');
+          if (musicControlButton) {
+            musicControlButton.addEventListener('click', () => {
+              // Wait a bit for the music control to update, then sync our UI
+              setTimeout(() => {
+                this.syncVolumeWithMusicState();
+              }, 100);
+            });
+          }
+        }
+
+        syncVolumeWithMusicState() {
+          if (window.gameInstance && window.gameInstance.musicControlUI) {
+            const isMusicEnabled =
+              window.gameInstance.musicControlUI.isMusicEnabled;
+
+            console.log('🎵 Syncing volume with music state:', {
+              isMusicEnabled,
+              currentVolume: this.settings.volume,
+              previousVolume: this.previousVolume
+            });
+
+            if (!isMusicEnabled) {
+              // Music is disabled, set volume UI to 0 but remember the actual volume
+              // Only store previousVolume if it's not already 0 (to avoid storing 0 as previous)
+              if (this.settings.volume > 0) {
+                this.previousVolume = this.settings.volume;
+                console.log('🔇 Music disabled, storing previous volume:', this.previousVolume);
+              }
+              this.settings.volume = 0;
+              this.volumeSlider.value = 0;
+              this.volumeValue.textContent = '0%';
+            } else {
+              // Music is enabled, restore previous volume or default to 50%
+              const volumeToRestore = this.previousVolume !== undefined ? this.previousVolume : 50;
+              
+              console.log('🔊 Music enabled, restoring volume to:', volumeToRestore);
+              
+              this.settings.volume = volumeToRestore;
+              this.volumeSlider.value = volumeToRestore;
+              this.volumeValue.textContent = volumeToRestore + '%';
+              
+              // Actually set the audio volume
+              this.updateAudioVolume(volumeToRestore / 100);
+              
+              // Save the restored volume to localStorage
+              this.saveSettings();
+              
+              // Clear previousVolume after restoration
+              this.previousVolume = undefined;
+            }
+          }
+        }
+
+        initializeVolumeFromGame() {
+          // Check if user chose "Explore in Silence" and adjust volume accordingly
+          if (window.gameInstance && window.gameInstance.audioManager) {
+            const currentVolume = window.gameInstance.audioManager.masterVolume;
+            const volumePercent = Math.round(currentVolume * 100);
+
+            // If the game was started without music, the volume should reflect that
+            if (!window.gameInstance.withMusic) {
+              // Store 50% as the default volume for when music gets enabled
+              this.previousVolume = 50;
+              this.settings.volume = 0;
+              this.volumeSlider.value = 0;
+              this.volumeValue.textContent = '0%';
+            } else {
+              // Game started with music, use the current volume or default to 50%
+              const initialVolume = volumePercent > 0 ? volumePercent : 50;
+              this.settings.volume = initialVolume;
+              this.volumeSlider.value = initialVolume;
+              this.volumeValue.textContent = initialVolume + '%';
+            }
+          }
+        }
+
+        initializeAntialiasFromGame() {
+          if (window.gameInstance && window.gameInstance.renderer) {
+            const currentAntialias = window.gameInstance.renderer.antialias;
+            this.settings.antialias = currentAntialias;
+
+            const antialiasToggle = document.getElementById('antialias-toggle');
+            if (antialiasToggle) {
+              antialiasToggle.checked = currentAntialias;
+            }
+
+            console.log(
+              `Initialized antialiasing toggle to: ${currentAntialias}`
+            );
+          }
+        }
+
+        openModal() {
+          this.settingsModal.classList.add('show');
+          document.body.style.overflow = 'hidden';
+        }
+
+        closeModal() {
+          this.settingsModal.classList.remove('show');
+          document.body.style.overflow = '';
+        }
+
+        switchTab(tabName) {
+          // Update tab buttons
+          this.tabButtons.forEach((btn) => {
+            btn.classList.toggle('active', btn.dataset.tab === tabName);
+          });
+
+          // Update tab contents
+          this.tabContents.forEach((content) => {
+            content.classList.toggle('active', content.id === tabName + '-tab');
+          });
+        }
+
+        updateAudioVolume(volume) {
+          // This will be called by the main game to update audio volume
+          if (window.gameInstance && window.gameInstance.audioManager) {
+            window.gameInstance.audioManager.setMasterVolume(volume);
+
+            // Don't interfere with music control when user is manually adjusting volume
+            // The music control UI should handle its own state
+
+            console.log(
+              `Master volume changed to: ${Math.round(volume * 100)}%`
+            );
+          }
+        }
+
+        updateGraphicsQuality(quality) {
+          // This will be called by the main game to update graphics settings
+          const settings = this.getQualitySettings();
+
+          if (window.gameInstance) {
+            const gameSettings = settings[quality];
+
+            // Update grass density
+            if (
+              window.gameInstance.world &&
+              window.gameInstance.world.ground &&
+              window.gameInstance.world.ground.grassManager
+            ) {
+              const grassManager =
+                window.gameInstance.world.ground.grassManager;
+              grassManager.GRASS_PER_TILE = gameSettings.grassPerTile;
+
+              // Trigger grass regeneration
+              if (typeof grassManager.regenerateGrass === 'function') {
+                grassManager.regenerateGrass();
+              }
+            }
+
+            // Update fire effects
+            if (window.gameInstance.world && window.gameInstance.world.fire) {
+              const fire = window.gameInstance.world.fire;
+              if (fire.fireEmitterParams) {
+                fire.originalFireEmissionRate = gameSettings.fireEmissionRate;
+                fire.fireEmitterParams.emissionRate =
+                  gameSettings.fireEmissionRate;
+              }
+              if (fire.smokeEmitterParams) {
+                fire.originalSmokeEmissionRate = gameSettings.smokeEmissionRate;
+                fire.smokeEmitterParams.emissionRate =
+                  gameSettings.smokeEmissionRate;
+              }
+              if (fire.amberEmitterParams) {
+                fire.originalAmberEmissionRate = gameSettings.amberEmissionRate;
+                fire.amberEmitterParams.emissionRate =
+                  gameSettings.amberEmissionRate;
+              }
+            }
+
+            console.log(
+              `Graphics quality changed to: ${quality}`,
+              gameSettings
+            );
+
+            // Emit graphics quality change event
+            const graphicsChangeEvent = new CustomEvent(
+              'graphicsQualityChanged',
+              {
+                detail: { quality, settings: gameSettings },
+              }
+            );
+            window.dispatchEvent(graphicsChangeEvent);
+          }
+        }
+
+        // Load settings from localStorage
+        loadSettings() {
+          try {
+            const saved = localStorage.getItem('gameSettings');
+            const settings = saved ? JSON.parse(saved) : {};
+            console.log('📁 Loaded settings from localStorage:', settings);
+            return settings;
+          } catch (error) {
+            console.warn('Failed to load settings from localStorage:', error);
+            return {};
+          }
+        }
+
+        // Save settings to localStorage
+        saveSettings() {
+          try {
+            localStorage.setItem('gameSettings', JSON.stringify(this.settings));
+          } catch (error) {
+            console.warn('Failed to save settings to localStorage:', error);
+          }
+        }
+
+        // Get quality settings object (same as in updateGraphicsQuality)
+        getQualitySettings() {
+          return {
+            low: {
+              grassPerTile: 10000,
+              fireEmissionRate: 350,
+              smokeEmissionRate: 35,
+              amberEmissionRate: 20,
+              antialias: false,
+              shadowMapType: 'BasicShadowMap',
+              pixelRatioCap: 1,
+            },
+            medium: {
+              grassPerTile: 12500,
+              fireEmissionRate: 500,
+              smokeEmissionRate: 50,
+              amberEmissionRate: 30,
+              antialias: false,
+              shadowMapType: 'PCFShadowMap',
+              pixelRatioCap: 2,
+            },
+            high: {
+              grassPerTile: 25000,
+              fireEmissionRate: 650,
+              smokeEmissionRate: 65,
+              amberEmissionRate: 40,
+              antialias: true,
+              shadowMapType: 'PCFSoftShadowMap',
+              pixelRatioCap: 2,
+            },
+            ultra: {
+              grassPerTile: 50000,
+              fireEmissionRate: 800,
+              smokeEmissionRate: 80,
+              amberEmissionRate: 50,
+              antialias: true,
+              shadowMapType: 'PCFSoftShadowMap',
+              pixelRatioCap: 3,
+            },
+          };
+        }
+
+        // Show reload banner when graphics settings change
+        showReloadBanner() {
+          // Remove existing banner if any
+          const existingBanner = document.getElementById('reload-banner');
+          if (existingBanner) {
+            existingBanner.remove();
+          }
+
+          // Create reload banner
+          const banner = document.createElement('div');
+          banner.id = 'reload-banner';
+          banner.innerHTML = `
+            <div style="
+              position: fixed;
+              top: 20px;
+              right: 20px;
+              background: #ede8e4;
+              color: #000;
+              padding: 15px 20px;
+              border-radius: 10px;
+              border: 1px solid rgba(0,0,0,0.1);
+              box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+              z-index: 10000;
+              font-family: 'Inter', sans-serif;
+              max-width: 300px;
+              animation: slideIn 0.3s ease-out;
+            ">
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                <i class="fas fa-info-circle" style="color: #000;"></i>
+                <span style="font-weight: 600; color: #000;">Graphics Settings Changed</span>
+              </div>
+              <p style="margin: 0 0 15px 0; font-size: 14px; color: #000; opacity: 0.8;">
+                Low / Medium <-> High / Ultra graphics  changes require a page reload to take effect.
+              </p>
+              <div style="display: flex; gap: 10px;">
+                <button id="reload-now-btn" style="
+                  background: #000;
+                  border: 1px solid #000;
+                  color: #ede8e4;
+                  padding: 8px 16px;
+                  border-radius: 6px;
+                  cursor: pointer;
+                  font-size: 14px;
+                  font-weight: 500;
+                  transition: all 0.2s;
+                " onmouseover="this.style.background='#333'; this.style.borderColor='#333'" 
+                   onmouseout="this.style.background='#000'; this.style.borderColor='#000'">
+                  Reload Now
+                </button>
+                <button id="dismiss-banner-btn" style="
+                  background: transparent;
+                  border: 1px solid rgba(0,0,0,0.3);
+                  color: #000;
+                  padding: 8px 16px;
+                  border-radius: 6px;
+                  cursor: pointer;
+                  font-size: 14px;
+                  transition: all 0.2s;
+                " onmouseover="this.style.background='rgba(0,0,0,0.05)'; this.style.borderColor='rgba(0,0,0,0.5)'" 
+                   onmouseout="this.style.background='transparent'; this.style.borderColor='rgba(0,0,0,0.3)'">
+                  Later
+                </button>
+              </div>
+            </div>
+          `;
+
+          // Add animation styles
+          if (!document.getElementById('reload-banner-styles')) {
+            const styles = document.createElement('style');
+            styles.id = 'reload-banner-styles';
+            styles.textContent = `
+              @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+              }
+            `;
+            document.head.appendChild(styles);
+          }
+
+          document.body.appendChild(banner);
+
+          // Add event listeners
+          document
+            .getElementById('reload-now-btn')
+            .addEventListener('click', () => {
+              window.location.reload();
+            });
+
+          document
+            .getElementById('dismiss-banner-btn')
+            .addEventListener('click', () => {
+              banner.remove();
+            });
+
+          // Auto-dismiss after 10 seconds
+          setTimeout(() => {
+            if (document.getElementById('reload-banner')) {
+              banner.remove();
+            }
+          }, 10000);
+        }
+      }
+
+      // Initialize settings manager when DOM is loaded
+      document.addEventListener('DOMContentLoaded', () => {
+        window.settingsManager = new SettingsManager();
+
+        // Apply saved graphics settings on page load
+        const savedQuality = window.settingsManager.settings.graphicsQuality;
+        const qualitySettings = window.settingsManager.getQualitySettings();
+        const currentSettings = qualitySettings[savedQuality];
+
+        if (currentSettings) {
+          // Set graphics settings in localStorage for renderer initialization
+          localStorage.setItem(
+            'graphicsAntialias',
+            currentSettings.antialias.toString()
+          );
+          localStorage.setItem(
+            'graphicsShadowMapType',
+            currentSettings.shadowMapType
+          );
+          localStorage.setItem(
+            'graphicsPixelRatioCap',
+            currentSettings.pixelRatioCap.toString()
+          );
+        }
+
+        // Add a test listener to verify the event system works
+        window.addEventListener('graphicsQualityChanged', (event) => {
+          console.log('🎮 Graphics Quality Event Received:', event.detail);
+        });
+
+        // Trigger initial graphics quality event when game loads
+        setTimeout(() => {
+          if (window.settingsManager) {
+            const currentQuality =
+              window.settingsManager.settings.graphicsQuality;
+            window.settingsManager.updateGraphicsQuality(currentQuality);
+          }
+        }, 1000); // Wait for game to initialize
+      });
+    </script>
   </body>
 </html>

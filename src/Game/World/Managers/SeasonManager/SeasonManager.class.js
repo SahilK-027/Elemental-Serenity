@@ -527,7 +527,7 @@ export default class SeasonManager extends EventEmitter {
             shadow: new THREE.Color(0.05, 0.025, 0.01),
             dark: new THREE.Color(0.15, 0.1, 0.04),
             light: new THREE.Color(0.4, 0.3, 0.15),
-            flowerVisibility: 0.25,
+            flowerVisibility: 0.15,
           },
         },
         fire: {

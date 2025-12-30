@@ -23,6 +23,10 @@ export default class Renderer {
     this.environmentTimeManager.onChange((newValue, oldValue) => {
       this.onEnvTimeChanged(newValue, oldValue);
     });
+    
+    // Subscribe to graphics quality changes
+    this.onGraphicsQualityChanged = this.onGraphicsQualityChanged.bind(this);
+    window.addEventListener('graphicsQualityChanged', this.onGraphicsQualityChanged);
   }
 
   setRendererInstance() {
@@ -36,9 +40,13 @@ export default class Renderer {
       NeutralToneMapping: THREE.NeutralToneMapping,
     };
 
+    // Get antialiasing setting from localStorage (set by graphics quality)
+    const storedAntialias = localStorage.getItem('graphicsAntialias');
+    const useAntialias = storedAntialias ? storedAntialias === 'true' : false;
+
     this.rendererInstance = new THREE.WebGLRenderer({
       canvas: this.canvas,
-      antialias: false,
+      antialias: useAntialias,
       powerPreference: 'high-performance',
     });
 
@@ -61,9 +69,22 @@ export default class Renderer {
 
     this.rendererInstance.toneMappingExposure = 1.75;
     this.rendererInstance.shadowMap.enabled = true;
-    this.rendererInstance.shadowMap.type = THREE.PCFShadowMap; // Use faster shadow type
+    
+    // Get shadow map type from localStorage (set by graphics quality)
+    const storedShadowMapType = localStorage.getItem('graphicsShadowMapType');
+    const shadowMapTypes = {
+      'BasicShadowMap': THREE.BasicShadowMap,
+      'PCFShadowMap': THREE.PCFShadowMap,
+      'PCFSoftShadowMap': THREE.PCFSoftShadowMap
+    };
+    this.rendererInstance.shadowMap.type = shadowMapTypes[storedShadowMapType] || THREE.PCFShadowMap;
+    
     this.rendererInstance.setSize(this.sizes.width, this.sizes.height);
-    this.rendererInstance.setPixelRatio(Math.min(this.sizes.pixelRatio, 2)); // Cap pixel ratio
+    
+    // Get pixel ratio cap from localStorage (set by graphics quality)
+    const storedPixelRatioCap = localStorage.getItem('graphicsPixelRatioCap');
+    const pixelRatioCap = storedPixelRatioCap ? parseInt(storedPixelRatioCap) : 2;
+    this.rendererInstance.setPixelRatio(Math.min(this.sizes.pixelRatio, pixelRatioCap));
 
     if (this.isDebugMode) {
       this.setUpPerformanceMonitor();
@@ -82,13 +103,50 @@ export default class Renderer {
     this.updateToneMapping();
   }
 
+  onGraphicsQualityChanged(event) {
+    const { quality, settings } = event.detail;
+    console.log(`Renderer: Graphics quality changed to ${quality}`, settings);
+    
+    // Update shadow map type immediately
+    const shadowMapTypes = {
+      'BasicShadowMap': THREE.BasicShadowMap,
+      'PCFShadowMap': THREE.PCFShadowMap,
+      'PCFSoftShadowMap': THREE.PCFSoftShadowMap
+    };
+    
+    if (shadowMapTypes[settings.shadowMapType]) {
+      this.rendererInstance.shadowMap.type = shadowMapTypes[settings.shadowMapType];
+      console.log(`Renderer: Shadow map type updated to ${settings.shadowMapType}`);
+    }
+    
+    // Update pixel ratio immediately
+    if (this.sizes && settings.pixelRatioCap) {
+      const newPixelRatio = Math.min(this.sizes.pixelRatio, settings.pixelRatioCap);
+      this.rendererInstance.setPixelRatio(newPixelRatio);
+      console.log(`Renderer: Pixel ratio updated to ${newPixelRatio} (capped at ${settings.pixelRatioCap})`);
+    }
+    
+    // Store settings for next renderer creation (antialiasing requires restart)
+    localStorage.setItem('graphicsAntialias', settings.antialias.toString());
+    localStorage.setItem('graphicsShadowMapType', settings.shadowMapType);
+    localStorage.setItem('graphicsPixelRatioCap', settings.pixelRatioCap.toString());
+    
+    if (settings.antialias !== undefined) {
+      console.log(`Renderer: Antialiasing will be ${settings.antialias ? 'enabled' : 'disabled'} on next page load`);
+    }
+  }
+
   setUpPerformanceMonitor() {
     this.perf = new PerformanceMonitor(this.rendererInstance);
   }
 
   resize() {
     this.rendererInstance.setSize(this.sizes.width, this.sizes.height);
-    this.rendererInstance.setPixelRatio(this.sizes.pixelRatio);
+    
+    // Respect the pixel ratio cap from graphics settings
+    const storedPixelRatioCap = localStorage.getItem('graphicsPixelRatioCap');
+    const pixelRatioCap = storedPixelRatioCap ? parseInt(storedPixelRatioCap) : 2;
+    this.rendererInstance.setPixelRatio(Math.min(this.sizes.pixelRatio, pixelRatioCap));
   }
 
   update() {
@@ -103,6 +161,7 @@ export default class Renderer {
 
   destroy() {
     this.environmentTimeManager.offChange();
+    window.removeEventListener('graphicsQualityChanged', this.onGraphicsQualityChanged);
     this.rendererInstance.dispose();
   }
 }

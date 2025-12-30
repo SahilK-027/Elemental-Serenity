@@ -460,6 +460,29 @@ export class GrassManager {
     }
   }
 
+  // Method to regenerate grass with new density settings
+  regenerateGrass() {
+    console.log(`Regenerating grass with density: ${this.GRASS_PER_TILE}`);
+    
+    // Remove existing grass
+    if (this.grassInstancedMesh) {
+      this.scene.remove(this.grassInstancedMesh);
+      this.grassInstancedMesh.dispose();
+      this.grassInstancedMesh = null;
+    }
+    
+    // Remove existing flowers
+    if (this.flowerInstancedMesh) {
+      this.scene.remove(this.flowerInstancedMesh);
+      this.flowerInstancedMesh.dispose();
+      this.flowerInstancedMesh = null;
+    }
+    
+    // Recreate grass and flowers with new settings
+    this.createAllGrassInSingleMesh();
+    this.createFlowers();
+  }
+
   initGUI() {
     this.debugGUI.add(
       this.sharedUniforms.uNormalStrength,

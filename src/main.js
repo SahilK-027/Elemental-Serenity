@@ -152,6 +152,9 @@ resources.on('loaded', () => {
         withMusic
       );
 
+      // Expose game instance globally for settings access
+      window.gameInstance = game;
+
       shaderReveal.start();
 
       loader.classList.add('hidden');
