@@ -13,7 +13,6 @@ import waterVertexCommonChunk from '../../../../Shaders/Chunks/water/water.verte
 import waterVertexBeginChunk from '../../../../Shaders/Chunks/water/water.vertex_begin_chunk.glsl';
 import waterFragmentCommonChunk from '../../../../Shaders/Chunks/water/water.fragment_common_chunk.glsl';
 import waterFragmentColorChunk from '../../../../Shaders/Chunks/water/water.fragment_color_chunk.glsl';
-// Rocks: https://freestylized.com/material/rocks_with_water_01/
 
 export default class Ground {
   constructor({
@@ -220,15 +219,9 @@ export default class Ground {
     this.customGroundUniforms.uGroundColorBelowGrass.value.copy(
       colors.uGroundColorBelowGrass
     );
-    this.customGroundUniforms.uRockColor.value.copy(
-      colors.uRockColor
-    );
-    this.customGroundUniforms.uWaterShallow.value.copy(
-      colors.uWaterShallow
-    );
-    this.customGroundUniforms.uWaterDeep.value.copy(
-      colors.uWaterDeep
-    );
+    this.customGroundUniforms.uRockColor.value.copy(colors.uRockColor);
+    this.customGroundUniforms.uWaterShallow.value.copy(colors.uWaterShallow);
+    this.customGroundUniforms.uWaterDeep.value.copy(colors.uWaterDeep);
   }
 
   addWaterRipples() {
@@ -259,12 +252,13 @@ export default class Ground {
         value: new THREE.Vector3(this.WORLD_SIZE, 0, this.WORLD_SIZE),
       },
       uPerlinNoise: { value: perlinNoise },
-      uWaterDepthTexture: {
-        value: waterDepthTexture,
-      },
+      uWaterDepthTexture: { value: waterDepthTexture },
+
+      // Ripple uniforms
+      uRipplesRatio: { value: 0.0 },
       uDensityMaskMin: { value: 0.05 },
       uDensityMaskMax: { value: 0.15 },
-      uShoreMaskThreshold: { value: 0.45 },
+      uShoreMaskThreshold: { value: 0.4 },
       uNoiseScale1: { value: 3.0 },
       uNoiseScale2: { value: 5.0 },
       uNoiseSpeed1: { value: 0.5 },
@@ -280,6 +274,21 @@ export default class Ground {
       uWaterDepthFade: { value: 0.1 },
       uDiscardThreshold: { value: 0.45 },
       uRippleOpacity: { value: 2.5 },
+
+      // Splash uniforms
+      uSplashesRatio: { value: 0.0 },
+      uSplashesNoiseFrequency: { value: 0.33 },
+      uSplashesTimeFrequency: { value: 6.0 },
+      uSplashesThickness: { value: 0.3 },
+      uSplashesEdgeAttenuationLow: { value: 0.14 },
+      uSplashesEdgeAttenuationHigh: { value: 1.0 },
+      uSplashesCenterMin: { value: 0.0 },
+      uSplashesCenterMax: { value: 0.5 },
+
+      // Ice uniforms
+      uIceRatio: { value: 0.0 },
+      uIceNoiseFrequency: { value: 0.3 },
+      uIceColor: { value: new THREE.Color(0.9, 0.95, 1.0) },
     };
 
     this.waterRipplesMat.onBeforeCompile = (shader) => {
@@ -314,6 +323,7 @@ export default class Ground {
     this.ripples.position.set(-0.2, 0.1, 1.3);
     this.scene.add(this.ripples);
   }
+
 
   initGUI() {
     this.debugGUI.add(
@@ -360,52 +370,17 @@ export default class Ground {
       'Water'
     );
 
+    // Ripple controls
+    this.debugGUI.add(
+      this.customWaterRipplesUniforms.uRipplesRatio,
+      'value',
+      { min: 0.0, max: 1.0, step: 0.01, label: 'Ripples Ratio' },
+      'Water'
+    );
     this.debugGUI.add(
       this.customWaterRipplesUniforms.uShoreMaskThreshold,
       'value',
       { min: 0.0, max: 1.0, step: 0.01, label: 'Ripple Shore Mask Threshold' },
-      'Water'
-    );
-    this.debugGUI.add(
-      this.customWaterRipplesUniforms.uNoiseScale1,
-      'value',
-      { min: 0.5, max: 10.0, step: 0.1, label: 'Ripple Noise Scale 1' },
-      'Water'
-    );
-    this.debugGUI.add(
-      this.customWaterRipplesUniforms.uNoiseScale2,
-      'value',
-      { min: 0.5, max: 10.0, step: 0.1, label: 'Ripple Noise Scale 2' },
-      'Water'
-    );
-    this.debugGUI.add(
-      this.customWaterRipplesUniforms.uNoiseSpeed1,
-      'value',
-      { min: 0.0, max: 2.0, step: 0.05, label: 'Ripple Noise Speed 1' },
-      'Water'
-    );
-    this.debugGUI.add(
-      this.customWaterRipplesUniforms.uNoiseSpeed2,
-      'value',
-      { min: 0.0, max: 2.0, step: 0.05, label: 'Ripple Noise Speed 2' },
-      'Water'
-    );
-    this.debugGUI.add(
-      this.customWaterRipplesUniforms.uNoiseMix1,
-      'value',
-      { min: 0.0, max: 1.0, step: 0.05, label: 'Ripple Noise Mix 1' },
-      'Water'
-    );
-    this.debugGUI.add(
-      this.customWaterRipplesUniforms.uNoiseMix2,
-      'value',
-      { min: 0.0, max: 1.0, step: 0.05, label: 'Ripple Noise Mix 2' },
-      'Water'
-    );
-    this.debugGUI.add(
-      this.customWaterRipplesUniforms.uNoiseDepthInfluence,
-      'value',
-      { min: 0.0, max: 1.0, step: 0.05, label: 'Ripple Noise Depth Influence' },
       'Water'
     );
     this.debugGUI.add(
@@ -415,46 +390,62 @@ export default class Ground {
       'Water'
     );
     this.debugGUI.add(
-      this.customWaterRipplesUniforms.uRippleInnerEdge,
-      'value',
-      { min: 0.0, max: 0.2, step: 0.01, label: 'Ripple Inner Edge' },
-      'Water'
-    );
-    this.debugGUI.add(
-      this.customWaterRipplesUniforms.uRippleOuterEdge,
-      'value',
-      { min: 0.0, max: 1.0, step: 0.05, label: 'Ripple Outer Edge' },
-      'Water'
-    );
-    this.debugGUI.add(
-      this.customWaterRipplesUniforms.uBreakupMin,
-      'value',
-      { min: 0.0, max: 1.0, step: 0.05, label: 'Ripple Breakup Min' },
-      'Water'
-    );
-    this.debugGUI.add(
-      this.customWaterRipplesUniforms.uBreakupMax,
-      'value',
-      { min: 0.0, max: 1.0, step: 0.05, label: 'Ripple Breakup Max' },
-      'Water'
-    );
-    this.debugGUI.add(
-      this.customWaterRipplesUniforms.uWaterDepthFade,
-      'value',
-      { min: 0.0, max: 0.5, step: 0.01, label: 'Ripple Water Depth Fade' },
-      'Water'
-    );
-    this.debugGUI.add(
-      this.customWaterRipplesUniforms.uDiscardThreshold,
-      'value',
-      { min: 0.0, max: 1.0, step: 0.05, label: 'Ripple Discard Threshold' },
-      'Water'
-    );
-    this.debugGUI.add(
       this.customWaterRipplesUniforms.uRippleOpacity,
       'value',
       { min: 0.0, max: 5.0, step: 0.1, label: 'Ripple Opacity' },
       'Water'
+    );
+
+    // Splash controls
+    this.debugGUI.add(
+      this.customWaterRipplesUniforms.uSplashesRatio,
+      'value',
+      { min: 0.0, max: 1.0, step: 0.01, label: 'Splashes Ratio' },
+      'Water Effects'
+    );
+    this.debugGUI.add(
+      this.customWaterRipplesUniforms.uSplashesNoiseFrequency,
+      'value',
+      { min: 0.1, max: 2.0, step: 0.01, label: 'Splash Noise Frequency' },
+      'Water Effects'
+    );
+    this.debugGUI.add(
+      this.customWaterRipplesUniforms.uSplashesTimeFrequency,
+      'value',
+      { min: 0.0, max: 20.0, step: 0.1, label: 'Splash Time Frequency' },
+      'Water Effects'
+    );
+    this.debugGUI.add(
+      this.customWaterRipplesUniforms.uSplashesCenterMin,
+      'value',
+      { min: 0.0, max: 1.0, step: 0.01, label: 'Splash Center Min' },
+      'Water Effects'
+    );
+    this.debugGUI.add(
+      this.customWaterRipplesUniforms.uSplashesCenterMax,
+      'value',
+      { min: 0.0, max: 1.0, step: 0.01, label: 'Splash Center Max' },
+      'Water Effects'
+    );
+
+    // Ice controls
+    this.debugGUI.add(
+      this.customWaterRipplesUniforms.uIceRatio,
+      'value',
+      { min: 0.0, max: 1.0, step: 0.01, label: 'Ice Ratio' },
+      'Water Effects'
+    );
+    this.debugGUI.add(
+      this.customWaterRipplesUniforms.uIceNoiseFrequency,
+      'value',
+      { min: 0.1, max: 2.0, step: 0.01, label: 'Ice Noise Frequency' },
+      'Water Effects'
+    );
+    this.debugGUI.add(
+      this.customWaterRipplesUniforms.uIceColor,
+      'value',
+      { type: 'color', label: 'Ice Color' },
+      'Water Effects'
     );
   }
 
@@ -462,7 +453,73 @@ export default class Ground {
     if (this.grassManager) {
       this.grassManager.update();
     }
+
+    // Update time
     this.customWaterRipplesUniforms.uTime.value += 0.001;
+
+    // Update effects based on season
+    const currentSeason = this.seasonManager.currentSeason;
+
+    // Rainy season: Ripples at edges + splashes in center
+    if (currentSeason === 'rainy') {
+      this.customWaterRipplesUniforms.uRipplesRatio.value =
+        THREE.MathUtils.lerp(
+          this.customWaterRipplesUniforms.uRipplesRatio.value,
+          1.0,
+          0.05
+        );
+      this.customWaterRipplesUniforms.uSplashesRatio.value =
+        THREE.MathUtils.lerp(
+          this.customWaterRipplesUniforms.uSplashesRatio.value,
+          1.0,
+          0.05
+        );
+      this.customWaterRipplesUniforms.uIceRatio.value = THREE.MathUtils.lerp(
+        this.customWaterRipplesUniforms.uIceRatio.value,
+        0.0,
+        0.02
+      );
+    }
+    // Winter: Only ice, no ripples, no splashes
+    else if (currentSeason === 'winter') {
+      this.customWaterRipplesUniforms.uRipplesRatio.value =
+        THREE.MathUtils.lerp(
+          this.customWaterRipplesUniforms.uRipplesRatio.value,
+          0.0,
+          0.05
+        );
+      this.customWaterRipplesUniforms.uSplashesRatio.value =
+        THREE.MathUtils.lerp(
+          this.customWaterRipplesUniforms.uSplashesRatio.value,
+          0.0,
+          0.05
+        );
+      this.customWaterRipplesUniforms.uIceRatio.value = THREE.MathUtils.lerp(
+        this.customWaterRipplesUniforms.uIceRatio.value,
+        1.0,
+        0.05
+      );
+    }
+    // Spring and Autumn: Only ripples, no splashes, no ice
+    else {
+      this.customWaterRipplesUniforms.uRipplesRatio.value =
+        THREE.MathUtils.lerp(
+          this.customWaterRipplesUniforms.uRipplesRatio.value,
+          1.0,
+          0.05
+        );
+      this.customWaterRipplesUniforms.uSplashesRatio.value =
+        THREE.MathUtils.lerp(
+          this.customWaterRipplesUniforms.uSplashesRatio.value,
+          0.0,
+          0.05
+        );
+      this.customWaterRipplesUniforms.uIceRatio.value = THREE.MathUtils.lerp(
+        this.customWaterRipplesUniforms.uIceRatio.value,
+        0.0,
+        0.05
+      );
+    }
   }
 
   dispose() {

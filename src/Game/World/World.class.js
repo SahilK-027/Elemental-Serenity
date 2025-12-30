@@ -11,6 +11,7 @@ import Camp from './Components/Camp/Camp.class';
 import Fire from './Components/Fire/Fire.class';
 import FireFlies from './Components/FireFlies/FireFlies.class';
 import FallingLeaves from './Components/FallingLeaves/FallingLeaves.class';
+import Rain from './Components/Rain/Rain.class';
 
 export default class World {
   constructor() {
@@ -31,6 +32,7 @@ export default class World {
     this.camp = new Camp();
     this.fire = new Fire();
     this.fireFlies = new FireFlies();
+    this.rain = new Rain();
   }
 
   update(delta, elapsedTime) {
@@ -39,5 +41,6 @@ export default class World {
     this.fire.update(delta, elapsedTime);
     this.fallingLeaves.update(delta);
     this.fireFlies.update(elapsedTime);
+    this.rain.update(delta, elapsedTime);
   }
 }
