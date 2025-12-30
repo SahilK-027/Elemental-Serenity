@@ -36,6 +36,24 @@ export default class Fire {
     this.fireEmitterParams = null;
     this.smokeEmitterParams = null;
     this.amberEmitterParams = null;
+    
+    this.originalFireEmissionRate = 500;
+    this.originalAmberEmissionRate = 30;
+    this.originalSmokeEmissionRate = 50;
+    this.originalSmokePosition = { x: -5.4, y: 1.9, z: -6.9 };
+    this.rainySmokePosition = { x: -5.4, y: 0.6, z: -6.9 };
+    this.rainySmokeEmissionRate = 8;
+    
+    this.originalSmokeColorStops = [
+      { time: 0.0, value: new THREE.Color(0xfff1cc) },
+      { time: 0.3, value: new THREE.Color(0xfffbf0) },
+      { time: 1.0, value: new THREE.Color(0xffffff) },
+    ];
+    this.rainySmokeColorStops = [
+      { time: 0.0, value: new THREE.Color(0x666666) },
+      { time: 0.3, value: new THREE.Color(0x888888) },
+      { time: 1.0, value: new THREE.Color(0xaaaaaa) },
+    ];
 
     this._createDefaultStops();
 
@@ -55,6 +73,8 @@ export default class Fire {
     this.seasonManager.onChange((newSeason, oldSeason) => {
       this.onSeasonChanged(newSeason, oldSeason);
     });
+
+    this.updateFireEffectsForSeason();
   }
 
   _createDefaultStops() {
@@ -342,7 +362,7 @@ export default class Fire {
     fireEmitterParams.shape = new PARTICLES.PointShape();
     fireEmitterParams.shape.position.set(-5.4, 1.0, -6.9);
     fireEmitterParams.shape.positionRadiusVariance = 0.3;
-    fireEmitterParams.emissionRate = 500;
+    fireEmitterParams.emissionRate = this.originalFireEmissionRate;
     fireEmitterParams.maxParticles = 500;
     fireEmitterParams.maxEmission = Infinity;
     fireEmitterParams.maxLife = 1;
@@ -380,9 +400,13 @@ export default class Fire {
   createSmokeEmitter() {
     const smokeEmitterParams = new PARTICLES.EmitterParams();
     smokeEmitterParams.shape = new PARTICLES.PointShape();
-    smokeEmitterParams.shape.position.set(-5.4, 1.9, -6.9);
+    smokeEmitterParams.shape.position.set(
+      this.originalSmokePosition.x,
+      this.originalSmokePosition.y,
+      this.originalSmokePosition.z
+    );
     smokeEmitterParams.shape.positionRadiusVariance = 0.4;
-    smokeEmitterParams.emissionRate = 50;
+    smokeEmitterParams.emissionRate = this.originalSmokeEmissionRate;
     smokeEmitterParams.maxParticles = 150;
     smokeEmitterParams.maxEmission = Infinity;
     smokeEmitterParams.maxLife = 3;
@@ -433,7 +457,7 @@ export default class Fire {
     amberEmitterParams.shape = new PARTICLES.PointShape();
     amberEmitterParams.shape.position.set(-5.4, 1.0, -6.9);
     amberEmitterParams.shape.positionRadiusVariance = 0.35;
-    amberEmitterParams.emissionRate = 30;
+    amberEmitterParams.emissionRate = this.originalAmberEmissionRate;
     amberEmitterParams.maxParticles = 120;
     amberEmitterParams.maxEmission = Infinity;
     amberEmitterParams.maxLife = 3;
@@ -861,6 +885,58 @@ export default class Fire {
     this.currentSeason = newSeason;
     this.smokeAlphaConfig = this.seasonManager.getColorConfig('fire');
     this.updateSmokeAlpha();
+    this.updateFireEffectsForSeason();
+  }
+
+  updateFireEffectsForSeason() {
+    const isRainySeason = this.currentSeason === 'rainy';
+    
+    if (this.fireEmitterParams) {
+      this.fireEmitterParams.emissionRate = isRainySeason ? 0 : this.originalFireEmissionRate;
+    }
+    
+    if (this.amberEmitterParams) {
+      this.amberEmitterParams.emissionRate = isRainySeason ? 0 : this.originalAmberEmissionRate;
+    }
+    
+    if (this.smokeEmitterParams) {
+      this.smokeEmitterParams.emissionRate = isRainySeason 
+        ? this.rainySmokeEmissionRate 
+        : this.originalSmokeEmissionRate;
+      
+      const smokePos = isRainySeason ? this.rainySmokePosition : this.originalSmokePosition;
+      this.smokeEmitterParams.shape.position.set(smokePos.x, smokePos.y, smokePos.z);
+    }
+    
+    this.updateSmokeColorForSeason(isRainySeason);
+    
+    if (this.fireRendererGroup) {
+      this.fireRendererGroup.visible = !isRainySeason;
+    }
+    
+    if (this.amberRendererGroup) {
+      this.amberRendererGroup.visible = !isRainySeason;
+    }
+    
+    if (this.fireLight) {
+      this.fireLight.visible = !isRainySeason;
+    }
+    
+    if (this.fireLight2) {
+      this.fireLight2.visible = !isRainySeason;
+    }
+  }
+
+  updateSmokeColorForSeason(isRainySeason) {
+    const colorStops = isRainySeason ? this.rainySmokeColorStops : this.originalSmokeColorStops;
+    
+    this.smokeColorStops.forEach((stop, index) => {
+      if (colorStops[index]) {
+        stop.value.copy(colorStops[index].value);
+      }
+    });
+    
+    this._buildSmokeInterpolantsAndTextures();
   }
 
   updateSmokeAlpha() {
