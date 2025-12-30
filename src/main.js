@@ -194,6 +194,12 @@ const handleSeasonToggle = (event) => {
   const clickedButton = event.currentTarget;
   const uiSeason = clickedButton.dataset.season;
   const managerSeason = seasonMapping[uiSeason];
+  
+  const currentSeason = seasonManager.currentSeason;
+  
+  if (currentSeason === managerSeason) {
+    return;
+  }
 
   seasonButtons.forEach((button) => {
     button.classList.remove('active');
@@ -252,6 +258,12 @@ const initializeSeasonUI = () => {
 const handleDayNightToggle = (event) => {
   const clickedButton = event.currentTarget;
   const selectedTime = clickedButton.dataset.time;
+  
+  const currentTime = environmentTimeManager.envTime;
+  
+  if (currentTime === selectedTime) {
+    return;
+  }
 
   dayNightButtons.forEach((button) => {
     button.classList.remove('active');
