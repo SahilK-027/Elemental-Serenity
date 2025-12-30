@@ -69,7 +69,7 @@ export default class Skydome {
       autumn: {
         day: {
           zenithColor: new THREE.Color(0.6, 0.4, 0.2), // Warm brown-orange
-          horizonColor: new THREE.Color(0.68, 0.4, 0.14), // Golden horizon
+          horizonColor: new THREE.Color(0.35, 0.66, 0.72), // Golden horizon
           groundColor: new THREE.Color(1.0, 0.7, 0.4), // Warm gold
           sunColor: new THREE.Color(1.0, 0.7, 0.3), // Orange sun
           sunGlowColor: new THREE.Color(1.0, 0.5, 0.2), // Deep orange glow
