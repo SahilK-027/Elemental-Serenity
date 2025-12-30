@@ -1,5 +1,6 @@
 import Game from '../Game.class';
 import Lighting from './Components/Lighting/Lighting.class';
+import Skydome from './Components/Skydome/Skydome.class';
 import Ground from './Components/Ground/Ground.class';
 import Tent from './Components/Tent/Tent.class';
 import Bridge from './Components/Bridge/Bridge.class';
@@ -21,6 +22,7 @@ export default class World {
     this.lighting = new Lighting({
       helperEnabled: false,
     });
+    this.skydome = new Skydome();
     this.debugGUI = this.game.debug;
     this.ground = new Ground();
     this.tent = new Tent();
@@ -40,6 +42,7 @@ export default class World {
   update(delta, elapsedTime) {
     this.ground.update();
     this.bush.update();
+    this.skydome.update(delta, elapsedTime);
     this.fire.update(delta, elapsedTime);
     this.fallingLeaves.update(delta);
     this.fireFlies.update(elapsedTime);
