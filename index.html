@@ -733,6 +733,7 @@
         align-items: center;
         padding: 12px 0;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        font-size: 14px !important;
       }
 
       .setting-item:last-child {
@@ -871,6 +872,26 @@
         font-size: 0.95rem;
       }
 
+      .about-text a {
+        color: #2563eb;
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: all 0.2s ease;
+      }
+
+      .about-text a:hover {
+        color: #1d4ed8;
+        border-bottom-color: #1d4ed8;
+      }
+
+      .subsection-title {
+        font-family: 'Schoolbell', cursive;
+        font-size: 1rem;
+        color: #000;
+        margin: 16px 0 8px 0;
+        font-weight: 600;
+      }
+
       .tech-title {
         font-family: 'Schoolbell', cursive;
         font-size: 1.2rem;
@@ -928,24 +949,49 @@
       }
 
       .credit-category {
-        margin-bottom: 24px;
+        margin-bottom: 32px;
+        padding: 16px;
+        background: rgba(0, 0, 0, 0.02);
+        border-radius: 8px;
+        border-left: 3px solid rgba(0, 0, 0, 0.1);
       }
 
       .credit-title {
         font-family: 'Schoolbell', cursive;
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         color: #000;
-        margin: 0 0 12px 0;
+        margin: 0 0 16px 0;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       }
 
       .credit-item {
-        padding: 4px 0;
+        padding: 8px 0;
         color: rgba(0, 0, 0, 0.7);
         font-size: 0.9rem;
+        line-height: 1.5;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      }
+
+      .credit-item:last-child {
+        border-bottom: none;
       }
 
       .credit-item strong {
-        color: rgba(0, 0, 0, 0.8);
+        color: rgba(0, 0, 0, 0.9);
+        font-weight: 600;
+      }
+
+      .credit-item a {
+        color: #2563eb;
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: all 0.2s ease;
+      }
+
+      .credit-item a:hover {
+        color: #1d4ed8;
+        border-bottom-color: #1d4ed8;
       }
 
       .version-info {
@@ -1171,52 +1217,337 @@
           <!-- About Tab -->
           <div class="tab-content" id="about-tab">
             <div class="about-section">
-              <h3 class="section-title">Elemental Serenity</h3>
-              <p class="about-text">
-                An immersive 3D nature experience built with cutting-edge web
-                technologies. Explore a dynamic world that changes with seasons
-                and time, featuring realistic grass simulation, particle
-                effects, and atmospheric lighting.
-              </p>
+              <h3 class="section-title">
+                Building <em>Elemental Serenity</em>
+              </h3>
 
-              <h4 class="tech-title">Technology Stack</h4>
-              <div class="tech-grid">
-                <div class="tech-item">
-                  <i class="fab fa-js-square"></i>
-                  <span>Three.js</span>
-                </div>
-                <div class="tech-item">
-                  <i class="fas fa-cube"></i>
-                  <span>WebGL</span>
-                </div>
-                <div class="tech-item">
-                  <i class="fas fa-code"></i>
-                  <span>GLSL Shaders</span>
-                </div>
-                <div class="tech-item">
-                  <i class="fas fa-magic"></i>
-                  <span>GSAP</span>
-                </div>
-                <div class="tech-item">
-                  <i class="fas fa-fire"></i>
-                  <span>Particle Systems</span>
-                </div>
-                <div class="tech-item">
-                  <i class="fas fa-leaf"></i>
-                  <span>Procedural Generation</span>
-                </div>
+              <div
+                style="
+                  text-align: left;
+                  margin-bottom: 24px;
+                  padding: 16px;
+                  background: rgba(0, 0, 0, 0.02);
+                  border-radius: 8px;
+                  border-left: 3px solid #2563eb;
+                "
+              >
+                <p
+                  style="
+                    margin: 0;
+                    font-size: 0.95rem;
+                    color: rgba(0, 0, 0, 0.7);
+                  "
+                >
+                  <strong><i class="fa-brands fa-github" style="font-size: 18px;"></i></strong>
+                  <a
+                    href="https://github.com/SahilK-027/Elemental-Serenity"
+                    target="_blank"
+                    style="
+                      color: #2563eb;
+                      text-decoration: none;
+                      font-weight: 600;
+                    "
+                  >
+                    https://github.com/SahilK-027/Elemental-Serenity
+                  </a>
+                </p>
               </div>
 
-              <h4 class="tech-title">Features</h4>
+              <p class="about-text">
+                What started as a weekend experiment to render a calm, digital
+                glade turned into a months-long exercise in pushing WebGL 2.0
+                and Three.js to their limits. I wanted an environment that felt
+                <em>alive,</em> not just pretty-looking, but responsive,
+                season-aware, and fast enough to run on a mid-range laptop.
+                Below is the short version of that journey: the problems that
+                kept me up at night, the solutions that actually worked, and the
+                few hard lessons I carried into every subsystem.
+              </p>
+
+              <h4 class="tech-title">Inspiration & Creative Direction</h4>
+              <p class="about-text">
+                The original spark for <em>Elemental Serenity</em> came from
+                watching <strong>Bruno Simon's portfolio devlogs</strong> (<a
+                  href="https://youtu.be/MXpML0B2MJc?si=rePA5w2j7CL7Jm9s"
+                  target="_blank"
+                  >https://youtu.be/MXpML0B2MJc?si=rePA5w2j7CL7Jm9s</a
+                >), specifically his breakdowns of how a playful, interactive 3D
+                experience can still be technically rigorous. Seeing how he
+                approached world-building in the browser reframed how I thought
+                about WebGL projects: not as static demos, but as
+                <em>places</em> users can explore. His emphasis on
+                performance-aware creativity pushed me to treat every visual
+                decision as an engineering problem waiting to be solved.
+              </p>
+              <p class="about-text">
+                At the same time, <strong>Jordan Breton's portfolio</strong> (<a
+                  href="https://jordan-breton.com/"
+                  target="_blank"
+                  >https://jordan-breton.com/</a
+                >) heavily influenced the overall mood and restraint of the
+                scene. Where Bruno's work inspired interactivity and technical
+                ambition, Jordan's reminded me of the power of atmosphere,
+                subtle motion, carefully chosen colour palettes, and
+                environments that feel intentional rather than busy. That
+                balance between expressiveness and calm became a guiding
+                principle throughout the project.
+              </p>
+
+              <h4 class="tech-title">The Stack (Why These Tools)</h4>
+              <p class="about-text">
+                I intentionally kept the tech simple but modern:
+              </p>
               <ul class="feature-list">
-                <li>Dynamic day/night cycle with realistic lighting</li>
-                <li>Seasonal changes affecting environment and atmosphere</li>
-                <li>Advanced grass rendering with wind simulation</li>
-                <li>Realistic fire and smoke particle effects</li>
-                <li>Procedural terrain generation</li>
-                <li>Immersive audio design</li>
-                <li>Optimized performance across devices</li>
+                <li>
+                  <strong>Three.js 0.182</strong> on top of
+                  <strong>WebGL 2.0</strong> for lower-level control.
+                </li>
+                <li>
+                  Custom <strong>GLSL</strong> for the parts where CPU-driven
+                  tricks just wouldn't cut it.
+                </li>
+                <li>
+                  <strong>GSAP 3.14</strong> for smooth orchestration of UI and
+                  seasonal transitions.
+                </li>
+                <li>
+                  <strong>Vite 6.0</strong> + ES6 modules for a snappy dev loop.
+                </li>
+                <li>
+                  <code>vite-plugin-glsl</code> — absolute game changer for
+                  shader hot-reload.
+                </li>
               </ul>
+              <p class="about-text">
+                These choices gave me quick iteration during development while
+                allowing me to drop into GLSL when performance mattered.
+              </p>
+
+              <h4 class="tech-title">
+                The Grass Problem Was My Biggest Challenge
+              </h4>
+              <p class="about-text">
+                I wanted thousands of grass blades that bend and whisper in the
+                wind. Naively creating tens of thousands of separate meshes was
+                an instant FPS death sentence. The goal became:
+                <em
+                  >how do I keep visual richness with minimal geometry and GPU
+                  overhead?</em
+                >
+              </p>
+
+              <h5 class="subsection-title">What I tried</h5>
+              <ul class="feature-list">
+                <li>
+                  <strong>Instanced rendering</strong>: share a single blade
+                  geometry and provide per-instance transforms. This is
+                  standard, but it alone doesn't solve density control or varied
+                  wind behaviour.
+                </li>
+                <li>
+                  <strong>Billboards</strong>: keep each blade as a
+                  camera-facing quad to dramatically reduce vertex counts.
+                </li>
+              </ul>
+
+              <h5 class="subsection-title">The solution that stuck</h5>
+              <ol class="feature-list">
+                <li>
+                  <strong>Instanced quads + billboard rotation.</strong> Each
+                  grass blade is an instanced quad that rotates in the vertex
+                  shader to face the camera. This alone reduced the vertex count
+                  by orders of magnitude.
+                </li>
+                <li>
+                  <strong>RGB control texture:</strong> a single texture packed
+                  with control channels:
+                  <ul style="margin-left: 20px; margin-top: 8px">
+                    <li>
+                      <strong>R</strong> = path mask (0 = path, 1 = dense grass)
+                    </li>
+                    <li><strong>G</strong> = thickness/scale variation</li>
+                    <li>
+                      <strong>B</strong> = wind intensity map (used to bias
+                      per-instance wind strength)
+                    </li>
+                  </ul>
+                  This texture lets me paint where grass should be sparse
+                  (paths), where it should be thick, and where it should sway
+                  wildly.
+                </li>
+                <li>
+                  <strong>GPU wind physics in GLSL</strong> — per-instance
+                  attributes for base offset + a per-pixel wind strength sampled
+                  from the B channel; everything runs in the vertex shader, so
+                  the CPU only updates when instances are added/removed.
+                </li>
+                <li>
+                  <strong>LOD + quality presets</strong> — for
+                  Low/Medium/High/Ultra I dynamically reduce instance count,
+                  billboard complexity, and particle emissions.
+                </li>
+              </ol>
+
+              <h4 class="tech-title">Seasons — 8 Worlds in One</h4>
+              <p class="about-text">
+                I didn't want a single color toggle. I wanted completely
+                different moods.
+              </p>
+              <ul class="feature-list">
+                <li>
+                  <strong>Design</strong>: 4 seasons × 2 times of day = 8 full
+                  palettes. Every material, grass, rock, water, fire, and smoke
+                  responds.
+                </li>
+                <li>
+                  <strong>Implementation</strong>: a single
+                  <code>SeasonManager</code> singleton broadcasts events and
+                  exposes a small set of uniforms every shader subscribes to
+                  (palette colors, shadow tint, water reflectance, smoke
+                  opacity).
+                </li>
+                <li>
+                  <strong>Performance trick</strong>: shaders receive a compact,
+                  precomputed palette (vec3 arrays + single floats). The heavy
+                  interpolation happens once in JS when switching seasons;
+                  shaders simply lerp between two provided palettes based on
+                  <code>u_seasonBlend</code>.
+                </li>
+              </ul>
+              <p class="about-text">
+                The result is smooth, event-driven transitions with zero frame
+                drops even on large scenes.
+              </p>
+
+              <h4 class="tech-title">Audio — Making Proximity Feel Real</h4>
+              <p class="about-text">
+                Visuals were only half the immersion. Sound had to be reactive,
+                not just background music.
+              </p>
+              <ul class="feature-list">
+                <li><strong>Web Audio API</strong> drives the system.</li>
+                <li>
+                  An <code>AmbientSoundManager</code> controls both
+                  <strong>spatialized sounds</strong> (bird pings, crackling
+                  fire) and <strong>ambience tracks</strong> (wind, brook,
+                  seasonal pads).
+                </li>
+                <li>
+                  <strong>Distance-based falloff</strong> and
+                  <strong>smart mixing</strong> prevent CPU spikes (don't decode
+                  or play inaudible sounds).
+                </li>
+                <li>
+                  Crossfading between tracks and season-aware mixes keeps the
+                  audio design cohesive.
+                </li>
+              </ul>
+              <p class="about-text">
+                This was deceptively tricky: poorly handled crossfades or too
+                many simultaneous sound nodes easily produce audible artefacts
+                or memory leaks, so lifecycle management was critical.
+              </p>
+
+              <h4 class="tech-title">
+                Architecture Decisions That Actually Saved Time
+              </h4>
+              <p class="about-text">
+                A few engineering choices repeatedly paid dividends:
+              </p>
+              <ul class="feature-list">
+                <li>
+                  <strong>Event-driven design</strong>: a lightweight
+                  <code>EventEmitter</code> allowed decoupled components to
+                  react to seasonal or quality changes without washing the scene
+                  with polling logic.
+                </li>
+                <li>
+                  <strong>Singleton SeasonManager & AudioManager</strong>: one
+                  source of truth is easier to reason about than dozens of
+                  semi-consistent objects.
+                </li>
+                <li>
+                  <strong>vite-plugin-glsl</strong>: shader hot-reload made
+                  iterating GLSL feel almost as fast as tweaking CSS in a web
+                  app.
+                </li>
+                <li>
+                  <strong>Quality presets</strong>: Low/Medium/High/Ultra mapped
+                  to concrete parameters (grass density, particle rates, shadow
+                  resolution). Users could persist settings in
+                  <code>localStorage</code>.
+                </li>
+                <li>
+                  <strong>Perf tooling</strong>: embedded three-perf for FPS
+                  tracking while tuning the grass system and particles.
+                </li>
+              </ul>
+
+              <h4 class="tech-title">
+                Memory Management Is the Thing I Learned the Hard Way
+              </h4>
+              <p class="about-text">
+                WebGL resources are explicit. I ran into crashes and VRAM leaks
+                until I audited the cleanup.
+              </p>
+              <ul class="feature-list">
+                <li>
+                  Always call <code>.dispose()</code> on geometries, materials,
+                  and textures when removed.
+                </li>
+                <li>
+                  Remove event listeners and stop audio nodes on scene teardown.
+                </li>
+                <li>
+                  Keep visible object lists small and reuse buffers when
+                  possible (object pools for particles and temporary meshes).
+                </li>
+              </ul>
+              <p class="about-text">
+                After enforcing strict cleanup patterns, stability improved
+                dramatically, especially on devices with constrained memory.
+              </p>
+
+              <h4 class="tech-title">Tradeoffs & Lessons Learned</h4>
+              <ul class="feature-list">
+                <li>
+                  <strong>Complex GLSL > simple CPU logic</strong>: doing wind
+                  and billboarding in the vertex shader saved CPU time but
+                  shifted complexity into shader code. Worth it for performance,
+                  but harder to debug.
+                </li>
+                <li>
+                  <strong>Billboards are cheap, but not always right</strong>:
+                  they work brilliantly for grass and distant foliage but fall
+                  short at close range. I mixed instance billboards with a few
+                  full meshes near the camera.
+                </li>
+                <li>
+                  <strong>Start profiling early</strong>: three-perf and simple
+                  bench scenes let me measure the real effect of changes.
+                  Guessing is expensive.
+                </li>
+                <li>
+                  <strong>One true source of state</strong> (singletons/event
+                  bus) simplifies seasonal transitions, and settings sync across
+                  systems.
+                </li>
+                <li>
+                  <strong>User-configurable quality</strong> matters: letting
+                  users scale down particle counts and shadow resolution kept
+                  the experience accessible.
+                </li>
+              </ul>
+
+              <h4 class="tech-title">Closing Notes</h4>
+              <p class="about-text">
+                This project was equal parts art and systems engineering. The
+                biggest wins came from moving logic onto the GPU (instancing,
+                wind, particles), centralising state (SeasonManager), and being
+                ruthless about cleanup. If you want to poke around the code,
+                focus on the instanced grass shader and the event-driven
+                SeasonManager; they're the heart of the system.
+              </p>
             </div>
           </div>
 
@@ -1226,52 +1557,223 @@
               <h3 class="section-title">Credits & Resources</h3>
 
               <div class="credit-category">
-                <h4 class="credit-title">Development Team</h4>
+                <h4 class="credit-title">Models</h4>
                 <div class="credit-item">
-                  <strong>Lead Developer:</strong> Alex Thompson
+                  <strong>"A simple medieval wooden bridge"</strong> (<a
+                    href="https://skfb.ly/oE6UI"
+                    target="_blank"
+                    >https://skfb.ly/oE6UI</a
+                  >) by FunWithBlender is licensed under Creative Commons
+                  Attribution-NonCommercial (<a
+                    href="http://creativecommons.org/licenses/by-nc/4.0/"
+                    target="_blank"
+                    >http://creativecommons.org/licenses/by-nc/4.0/</a
+                  >).
                 </div>
                 <div class="credit-item">
-                  <strong>3D Artist:</strong> Sarah Chen
+                  <strong>"Stylized Tent"</strong> (<a
+                    href="https://skfb.ly/6YSvM"
+                    target="_blank"
+                    >https://skfb.ly/6YSvM</a
+                  >) by csabat3D is licensed under Creative Commons Attribution
+                  (<a
+                    href="http://creativecommons.org/licenses/by/4.0/"
+                    target="_blank"
+                    >http://creativecommons.org/licenses/by/4.0/</a
+                  >).
                 </div>
                 <div class="credit-item">
-                  <strong>Shader Programming:</strong> Marcus Rodriguez
-                </div>
-                <div class="credit-item">
-                  <strong>Audio Design:</strong> Emma Wilson
+                  <strong>Tree trunks and some sound effects:</strong>
+                  <a href="https://bruno-simon.com/" target="_blank"
+                    >https://bruno-simon.com/</a
+                  >
                 </div>
               </div>
 
               <div class="credit-category">
-                <h4 class="credit-title">Assets & Resources</h4>
+                <h4 class="credit-title">Environment & Textures</h4>
                 <div class="credit-item">
-                  <strong>3D Models:</strong> Custom created with Blender
-                </div>
-                <div class="credit-item">
-                  <strong>Textures:</strong> Procedural and hand-painted
-                </div>
-                <div class="credit-item">
-                  <strong>Audio:</strong> Freesound.org contributors
-                </div>
-                <div class="credit-item">
-                  <strong>Fonts:</strong> Google Fonts (Inter, Schoolbell)
+                  <strong>Environment map:</strong>
+                  "citrus_orchard_road_puresky_4k.hdr" from
+                  <a href="https://polyhaven.com" target="_blank">Polyhaven</a>
                 </div>
               </div>
 
               <div class="credit-category">
-                <h4 class="credit-title">Special Thanks</h4>
+                <h4 class="credit-title">Music and Audio</h4>
                 <div class="credit-item">
-                  Three.js community for excellent documentation
+                  <strong>BGM:</strong>
+                  <a href="https://suno.com" target="_blank">suno.com</a> - Suno
+                  AI music
                 </div>
                 <div class="credit-item">
-                  WebGL and GLSL shader tutorials by various contributors
+                  <strong>Additional audio resources:</strong>
+                  <a href="https://brunosimon.com/" target="_blank"
+                    >https://brunosimon.com/</a
+                  >
+                </div>
+              </div>
+
+              <div class="credit-category">
+                <h4 class="credit-title">Tools and Resources</h4>
+                <div class="credit-item">
+                  <a href="https://threejs-journey.com/" target="_blank"
+                    >https://threejs-journey.com/</a
+                  >
                 </div>
                 <div class="credit-item">
-                  Open source libraries that made this project possible
+                  <a href="https://simondev.io/" target="_blank"
+                    >https://simondev.io/</a
+                  >
+                </div>
+                <div class="credit-item">
+                  <a href="https://blog.maximeheckel.com/" target="_blank"
+                    >https://blog.maximeheckel.com/</a
+                  >
+                </div>
+                <div class="credit-item">
+                  <a
+                    href="https://youtu.be/M4kMri55rdE?si=sgcrKVit2EzGozD2"
+                    target="_blank"
+                    >https://youtu.be/M4kMri55rdE?si=sgcrKVit2EzGozD2</a
+                  >
+                </div>
+                <div class="credit-item">
+                  <a
+                    href="https://youtu.be/F7_btP0Vhzo?si=fymP2M4GQUD-6aqS"
+                    target="_blank"
+                    >https://youtu.be/F7_btP0Vhzo?si=fymP2M4GQUD-6aqS</a
+                  >
+                </div>
+                <div class="credit-item">
+                  <a
+                    href="https://tympanus.net/codrops/2024/12/02/how-to-code-a-shader-based-reveal-effect-with-react-three-fiber-glsl/"
+                    target="_blank"
+                    >Shader-based reveal effect tutorial - Codrops</a
+                  >
+                </div>
+                <div class="credit-item">
+                  <a
+                    href="https://tympanus.net/codrops/2025/02/04/how-to-make-the-fluffiest-grass-with-three-js/"
+                    target="_blank"
+                    >Fluffy grass with Three.js tutorial - Codrops</a
+                  >
+                </div>
+                <div class="credit-item">
+                  <a
+                    href="https://github.com/AT010303/StylizedTree"
+                    target="_blank"
+                    >https://github.com/AT010303/StylizedTree</a
+                  >
+                </div>
+                <div class="credit-item">
+                  <a href="https://www.blender.org/" target="_blank">Blender</a>
+                  - 3D modeling software
+                </div>
+                <div class="credit-item">
+                  <a href="https://www.gimp.org/" target="_blank">GIMP</a> -
+                  Image editing
+                </div>
+                <div class="credit-item">
+                  <a
+                    href="https://www.rapidtables.com/convert/color/hex-to-rgb.html"
+                    target="_blank"
+                    >Hex to RGB converter</a
+                  >
+                </div>
+                <div class="credit-item">
+                  <a
+                    href="https://matheowis.github.io/HDRI-to-CubeMap/"
+                    target="_blank"
+                    >HDRI to CubeMap converter</a
+                  >
+                </div>
+                <div class="credit-item">
+                  <a
+                    href="https://vercel.com/docs/project-configuration#project/version"
+                    target="_blank"
+                    >Vercel deployment documentation</a
+                  >
+                </div>
+                <div class="credit-item">
+                  <a href="https://freestylized.com/" target="_blank"
+                    >https://freestylized.com/</a
+                  >
+                </div>
+                <div class="credit-item">
+                  <a href="https://fontawesome.com/icons" target="_blank"
+                    >Font Awesome</a
+                  >
+                  - Icons
+                </div>
+                <div class="credit-item">
+                  <a
+                    href="https://fonts.google.com/specimen/Schoolbell"
+                    target="_blank"
+                    >Google Fonts - Schoolbell</a
+                  >
+                </div>
+              </div>
+
+              <div class="credit-category">
+                <h4 class="credit-title">JavaScript Libraries</h4>
+                <div class="credit-item">
+                  <strong>Three.js:</strong>
+                  <a href="https://threejs.org/" target="_blank"
+                    >https://threejs.org/</a
+                  >
+                  - 3D graphics library
+                </div>
+                <div class="credit-item">
+                  <strong>GSAP:</strong>
+                  <a href="https://gsap.com/" target="_blank"
+                    >https://gsap.com/</a
+                  >
+                  - Animation library
+                </div>
+                <div class="credit-item">
+                  <strong>lil-gui:</strong>
+                  <a href="https://lil-gui.georgealways.com/" target="_blank"
+                    >https://lil-gui.georgealways.com/</a
+                  >
+                  - Debug interface
+                </div>
+                <div class="credit-item">
+                  <strong>three-perf:</strong>
+                  <a
+                    href="https://github.com/RenaudRohlinger/three-perf"
+                    target="_blank"
+                    >https://github.com/RenaudRohlinger/three-perf</a
+                  >
+                  - Performance monitoring
+                </div>
+                <div class="credit-item">
+                  <strong>Mersenne Twister:</strong>
+                  <a
+                    href="https://github.com/boo1ean/mersenne-twister"
+                    target="_blank"
+                    >https://github.com/boo1ean/mersenne-twister</a
+                  >
+                  - Random number generator
+                </div>
+                <div class="credit-item">
+                  <strong>Vite:</strong>
+                  <a href="https://vitejs.dev/" target="_blank"
+                    >https://vitejs.dev/</a
+                  >
+                  - Build tool
+                </div>
+                <div class="credit-item">
+                  <strong>Sass:</strong>
+                  <a href="https://sass-lang.com/" target="_blank"
+                    >https://sass-lang.com/</a
+                  >
+                  - CSS preprocessor
                 </div>
               </div>
 
               <div class="version-info">
-                <p>Version 1.0.0 | Built with ❤️ for the web</p>
+                <p>Version 1.0.0 | Built with 💜 for the web</p>
               </div>
             </div>
           </div>
@@ -1437,7 +1939,7 @@
             console.log('🎵 Syncing volume with music state:', {
               isMusicEnabled,
               currentVolume: this.settings.volume,
-              previousVolume: this.previousVolume
+              previousVolume: this.previousVolume,
             });
 
             if (!isMusicEnabled) {
@@ -1445,27 +1947,34 @@
               // Only store previousVolume if it's not already 0 (to avoid storing 0 as previous)
               if (this.settings.volume > 0) {
                 this.previousVolume = this.settings.volume;
-                console.log('🔇 Music disabled, storing previous volume:', this.previousVolume);
+                console.log(
+                  '🔇 Music disabled, storing previous volume:',
+                  this.previousVolume
+                );
               }
               this.settings.volume = 0;
               this.volumeSlider.value = 0;
               this.volumeValue.textContent = '0%';
             } else {
               // Music is enabled, restore previous volume or default to 50%
-              const volumeToRestore = this.previousVolume !== undefined ? this.previousVolume : 50;
-              
-              console.log('🔊 Music enabled, restoring volume to:', volumeToRestore);
-              
+              const volumeToRestore =
+                this.previousVolume !== undefined ? this.previousVolume : 50;
+
+              console.log(
+                '🔊 Music enabled, restoring volume to:',
+                volumeToRestore
+              );
+
               this.settings.volume = volumeToRestore;
               this.volumeSlider.value = volumeToRestore;
               this.volumeValue.textContent = volumeToRestore + '%';
-              
+
               // Actually set the audio volume
               this.updateAudioVolume(volumeToRestore / 100);
-              
+
               // Save the restored volume to localStorage
               this.saveSettings();
-              
+
               // Clear previousVolume after restoration
               this.previousVolume = undefined;
             }
@@ -1638,7 +2147,7 @@
               amberEmissionRate: 20,
               antialias: false,
               shadowMapType: 'BasicShadowMap',
-              pixelRatioCap: 1,
+              pixelRatioCap: 2,
             },
             medium: {
               grassPerTile: 12500,
