@@ -328,7 +328,7 @@ export default class ToastManager {
         break;
       case 'autumn':
       case 'fall':
-        icon = 'fas fa-leaf';
+        icon = 'fa-brands fa-canadian-maple-leaf';
         iconGradient = 'linear-gradient(135deg, #ff8a65 0%, #ff5722 100%)';
         break;
       case 'winter':
