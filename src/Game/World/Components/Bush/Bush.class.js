@@ -122,6 +122,8 @@ export default class Bush {
     if (bushType === 'tree') {
       return {
         shadowColor: this.col(preset.treeShadowColor),
+        midColor: this.col(preset.treeMidColor),
+        highlightColor: this.col(preset.treeHighlightColor),
       };
     } else if (bushType === 'birch') {
       return {

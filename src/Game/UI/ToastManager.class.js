@@ -68,7 +68,7 @@ export default class ToastManager {
       width: 36px;
       height: 36px;
       border-radius: 6px;
-      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+      background: linear-gradient(135deg, #7444ff 0%, #522bc7 100%);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -124,7 +124,7 @@ export default class ToastManager {
       bottom: 0;
       left: 0;
       height: 2px;
-      background: linear-gradient(90deg, #ff6b6b 0%, #ee5a24 100%);
+      background: linear-gradient(90deg, #7444ff 0%, #522bc7 100%);
       width: 0%;
       transition: width 4s linear;
     `;
@@ -201,8 +201,6 @@ export default class ToastManager {
   }
 
   showDayNightToast(timeOfDay) {
-    this.clearDayNightToasts();
-
     const toast = document.createElement('div');
     toast.className = 'daynight-toast';
 
@@ -315,8 +313,6 @@ export default class ToastManager {
   }
 
   showSeasonToast(season) {
-    this.clearSeasonToasts();
-
     const toast = document.createElement('div');
     toast.className = 'season-toast';
 
