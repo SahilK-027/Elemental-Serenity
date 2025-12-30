@@ -23,7 +23,6 @@ export default class MusicManager extends EventEmitter {
   }
 
   init() {
-    // We'll monitor track progress manually since Three.js Audio events can be unreliable
   }
 
   startRandomMusic() {
@@ -40,7 +39,6 @@ export default class MusicManager extends EventEmitter {
     this.isPaused = true;
     this.isPlaying = false;
     
-    // Store current track info for resuming
     if (this.audioManager.currentMusic && this.audioManager.currentMusic.isPlaying) {
       this.pausedTrackId = this.getCurrentTrack()?.id;
       this.audioManager.stopMusic(true, this.fadeOutDuration);
@@ -54,7 +52,6 @@ export default class MusicManager extends EventEmitter {
 
   resumeMusic() {
     if (!this.isPaused) {
-      // If not paused, start fresh
       this.startRandomMusic();
       return;
     }
@@ -62,7 +59,6 @@ export default class MusicManager extends EventEmitter {
     this.isPlaying = true;
     this.isPaused = false;
     
-    // Resume the same track that was paused
     if (this.pausedTrackId && this.currentTrackIndex >= 0) {
       const track = this.musicTracks[this.currentTrackIndex];
       if (track && track.id === this.pausedTrackId) {
@@ -72,7 +68,6 @@ export default class MusicManager extends EventEmitter {
       }
     }
     
-    // Fallback: play next random track if we can't resume
     this.playNextRandomTrack();
   }
 
@@ -92,7 +87,6 @@ export default class MusicManager extends EventEmitter {
   playNextRandomTrack() {
     if (!this.isPlaying) return;
     
-    // Get a random track different from the current one
     let nextIndex;
     do {
       nextIndex = Math.floor(Math.random() * this.musicTracks.length);
@@ -101,21 +95,17 @@ export default class MusicManager extends EventEmitter {
     this.currentTrackIndex = nextIndex;
     const track = this.musicTracks[this.currentTrackIndex];
     
-    // Play the track without loop
     this.playTrackWithoutLoop(track);
     
-    // Emit event for toast notification
     this.trigger('trackChanged', {
       name: track.name,
       id: track.id
     });
     
-    // Start monitoring for track end
     this.startTrackMonitoring(track.id);
   }
 
   playTrackWithoutLoop(track) {
-    // Stop current music first
     if (this.audioManager.currentMusic && this.audioManager.currentMusic.isPlaying) {
       this.audioManager.stopMusic(false);
     }
@@ -126,11 +116,9 @@ export default class MusicManager extends EventEmitter {
       return;
     }
 
-    // Set as current music
     this.audioManager.currentMusic = music;
-    music.setLoop(false); // Important: no loop for random playlist
+    music.setLoop(false);
     
-    // Fade in
     music.setVolume(0);
     music.play();
     this.audioManager.fadeVolume(music, this.audioManager.musicVolume * this.audioManager.masterVolume, this.fadeInDuration);
@@ -144,7 +132,6 @@ export default class MusicManager extends EventEmitter {
     const audio = this.audioManager.sounds[trackId];
     if (!audio) return;
 
-    // Get the audio buffer duration
     const duration = audio.buffer ? audio.buffer.duration : 0;
     let startTime = performance.now();
     
@@ -156,19 +143,17 @@ export default class MusicManager extends EventEmitter {
 
       const elapsed = (performance.now() - startTime) / 1000;
       
-      // Check if track should have ended (with some buffer time)
       if (elapsed >= duration - 0.5 || !audio.isPlaying) {
         clearInterval(this.trackCheckInterval);
         this.trackCheckInterval = null;
         
-        // Wait a moment then play next track
         setTimeout(() => {
           if (this.isPlaying) {
             this.playNextRandomTrack();
           }
         }, 1000);
       }
-    }, 1000); // Check every second
+    }, 1000);
   }
 
   getCurrentTrack() {

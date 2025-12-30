@@ -10,7 +10,6 @@ export default class ToastManager {
   }
 
   createToastContainer() {
-    // Create toast container
     this.toastContainer = document.createElement('div');
     this.toastContainer.id = 'toast-container';
     this.toastContainer.style.cssText = `
@@ -25,11 +24,9 @@ export default class ToastManager {
       gap: 8px;
     `;
 
-    // Ensure document.body exists
     if (document.body) {
       document.body.appendChild(this.toastContainer);
     } else {
-      // Wait for DOM to be ready
       document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(this.toastContainer);
       });
@@ -37,13 +34,11 @@ export default class ToastManager {
   }
 
   showMusicToast(trackName) {
-    // Remove any existing music toasts
     this.clearMusicToasts();
 
     const toast = document.createElement('div');
     toast.className = 'music-toast';
 
-    // New styling with #ede8e4 background and black text
     toast.style.cssText = `
       background: #ede8e4;
       color: rgba(0, 0, 0, 0.9);
@@ -68,7 +63,6 @@ export default class ToastManager {
       overflow: hidden;
     `;
 
-    // Create music icon with gradient styling
     const iconContainer = document.createElement('div');
     iconContainer.style.cssText = `
       width: 36px;
@@ -92,7 +86,6 @@ export default class ToastManager {
 
     iconContainer.appendChild(icon);
 
-    // Create text content with better typography
     const textContent = document.createElement('div');
     textContent.style.cssText = `
       display: flex;
@@ -125,7 +118,6 @@ export default class ToastManager {
       text-overflow: ellipsis;
     `;
 
-    // Add progress indicator
     const progressBar = document.createElement('div');
     progressBar.style.cssText = `
       position: absolute;
@@ -144,11 +136,9 @@ export default class ToastManager {
     toast.appendChild(textContent);
     toast.appendChild(progressBar);
 
-    // Find the insertion point - after season and day/night toasts
     const existingToasts = Array.from(this.toastContainer.children);
     let insertAfter = null;
 
-    // Look for the last season or day/night toast
     for (let i = existingToasts.length - 1; i >= 0; i--) {
       const existingToast = existingToasts[i];
       if (
@@ -160,33 +150,27 @@ export default class ToastManager {
       }
     }
 
-    // Insert the music toast after season/day-night toasts
     if (insertAfter) {
       this.toastContainer.insertBefore(toast, insertAfter.nextSibling);
     } else {
-      // If no season/day-night toasts exist, append at the end
       this.toastContainer.appendChild(toast);
     }
 
     this.activeToasts.push(toast);
 
-    // Force reflow to ensure initial state is applied
     toast.offsetHeight;
 
-    // Animate in with proper timing
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         toast.style.transform = 'translateX(0)';
         toast.style.opacity = '1';
 
-        // Start progress bar animation
         setTimeout(() => {
           progressBar.style.width = '100%';
         }, 100);
       });
     });
 
-    // Auto hide after 4 seconds
     setTimeout(() => {
       this.hideToast(toast);
     }, 4000);
@@ -217,13 +201,11 @@ export default class ToastManager {
   }
 
   showDayNightToast(timeOfDay) {
-    // Remove any existing day/night toasts
     this.clearDayNightToasts();
 
     const toast = document.createElement('div');
     toast.className = 'daynight-toast';
 
-    // Get appropriate icon gradient colors based on time of day
     let icon, iconGradient;
     if (timeOfDay === 'day') {
       icon = 'fas fa-sun';
@@ -257,7 +239,6 @@ export default class ToastManager {
       overflow: hidden;
     `;
 
-    // Create icon container with gradient
     const iconContainer = document.createElement('div');
     iconContainer.style.cssText = `
       width: 36px;
@@ -268,7 +249,7 @@ export default class ToastManager {
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      // border: 1px solid rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(0, 0, 0, 0.1);
     `;
 
     const iconElement = document.createElement('i');
@@ -281,7 +262,6 @@ export default class ToastManager {
 
     iconContainer.appendChild(iconElement);
 
-    // Create text content
     const textContent = document.createElement('div');
     textContent.style.cssText = `
       display: flex;
@@ -319,7 +299,6 @@ export default class ToastManager {
     this.toastContainer.appendChild(toast);
     this.activeToasts.push(toast);
 
-    // Animate in
     toast.offsetHeight;
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -328,7 +307,6 @@ export default class ToastManager {
       });
     });
 
-    // Auto hide after 3 seconds
     setTimeout(() => {
       this.hideToast(toast);
     }, 3000);
@@ -337,13 +315,11 @@ export default class ToastManager {
   }
 
   showSeasonToast(season) {
-    // Remove any existing season toasts
     this.clearSeasonToasts();
 
     const toast = document.createElement('div');
     toast.className = 'season-toast';
 
-    // Get appropriate icon and gradient colors based on season
     let icon, iconGradient;
     switch (season) {
       case 'spring':
@@ -392,7 +368,6 @@ export default class ToastManager {
       overflow: hidden;
     `;
 
-    // Create icon container with gradient
     const iconContainer = document.createElement('div');
     iconContainer.style.cssText = `
       width: 36px;
@@ -416,7 +391,6 @@ export default class ToastManager {
 
     iconContainer.appendChild(iconElement);
 
-    // Create text content
     const textContent = document.createElement('div');
     textContent.style.cssText = `
       display: flex;
@@ -454,7 +428,6 @@ export default class ToastManager {
     this.toastContainer.appendChild(toast);
     this.activeToasts.push(toast);
 
-    // Animate in
     toast.offsetHeight;
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -463,7 +436,6 @@ export default class ToastManager {
       });
     });
 
-    // Auto hide after 3 seconds
     setTimeout(() => {
       this.hideToast(toast);
     }, 3000);
@@ -493,13 +465,11 @@ export default class ToastManager {
 
     let backgroundColor, textColor, borderColor;
 
-    // Special handling for music disabled toast
     if (message === 'Music disabled') {
       backgroundColor = 'rgba(0, 0, 0, 0.9)';
       textColor = 'rgba(255, 255, 255, 0.95)';
       borderColor = 'rgba(255, 255, 255, 0.1)';
     } else {
-      // Default styling for other toasts
       switch (type) {
         case 'success':
           backgroundColor = '#ede8e4';
@@ -544,10 +514,8 @@ export default class ToastManager {
     this.toastContainer.appendChild(toast);
     this.activeToasts.push(toast);
 
-    // Force reflow to ensure initial state is applied
     toast.offsetHeight;
 
-    // Animate in with proper timing
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         toast.style.transform = 'translateX(0)';
@@ -555,7 +523,6 @@ export default class ToastManager {
       });
     });
 
-    // Auto hide
     setTimeout(() => {
       this.hideToast(toast);
     }, duration);
