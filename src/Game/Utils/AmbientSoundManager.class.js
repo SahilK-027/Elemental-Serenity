@@ -31,6 +31,7 @@ export default class AmbientSoundManager extends EventEmitter {
 
     // Track ambient sound state for tab visibility
     this.wasAmbientPlayingBeforeHide = false;
+    this.isAmbientSoundsPaused = false;
 
     this.init();
   }
@@ -252,6 +253,25 @@ export default class AmbientSoundManager extends EventEmitter {
         'thunderDistant',
         () => this.playThunder(),
         'thunder'
+      );
+    }
+  }
+
+  playThunderStrike() {
+    // Play the thunder strike sound only if:
+    // 1. Music is enabled
+    // 2. Tab is visible
+    // 3. Ambient sounds are not paused
+    if (
+      this.musicControlUI &&
+      this.musicControlUI.isMusicEnabled &&
+      !document.hidden &&
+      !this.isAmbientSoundsPaused
+    ) {
+      this.audioManager.playSound(
+        'thunderStrikeSound',
+        this.config.baseVolume * 0.9,
+        false
       );
     }
   }
@@ -483,6 +503,7 @@ export default class AmbientSoundManager extends EventEmitter {
 
   pauseAmbientSounds() {
     console.log('Pausing ambient sounds - stopping all sounds and timers');
+    this.isAmbientSoundsPaused = true;
     // Stop all ambient sounds using AudioManager's method
     this.audioManager.stopAllAmbientSounds();
     // Also clear our timers
@@ -498,6 +519,7 @@ export default class AmbientSoundManager extends EventEmitter {
     console.log(
       'Resuming ambient sounds - updating based on current conditions'
     );
+    this.isAmbientSoundsPaused = false;
     // Resume ambient sounds based on current conditions
     this.updateAmbientSounds();
   }

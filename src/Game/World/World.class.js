@@ -42,7 +42,19 @@ export default class World {
     
     // Initialize particle system and lightning
     this.particleSystem = new ParticleSystem();
-    this.lightning = new Lightning(this.particleSystem);
+    
+    // Calculate ground bounds from Ground dimensions
+    const worldSize = this.ground.WORLD_SIZE;
+    const halfSize = worldSize / 2;
+    console.log(halfSize);
+    const groundBounds = {
+      minX: -halfSize,
+      maxX: halfSize,
+      minZ: -halfSize,
+      maxZ: halfSize,
+    };
+    
+    this.lightning = new Lightning(this.particleSystem, groundBounds);
     
     // Setup debug UI
     if (this.debugGUI) {

@@ -15,19 +15,27 @@ export default class Lightning {
   #explosionMaterial = null;
   #activeLightningArcs = [];
 
-  constructor(particleSystem) {
+  constructor(particleSystem, groundBounds = null) {
     this.game = Game.getInstance();
     this.particleSystem = particleSystem;
     this.scene = this.game.scene;
 
+    // Ground bounds for lightning strikes (XY plane)
+    // groundBounds should be { minX, maxX, minZ, maxZ }
+    this.groundBounds = groundBounds || {
+      minX: -5.5,
+      maxX: 5.5,
+      minZ: -5.5,
+      maxZ: 5.5,
+    };
+
     // Lightning timing
     this.nextLightningTime = this.getRandomDelay();
     this.elapsedTime = 0;
-    this.isEnabled = true;
 
     // Lightning parameters
     this.cameraShakeDuration = 0.5;
-    this.cameraShakeIntensity = 0.3;
+    this.cameraShakeIntensity = 0.7;
 
     // Colors
     this.colorA = new THREE.Color(0x0000ff);
@@ -56,24 +64,10 @@ export default class Lightning {
     this.setupArc();
     this.createExplosionMaterial();
 
-    // Listen for pause/resume events
-    this.setupPauseResumeListeners();
-
     // Setup debug GUI if in debug mode
     this.isDebugMode = this.game.isDebugMode;
     if (this.isDebugMode) {
       this.initGUI();
-    }
-  }
-
-  setupPauseResumeListeners() {
-    if (this.game.musicManager) {
-      this.game.musicManager.on('pause', () => {
-        this.isEnabled = false;
-      });
-      this.game.musicManager.on('resume', () => {
-        this.isEnabled = true;
-      });
     }
   }
 
@@ -334,7 +328,11 @@ export default class Lightning {
     const arcMesh = this.createArcMesh(position);
     this.createExplosionParticles(position);
     this.triggerCameraShake();
-    this.playThunderSound();
+    
+    // Trigger thunder sound through AmbientSoundManager if available
+    if (this.game.ambientSoundManager) {
+      this.game.ambientSoundManager.playThunderStrike();
+    }
 
     // Clean up arc after duration
     setTimeout(() => {
@@ -342,7 +340,7 @@ export default class Lightning {
       arcMesh.geometry.dispose();
       arcMesh.material.dispose();
 
-      // NEW: Remove from tracking array
+      // Remove from tracking array
       const index = this.#activeLightningArcs.indexOf(arcMesh);
       if (index > -1) {
         this.#activeLightningArcs.splice(index, 1);
@@ -350,33 +348,21 @@ export default class Lightning {
     }, this.arc.duration * 1000);
   }
 
-  playThunderSound() {
-    if (this.game.audioManager?.sounds?.thunderStrikeSound) {
-      const sound = this.game.audioManager.sounds.thunderStrikeSound;
-      if (sound.isPlaying) sound.stop();
-      sound.setVolume(
-        this.game.audioManager.soundVolume * this.game.audioManager.masterVolume
-      );
-      sound.play();
-    }
-  }
-
   strikeRandom() {
-    const cameraPos = this.game.camera.cameraInstance.position;
-    const angle = Math.random() * Math.PI * 2;
-    const distance = 20 + Math.random() * 30;
-
-    const position = new THREE.Vector3(
-      cameraPos.x + Math.cos(angle) * distance,
-      0,
-      cameraPos.z + Math.sin(angle) * distance
-    );
-
+    // Generate random position within ground bounds
+    const x = this.groundBounds.minX + Math.random() * (this.groundBounds.maxX - this.groundBounds.minX);
+    const z = this.groundBounds.minZ + Math.random() * (this.groundBounds.maxZ - this.groundBounds.minZ);
+    
+    const position = new THREE.Vector3(x, 0, z);
     this.strike(position);
   }
 
   manualStrike() {
-    this.strike(new THREE.Vector3(0, 0, 0));
+    this.strikeRandom();
+  }
+
+  setGroundBounds(bounds) {
+    this.groundBounds = bounds;
   }
 
   isRainySeason() {
@@ -400,9 +386,8 @@ export default class Lightning {
       }
     }
 
-    // Only trigger automatic lightning during rainy season and when enabled
+    // Only trigger automatic lightning during rainy season
     if (
-      this.isEnabled &&
       this.isRainySeason() &&
       this.elapsedTime >= this.nextLightningTime
     ) {
