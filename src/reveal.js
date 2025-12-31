@@ -17,7 +17,7 @@ export default class ShaderReveal {
     this.startTime = 0;
     this.duration = 4500;
 
-    this.textDisplayDuration = 0;
+    this.textDisplayDuration = 7000;
     this.hasStarted = false;
     this.textOverlay = null;
 

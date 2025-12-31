@@ -1000,6 +1000,9 @@ export default class Fire {
     if (!this.fireLightPresent) return;
 
     this.flickerTime += delta;
+    if (this.flickerTime > 628) {
+      this.flickerTime -= 628;
+    }
     const flicker1 = this.smoothNoise(
       this.flickerTime * this.flickerSpeed + this.noiseOffset1
     );
