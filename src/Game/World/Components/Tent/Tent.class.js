@@ -49,7 +49,7 @@ export default class Tent {
   onSeasonChanged(newSeason, oldSeason) {
     this.currentSeason = newSeason;
     const lampColor = this.seasonManager.getColorConfig('tent').lampColor;
-    
+
     this.lampMeshes.forEach((mesh) => {
       mesh.material.emissive.copy(lampColor);
     });

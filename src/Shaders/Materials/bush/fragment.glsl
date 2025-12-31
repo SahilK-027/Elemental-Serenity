@@ -29,7 +29,7 @@ vec3 colorRamp(float t, vec3 shadowColor, vec3 midColor, vec3 highlightColor) {
         return mix(midColor, highlightColor, (t - 0.5) * 2.0);
     }
 }
-// DEBUG
+
 vec3 colorRampDEBUG(float t) {
     if (t < 0.5) {
         return mix(uShadowColor, uMidColor, t * 2.0);
@@ -58,9 +58,9 @@ void main() {
     vec3 color = colorRamp(t, shadowColor, midColor, highlightColor);
     color *= vInstanceColorMultiplier;
 
-    // DEBUG
-    // vec3 color = colorRampDEBUG(t);
-    // color *= vec3(0.68, 0.5, 0.22);
+
+
+
 
     gl_FragColor = vec4(color, 1.0);
 

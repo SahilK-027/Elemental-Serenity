@@ -12,7 +12,7 @@ void main() {
     texColor.a *= uTimeColorAlpha;
     gl_FragColor = texColor;
 
-    // #include <tonemapping_fragment>
-    // #include <colorspace_fragment>
+
+
     #include <fog_fragment>
 }

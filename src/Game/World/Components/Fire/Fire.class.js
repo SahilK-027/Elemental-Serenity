@@ -37,7 +37,7 @@ export default class Fire {
     this.smokeEmitterParams = null;
     this.amberEmitterParams = null;
 
-    // Load particle settings from localStorage
+
     const particleSettings = this.getInitialParticleSettings();
     this.originalFireEmissionRate = particleSettings.fireEmissionRate;
     this.originalAmberEmissionRate = particleSettings.amberEmissionRate;
@@ -45,7 +45,7 @@ export default class Fire {
     this.originalSmokePosition = { x: -5.4, y: 1.9, z: -6.9 };
     this.rainySmokePosition = { x: -5.4, y: 0.6, z: -6.9 };
     this.rainySmokeEmissionRate = 8;
-    
+
     this.originalSmokeColorStops = [
       { time: 0.0, value: new THREE.Color(0xfff1cc) },
       { time: 0.3, value: new THREE.Color(0xfffbf0) },
@@ -79,7 +79,7 @@ export default class Fire {
     this.updateFireEffectsForSeason();
   }
 
-  // Get initial particle settings from localStorage based on saved graphics quality
+
   getInitialParticleSettings() {
     const defaults = {
       fireEmissionRate: 500,
@@ -94,7 +94,7 @@ export default class Fire {
       const settings = JSON.parse(savedSettings);
       const quality = settings.graphicsQuality || 'medium';
 
-      // If custom quality, use the saved custom particle value
+
       if (quality === 'custom') {
         const customParticles = settings.customParticles || 500;
         return {
@@ -104,7 +104,7 @@ export default class Fire {
         };
       }
 
-      // Otherwise use preset values
+
       const presetSettings = {
         low: { fireEmissionRate: 350, smokeEmissionRate: 35, amberEmissionRate: 20 },
         medium: { fireEmissionRate: 500, smokeEmissionRate: 50, amberEmissionRate: 30 },
@@ -120,7 +120,7 @@ export default class Fire {
   }
 
   _createDefaultStops() {
-    // FIRE stops
+
     this.fireSizeStops = [
       { time: 0.0, value: 15 },
       { time: 0.5, value: 60 },
@@ -144,7 +144,7 @@ export default class Fire {
       { time: 1.0, value: 1.0 },
     ];
 
-    // SMOKE stops
+
     this.smokeSizeStops = [
       { time: 0.0, value: 15 },
       { time: 0.5, value: 60 },
@@ -168,7 +168,7 @@ export default class Fire {
       { time: 1.0, value: 0.0 },
     ];
 
-    // AMBER stops
+
     this.amberSizeStops = [
       { time: 0.0, value: 0 },
       { time: 0.5, value: 0.75 },
@@ -932,38 +932,38 @@ export default class Fire {
 
   updateFireEffectsForSeason() {
     const isRainySeason = this.currentSeason === 'rainy';
-    
+
     if (this.fireEmitterParams) {
       this.fireEmitterParams.emissionRate = isRainySeason ? 0 : this.originalFireEmissionRate;
     }
-    
+
     if (this.amberEmitterParams) {
       this.amberEmitterParams.emissionRate = isRainySeason ? 0 : this.originalAmberEmissionRate;
     }
-    
+
     if (this.smokeEmitterParams) {
-      this.smokeEmitterParams.emissionRate = isRainySeason 
-        ? this.rainySmokeEmissionRate 
+      this.smokeEmitterParams.emissionRate = isRainySeason
+        ? this.rainySmokeEmissionRate
         : this.originalSmokeEmissionRate;
-      
+
       const smokePos = isRainySeason ? this.rainySmokePosition : this.originalSmokePosition;
       this.smokeEmitterParams.shape.position.set(smokePos.x, smokePos.y, smokePos.z);
     }
-    
+
     this.updateSmokeColorForSeason(isRainySeason);
-    
+
     if (this.fireRendererGroup) {
       this.fireRendererGroup.visible = !isRainySeason;
     }
-    
+
     if (this.amberRendererGroup) {
       this.amberRendererGroup.visible = !isRainySeason;
     }
-    
+
     if (this.fireLight) {
       this.fireLight.visible = !isRainySeason;
     }
-    
+
     if (this.fireLight2) {
       this.fireLight2.visible = !isRainySeason;
     }
@@ -971,13 +971,13 @@ export default class Fire {
 
   updateSmokeColorForSeason(isRainySeason) {
     const colorStops = isRainySeason ? this.rainySmokeColorStops : this.originalSmokeColorStops;
-    
+
     this.smokeColorStops.forEach((stop, index) => {
       if (colorStops[index]) {
         stop.value.copy(colorStops[index].value);
       }
     });
-    
+
     this._buildSmokeInterpolantsAndTextures();
   }
 

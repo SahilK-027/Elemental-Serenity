@@ -22,8 +22,8 @@ export default class Lightning {
     this.particleSystem = particleSystem;
     this.scene = this.game.scene;
 
-    // Ground bounds for lightning strikes (XY plane)
-    // groundBounds should be { minX, maxX, minZ, maxZ }
+
+
     this.groundBounds = groundBounds || {
       minX: -5.5,
       maxX: 5.5,
@@ -31,48 +31,48 @@ export default class Lightning {
       maxZ: 5.5,
     };
 
-    // Lightning timing
+
     this.nextLightningTime = this.getRandomDelay();
     this.elapsedTime = 0;
 
-    // Camera shake parameters
+
     this.cameraShakeDuration = 0.65;
     this.cameraShakeIntensity = 0.85;
-    this.cameraShakeFrequency = 25; // Hz - higher = faster vibration
-    this.cameraShakeDecay = 2.5; // Exponential decay curve
+    this.cameraShakeFrequency = 25;
+    this.cameraShakeDecay = 2.5;
 
-    // Colors
+
     this.colorA = new THREE.Color(0xff8117);
     this.colorB = new THREE.Color(0xffd500);
     this.intensity = 3;
 
-    // Lighning colours
+
     this.colorLightningA = new THREE.Color(0x0000ff);
     this.colorLightningB = new THREE.Color(0x00ffff);
 
-    // Particle configuration
-    // Recommended explosion preset — faster, punchier, wider radius
+
+
     this.explosionParticles = {
-      count: 100, // more particles for fullness
-      duration: 1, // how long emission lasts (seconds)
-      maxLife: 1.3, // particle life (seconds) — short = punchy
-      velocityMagnitude: 5.6, // base speed
-      velocityMagnitudeVariance: 0.5, // randomness
+      count: 100,
+      duration: 1,
+      maxLife: 1.3,
+      velocityMagnitude: 5.6,
+      velocityMagnitudeVariance: 0.5,
       rotationAngularVariance: Math.PI * 2,
       gravity: true,
-      gravityStrength: -1.5, // moderate downward pull
-      dragCoefficient: -2.5, // positive value interpreted as "friction" in code below
-      positionRadiusVariance: 0, // spawn over a wider sphere (more volumetric)
+      gravityStrength: -1.5,
+      dragCoefficient: -2.5,
+      positionRadiusVariance: 0,
     };
 
-    // Create particle stops
+
     this._createParticleStops();
 
-    // Setup arc and explosion
+
     this.setupArc();
     this.createExplosionMaterial();
 
-    // Setup debug GUI if in debug mode
+
     this.isDebugMode = this.game.isDebugMode;
     if (this.isDebugMode) {
       this.initGUI();
@@ -197,7 +197,7 @@ export default class Lightning {
       points.push(point);
     }
 
-    // Create tube with thinner radius
+
     const curve = new THREE.CatmullRomCurve3(points);
     const geometry = new THREE.TubeGeometry(curve, 18, 0.07, 8, false);
 
@@ -245,7 +245,7 @@ export default class Lightning {
     params.gravityStrength = this.explosionParticles.gravityStrength;
     params.dragCoefficient = this.explosionParticles.dragCoefficient;
 
-    // Create a new renderer for this explosion
+
     const rendererParams = new ParticleRendererParams();
     rendererParams.maxParticles = this.explosionParticles.count;
     rendererParams.group = new THREE.Group();
@@ -271,7 +271,7 @@ export default class Lightning {
     const originalPosition = camera.position.clone();
     const shakeStart = performance.now();
 
-    // Calculate direction from camera to strike for directional bias
+
     let shakeDirection = new THREE.Vector3(0, 0, 1);
     if (strikePosition) {
       shakeDirection = new THREE.Vector3()
@@ -284,20 +284,20 @@ export default class Lightning {
       const progress = Math.min(elapsed / this.cameraShakeDuration, 1);
 
       if (progress < 1) {
-        // Easing: ease-out cubic for smooth ramp-up, then exponential decay
+
         const easeIn = progress < 0.1 ? Math.pow(progress / 0.1, 2) : 1;
         const decayFactor = Math.pow(1 - progress, this.cameraShakeDecay);
         const currentIntensity =
           this.cameraShakeIntensity * decayFactor * easeIn;
 
-        // Multi-frequency noise for organic feel
+
         const time = elapsed * this.cameraShakeFrequency;
         const noise1 = Math.sin(time * 1.0) * 0.6;
         const noise2 = Math.sin(time * 2.3) * 0.3;
         const noise3 = Math.sin(time * 4.7) * 0.1;
         const combinedNoise = noise1 + noise2 + noise3;
 
-        // Apply shake with directional bias
+
         const randomX = (Math.random() - 0.5) * 2;
         const randomY = (Math.random() - 0.5) * 2;
         const randomZ = (Math.random() - 0.5) * 2;
@@ -326,18 +326,18 @@ export default class Lightning {
     this.createExplosionParticles(position);
     this.triggerCameraShake(position);
 
-    // Trigger thunder sound through AmbientSoundManager if available
+
     if (this.game.ambientSoundManager) {
       this.game.ambientSoundManager.playThunderStrike();
     }
 
-    // Clean up arc after duration
+
     setTimeout(() => {
       this.scene.remove(arcMesh);
       arcMesh.geometry.dispose();
       arcMesh.material.dispose();
 
-      // Remove from tracking array
+
       const index = this.#activeLightningArcs.indexOf(arcMesh);
       if (index > -1) {
         this.#activeLightningArcs.splice(index, 1);
@@ -346,7 +346,7 @@ export default class Lightning {
   }
 
   strikeRandom() {
-    // Generate random position within ground bounds
+
     const x =
       this.groundBounds.minX +
       Math.random() * (this.groundBounds.maxX - this.groundBounds.minX);
@@ -373,21 +373,21 @@ export default class Lightning {
   update(delta) {
     this.elapsedTime += delta;
 
-    // Update shader time uniforms
+
     const currentTime = this.game.time?.elapsedTime || performance.now() / 1000;
 
     if (this.#explosionMaterial) {
       this.#explosionMaterial.uniforms.uTime.value = currentTime;
     }
 
-    // Update arc meshes
+
     for (const arc of this.#activeLightningArcs) {
       if (arc.material?.uniforms?.uTime) {
         arc.material.uniforms.uTime.value = currentTime;
       }
     }
 
-    // Only trigger automatic lightning during rainy season
+
     if (this.isRainySeason() && this.elapsedTime >= this.nextLightningTime) {
       this.strikeRandom();
       this.elapsedTime = 0;
@@ -476,7 +476,7 @@ export default class Lightning {
       folder
     );
 
-    // Camera shake controls
+
     const shakeFolder = 'Lightning/Camera Shake';
     this.game.debug.add(
       this,

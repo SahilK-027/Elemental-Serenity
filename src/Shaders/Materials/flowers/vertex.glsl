@@ -16,7 +16,7 @@ float noise(vec2 p) {
 void main() {
           #include <begin_vertex>
           #include <project_vertex>
-          // Scale UV to 1/2 width (2 textures horizontally), full height
+
     vUv = uv * vec2(0.5, 1.0) + aTexOffset;
 
     vec4 worldPos = instanceMatrix * vec4(0.0, 0.0, 0.0, 1.0);

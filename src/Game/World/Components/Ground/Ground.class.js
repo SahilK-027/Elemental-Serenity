@@ -254,7 +254,7 @@ export default class Ground {
       uPerlinNoise: { value: perlinNoise },
       uWaterDepthTexture: { value: waterDepthTexture },
 
-      // Ripple uniforms
+
       uRipplesRatio: { value: 0.0 },
       uDensityMaskMin: { value: 0.05 },
       uDensityMaskMax: { value: 0.15 },
@@ -275,7 +275,7 @@ export default class Ground {
       uDiscardThreshold: { value: 0.45 },
       uRippleOpacity: { value: 2.5 },
 
-      // Splash uniforms
+
       uSplashesRatio: { value: 0.0 },
       uSplashesNoiseFrequency: { value: 0.33 },
       uSplashesTimeFrequency: { value: 6.0 },
@@ -285,7 +285,7 @@ export default class Ground {
       uSplashesCenterMin: { value: 0.0 },
       uSplashesCenterMax: { value: 0.5 },
 
-      // Ice uniforms
+
       uIceRatio: { value: 0.0 },
       uIceNoiseFrequency: { value: 0.3 },
       uIceColor: { value: new THREE.Color(0.9, 0.95, 1.0) },
@@ -370,7 +370,7 @@ export default class Ground {
       'Water'
     );
 
-    // Ripple controls
+
     this.debugGUI.add(
       this.customWaterRipplesUniforms.uRipplesRatio,
       'value',
@@ -396,7 +396,7 @@ export default class Ground {
       'Water'
     );
 
-    // Splash controls
+
     this.debugGUI.add(
       this.customWaterRipplesUniforms.uSplashesRatio,
       'value',
@@ -428,7 +428,7 @@ export default class Ground {
       'Water Effects'
     );
 
-    // Ice controls
+
     this.debugGUI.add(
       this.customWaterRipplesUniforms.uIceRatio,
       'value',
@@ -454,13 +454,13 @@ export default class Ground {
       this.grassManager.update();
     }
 
-    // Update time
+
     this.customWaterRipplesUniforms.uTime.value += 0.001;
 
-    // Update effects based on season
+
     const currentSeason = this.seasonManager.currentSeason;
 
-    // Rainy season: Ripples at edges + splashes in center
+
     if (currentSeason === 'rainy') {
       this.customWaterRipplesUniforms.uRipplesRatio.value =
         THREE.MathUtils.lerp(
@@ -480,7 +480,7 @@ export default class Ground {
         0.02
       );
     }
-    // Winter: Only ice, no ripples, no splashes
+
     else if (currentSeason === 'winter') {
       this.customWaterRipplesUniforms.uRipplesRatio.value =
         THREE.MathUtils.lerp(
@@ -500,7 +500,7 @@ export default class Ground {
         0.05
       );
     }
-    // Spring and Autumn: Only ripples, no splashes, no ice
+
     else {
       this.customWaterRipplesUniforms.uRipplesRatio.value =
         THREE.MathUtils.lerp(

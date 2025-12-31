@@ -36,8 +36,8 @@ export class GrassManager {
     this.gridRows = gridRows;
     this.gridSpacing = gridSpacing;
     this.grassSize = 1.185;
-    
-    // Load grass density from localStorage based on saved graphics quality
+
+
     this.GRASS_PER_TILE = this.getInitialGrassDensity();
 
     this.FLOWERS_PER_TILE = 20;
@@ -72,30 +72,30 @@ export class GrassManager {
     this.createFlowers();
   }
 
-  // Get initial grass density from localStorage based on saved graphics quality
+
   getInitialGrassDensity() {
     const defaultDensity = 12500;
-    
+
     try {
       const savedSettings = localStorage.getItem('gameSettings');
       if (!savedSettings) return defaultDensity;
-      
+
       const settings = JSON.parse(savedSettings);
       const quality = settings.graphicsQuality || 'medium';
-      
-      // If custom quality, use the saved custom grass value
+
+
       if (quality === 'custom') {
         return settings.customGrass || defaultDensity;
       }
-      
-      // Otherwise use preset values
+
+
       const presetDensities = {
         low: 10000,
         medium: 12500,
         high: 25000,
         ultra: 50000,
       };
-      
+
       return presetDensities[quality] || defaultDensity;
     } catch (error) {
       console.warn('Failed to load grass density from localStorage:', error);
@@ -330,7 +330,7 @@ export class GrassManager {
     }
 
     const atlasCanvas = document.createElement('canvas');
-    const texSize = 256; // Each texture gets 256 x 256
+    const texSize = 256;
     atlasCanvas.width = texSize * 2;
     atlasCanvas.height = texSize;
     const ctx = atlasCanvas.getContext('2d');
@@ -493,24 +493,24 @@ export class GrassManager {
     }
   }
 
-  // Method to regenerate grass with new density settings
+
   regenerateGrass() {
-    
-    // Remove existing grass
+
+
     if (this.grassInstancedMesh) {
       this.scene.remove(this.grassInstancedMesh);
       this.grassInstancedMesh.dispose();
       this.grassInstancedMesh = null;
     }
-    
-    // Remove existing flowers
+
+
     if (this.flowerInstancedMesh) {
       this.scene.remove(this.flowerInstancedMesh);
       this.flowerInstancedMesh.dispose();
       this.flowerInstancedMesh = null;
     }
-    
-    // Recreate grass and flowers with new settings
+
+
     this.createAllGrassInSingleMesh();
     this.createFlowers();
   }

@@ -24,7 +24,7 @@ export default class Renderer {
       this.onEnvTimeChanged(newValue, oldValue);
     });
 
-    // Subscribe to graphics quality changes
+
     this.onGraphicsQualityChanged = this.onGraphicsQualityChanged.bind(this);
     window.addEventListener(
       'graphicsQualityChanged',
@@ -32,7 +32,7 @@ export default class Renderer {
     );
   }
 
-  // Get initial graphics settings from localStorage based on saved graphics quality
+
   getInitialGraphicsSettings() {
     const defaults = {
       antialias: false,
@@ -47,7 +47,7 @@ export default class Renderer {
       const settings = JSON.parse(savedSettings);
       const quality = settings.graphicsQuality || 'medium';
 
-      // If custom quality, use the saved custom values
+
       if (quality === 'custom') {
         return {
           antialias: settings.customAntialias || false,
@@ -56,7 +56,7 @@ export default class Renderer {
         };
       }
 
-      // Otherwise use preset values
+
       const presetSettings = {
         low: { antialias: false, shadowMapType: 'BasicShadowMap', pixelRatioCap: 2 },
         medium: { antialias: false, shadowMapType: 'PCFShadowMap', pixelRatioCap: 2 },
@@ -82,7 +82,7 @@ export default class Renderer {
       NeutralToneMapping: THREE.NeutralToneMapping,
     };
 
-    // Get antialiasing setting from localStorage (set by graphics quality)
+
     const graphicsSettings = this.getInitialGraphicsSettings();
     const useAntialias = graphicsSettings.antialias;
 
@@ -112,7 +112,7 @@ export default class Renderer {
     this.rendererInstance.toneMappingExposure = 1.75;
     this.rendererInstance.shadowMap.enabled = true;
 
-    // Get shadow map type from graphics settings
+
     const shadowMapTypes = {
       BasicShadowMap: THREE.BasicShadowMap,
       PCFShadowMap: THREE.PCFShadowMap,
@@ -123,7 +123,7 @@ export default class Renderer {
 
     this.rendererInstance.setSize(this.sizes.width, this.sizes.height);
 
-    // Apply pixel ratio cap from graphics settings
+
     this.rendererInstance.setPixelRatio(
       Math.min(this.sizes.pixelRatio, graphicsSettings.pixelRatioCap)
     );
@@ -148,7 +148,7 @@ export default class Renderer {
   onGraphicsQualityChanged(event) {
     const { quality, settings } = event.detail;
 
-    // Update shadow map type immediately
+
     const shadowMapTypes = {
       BasicShadowMap: THREE.BasicShadowMap,
       PCFShadowMap: THREE.PCFShadowMap,
@@ -160,7 +160,7 @@ export default class Renderer {
         shadowMapTypes[settings.shadowMapType];
     }
 
-    // Update pixel ratio immediately
+
     if (this.sizes && settings.pixelRatioCap) {
       const newPixelRatio = Math.min(
         this.sizes.pixelRatio,
@@ -169,7 +169,7 @@ export default class Renderer {
       this.rendererInstance.setPixelRatio(newPixelRatio);
     }
 
-    // Store settings for next renderer creation (antialiasing requires restart)
+
     localStorage.setItem('graphicsAntialias', settings.antialias.toString());
     localStorage.setItem('graphicsShadowMapType', settings.shadowMapType);
     localStorage.setItem(
@@ -185,7 +185,7 @@ export default class Renderer {
   resize() {
     this.rendererInstance.setSize(this.sizes.width, this.sizes.height);
 
-    // Respect the pixel ratio cap from graphics settings
+
     const graphicsSettings = this.getInitialGraphicsSettings();
     this.rendererInstance.setPixelRatio(
       Math.min(this.sizes.pixelRatio, graphicsSettings.pixelRatioCap)

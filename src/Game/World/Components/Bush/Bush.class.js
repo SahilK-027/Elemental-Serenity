@@ -22,50 +22,50 @@ export default class Bush {
     this.COLOR_PRESETS = this.seasonManager.getColorConfig('bush');
 
     this.BUSH_DEFINITIONS = [
-      // bottom right cluster
+
       { position: [7.3, 1.0, 3], scale: 1.2 },
       { position: [9, 0.2, 4.1], scale: 0.6 },
       { position: [10, 0.3, 0.0], scale: 0.6 },
       { position: [11, 0.1, 1.5], scale: 0.8 },
 
-      // top left near bridge
+
       { position: [-10, 0.7, -5.5], scale: 1.2 },
       { position: [-12, 1.0, -5.5], scale: 2.0 },
       { position: [-11, 0.2, -8.5], scale: 0.7 },
 
-      // top left near tent
+
       { position: [-2, 0.2, -7.5] },
 
-      // top right near tent
+
       { position: [8, 0.5, -9.5], scale: 0.6 },
 
-      // bottom left near rocks
+
       { position: [-4.0, 0.5, 10.5], scale: 0.7 },
       { position: [0.0, 0.5, 11.5], scale: 0.5 },
       { position: [1.8, 0.2, 9.5], scale: 0.5 },
 
-      // other clusters
+
       { position: [-4, 0.0, -15.5] },
       { position: [-6, 0.0, -15], scale: 0.9 },
 
-      // top-left rocks
+
       { position: [-9.8, 0.5, 4.5], leafCount: 30, scale: 1.2 },
       { position: [-8.8, 0.5, 8.5], leafCount: 30 },
       { position: [-6.5, 0.1, 8.5], leafCount: 30, scale: 0.8 },
 
-      // tree leaves (bottom right tree)
+
       { position: [12.0, 5.0, -0.2], scale: 0.6, bushType: 'tree' },
       { position: [12.0, 7.0, 1.5], scale: 0.7, bushType: 'tree' },
       { position: [12.5, 5.0, 3.2], scale: 0.7, bushType: 'tree' },
       { position: [13.5, 5.0, 0.5], scale: 0.6, bushType: 'tree' },
       { position: [11.0, 6.0, 2.5], scale: 0.6, bushType: 'tree' },
 
-      // birch-like clusters (top right)
+
       { position: [8.1, 6.5, -5.5], scale: 1.0, bushType: 'birch' },
       { position: [8.5, 7.5, -8.5], scale: 1.0, bushType: 'birch' },
       { position: [6.0, 7.5, -7.5], scale: 1.0, bushType: 'birch' },
 
-      // more clusters
+
       { position: [-10.5, 4.5, 0.0], scale: 1.0, bushType: 'tree' },
       { position: [-9.5, 5.0, -2.5], scale: 1.0, bushType: 'tree' },
       { position: [-8, 4.0, -2.5], scale: 1.0, bushType: 'tree' },
@@ -79,7 +79,7 @@ export default class Bush {
       { position: [-12, 6.0, 6.0], scale: 1.0, bushType: 'tree' },
       { position: [-12, 4.0, 7.0], scale: 1.0, bushType: 'tree' },
 
-      // mid-left birch cluster
+
       { position: [-3.1, 8.0, 10.5], scale: 1.0, bushType: 'birch' },
       { position: [-3.0, 6.0, 10.5], scale: 1.5, bushType: 'birch' },
       { position: [-5.0, 7.5, 11.5], scale: 1.0, bushType: 'birch' },

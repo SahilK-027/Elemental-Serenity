@@ -16,8 +16,8 @@ export default class ShaderReveal {
     this.uniforms = {};
     this.startTime = 0;
     this.duration = 4500;
-    // this.textDisplayDuration = 7000;
-    this.textDisplayDuration = 0; // DEBUG
+
+    this.textDisplayDuration = 0;
     this.hasStarted = false;
     this.textOverlay = null;
 
@@ -119,7 +119,7 @@ export default class ShaderReveal {
     this.textOverlay = document.createElement('div');
     this.textOverlay.innerHTML = `
       <div class="reveal-content" style="
-        text-align: center; 
+        text-align: center;
         font-family: 'Inter', sans-serif;
         max-width: 600px;
         margin: 0 auto;
@@ -133,7 +133,7 @@ export default class ShaderReveal {
           opacity: 0;
           transition: opacity 1.2s ease-out;
         ">A Dream Realized</h1>
-        
+
         <div class="reveal-description" style="
           font-family: 'Inter', sans-serif;
           font-size: clamp(0.85rem, 2vw, 1rem);

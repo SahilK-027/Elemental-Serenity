@@ -10,7 +10,7 @@ export default class AmbientSoundManager extends EventEmitter {
     this.audioManager = audioManager;
     this.musicControlUI = musicControlUI;
 
-    // Sound configuration constants
+
     this.config = {
       shortGapMin: 8000,
       shortGapMax: 10000,
@@ -19,17 +19,17 @@ export default class AmbientSoundManager extends EventEmitter {
       thunderLongGapMin: 8000,
       thunderLongGapMax: 10000,
       baseVolume: 0.8,
-      // Distance-based sound positions
+
       firePosition: new THREE.Vector3(-5.4, 1.0, -6.9),
       lakePosition: new THREE.Vector3(0, 0, 0),
-      maxDistance: 35, // Maximum distance for volume calculation
+      maxDistance: 35,
     };
 
-    // Active ambient sounds tracking
+
     this.activeContinuousSounds = new Set();
     this.scheduledTimers = new Map();
 
-    // Track ambient sound state for tab visibility
+
     this.wasAmbientPlayingBeforeHide = false;
     this.isAmbientSoundsPaused = false;
 
@@ -42,7 +42,7 @@ export default class AmbientSoundManager extends EventEmitter {
   }
 
   bindEvents() {
-    // Listen for environment and season changes
+
     this.environmentManager.onChange(() => {
       this.updateAmbientSounds();
     });
@@ -51,9 +51,9 @@ export default class AmbientSoundManager extends EventEmitter {
       this.updateAmbientSounds();
     });
 
-    // Listen for music control changes
+
     if (this.musicControlUI) {
-      // Override the original methods to include ambient sound control
+
       const originalEnableMusic = this.musicControlUI.enableMusic.bind(
         this.musicControlUI
       );
@@ -63,50 +63,50 @@ export default class AmbientSoundManager extends EventEmitter {
 
       this.musicControlUI.enableMusic = () => {
         originalEnableMusic();
-        this.updateAmbientSounds(); // Resume ambient sounds
+        this.updateAmbientSounds();
       };
 
       this.musicControlUI.disableMusic = () => {
         originalDisableMusic();
-        this.stopAllAmbientSounds(); // Stop all ambient sounds
+        this.stopAllAmbientSounds();
       };
     }
 
-    // Set up our own visibility handlers for ambient sounds
+
     this.setupAmbientVisibilityHandlers();
   }
 
   setupAmbientVisibilityHandlers() {
-    // Bind methods to preserve 'this' context
+
     this.handleAmbientVisibilityChange =
       this.handleAmbientVisibilityChange.bind(this);
     this.handleAmbientWindowBlur = this.handleAmbientWindowBlur.bind(this);
     this.handleAmbientWindowFocus = this.handleAmbientWindowFocus.bind(this);
     this.handleAmbientBeforeUnload = this.handleAmbientBeforeUnload.bind(this);
 
-    // Handle page visibility changes (user switching tabs, minimizing window, etc.)
+
     document.addEventListener(
       'visibilitychange',
       this.handleAmbientVisibilityChange
     );
 
-    // Handle window focus/blur events as backup
+
     window.addEventListener('blur', this.handleAmbientWindowBlur);
     window.addEventListener('focus', this.handleAmbientWindowFocus);
 
-    // Handle beforeunload (user leaving the page)
+
     window.addEventListener('beforeunload', this.handleAmbientBeforeUnload);
 
-    // Handle pagehide (more reliable for mobile)
+
     window.addEventListener('pagehide', this.handleAmbientBeforeUnload);
 
-    // Handle unload as additional backup
+
     window.addEventListener('unload', this.handleAmbientBeforeUnload);
   }
 
   handleAmbientVisibilityChange() {
     if (document.hidden) {
-      // Page is hidden - pause ambient sounds if music is enabled
+
       if (
         this.musicControlUI &&
         this.musicControlUI.isMusicEnabled &&
@@ -116,14 +116,14 @@ export default class AmbientSoundManager extends EventEmitter {
         this.pauseAmbientSounds();
       }
     } else {
-      // Page is visible again - resume ambient sounds if they were playing before
+
       if (
         this.musicControlUI &&
         this.musicControlUI.isMusicEnabled &&
         this.wasAmbientPlayingBeforeHide
       ) {
         this.wasAmbientPlayingBeforeHide = false;
-        // Small delay to ensure smooth transition
+
         setTimeout(() => {
           this.resumeAmbientSounds();
         }, 500);
@@ -160,7 +160,7 @@ export default class AmbientSoundManager extends EventEmitter {
   }
 
   updateAmbientSounds() {
-    // Don't play ambient sounds if music is disabled
+
     if (this.musicControlUI && !this.musicControlUI.isMusicEnabled) {
       this.stopAllAmbientSounds();
       return;
@@ -169,10 +169,10 @@ export default class AmbientSoundManager extends EventEmitter {
     const season = this.seasonManager.currentSeason;
     const timeOfDay = this.environmentManager.envTime;
 
-    // Stop all current ambient sounds and clear timers
+
     this.stopAllAmbientSounds();
 
-    // Start appropriate sounds based on conditions
+
     this.handleBirds(season, timeOfDay);
     this.handleCrickets(season, timeOfDay);
     this.handleOwl(season, timeOfDay);
@@ -184,7 +184,7 @@ export default class AmbientSoundManager extends EventEmitter {
   }
 
   handleBirds(season, timeOfDay) {
-    // When: season is autumn OR spring OR winter AND timeOfDay is day
+
     const shouldPlay =
       (season === 'autumn' || season === 'spring' || season === 'winter') &&
       timeOfDay === 'day';
@@ -195,7 +195,7 @@ export default class AmbientSoundManager extends EventEmitter {
   }
 
   handleCrickets(season, timeOfDay) {
-    // When: season is autumn OR spring AND timeOfDay is night
+
     const shouldPlay =
       (season === 'autumn' || season === 'spring' || season === 'winter') &&
       timeOfDay === 'night';
@@ -209,14 +209,14 @@ export default class AmbientSoundManager extends EventEmitter {
     if (timeOfDay !== 'night') return;
 
     if (season === 'autumn' || season === 'spring' || season === 'rainy') {
-      // owl_howling.mp3 for autumn, spring, and rainy seasons
+
       this.scheduleRandomSound(
         'owlHowling',
         () => this.playOwlHowling(),
         'long'
       );
     } else if (season === 'winter') {
-      // owl_hooting.mp3 for winter season
+
       this.scheduleRandomSound(
         'owlHooting',
         () => this.playOwlHooting(),
@@ -226,7 +226,7 @@ export default class AmbientSoundManager extends EventEmitter {
   }
 
   handleRain(season, timeOfDay) {
-    // When: season is rainy (day or night)
+
     const shouldPlay = season === 'rainy';
 
     if (shouldPlay) {
@@ -235,7 +235,7 @@ export default class AmbientSoundManager extends EventEmitter {
   }
 
   handleThunder(season, timeOfDay) {
-    // When: season is rainy (day or night)
+
     const shouldPlay = season === 'rainy';
 
     if (shouldPlay) {
@@ -248,10 +248,10 @@ export default class AmbientSoundManager extends EventEmitter {
   }
 
   playThunderStrike() {
-    // Play the thunder strike sound only if:
-    // 1. Music is enabled
-    // 2. Tab is visible
-    // 3. Ambient sounds are not paused
+
+
+
+
     if (
       this.musicControlUI &&
       this.musicControlUI.isMusicEnabled &&
@@ -267,7 +267,7 @@ export default class AmbientSoundManager extends EventEmitter {
   }
 
   handleWolf(season, timeOfDay) {
-    // When: all seasons AND timeOfDay is night
+
     const shouldPlay = timeOfDay === 'night';
 
     if (shouldPlay) {
@@ -276,7 +276,7 @@ export default class AmbientSoundManager extends EventEmitter {
   }
 
   handleFire(season, timeOfDay) {
-    // When: all seasons except rainy (day or night)
+
     const shouldPlay = season !== 'rainy';
 
     if (shouldPlay) {
@@ -288,7 +288,7 @@ export default class AmbientSoundManager extends EventEmitter {
   }
 
   handleLakeWaves(season, timeOfDay) {
-    // When: all seasons (day or night)
+
     const shouldPlay = true;
 
     if (shouldPlay) {
@@ -299,7 +299,7 @@ export default class AmbientSoundManager extends EventEmitter {
     }
   }
 
-  // Sound playing methods
+
   playRandomBird() {
     const birdSoundId = this.audioManager.getRandomBirdSound();
     this.audioManager.playSound(birdSoundId, this.config.baseVolume, false);
@@ -337,7 +337,7 @@ export default class AmbientSoundManager extends EventEmitter {
     );
   }
 
-  // Continuous sound management
+
   playContinuousSound(soundId) {
     if (!this.activeContinuousSounds.has(soundId)) {
       this.audioManager.playSound(soundId, this.config.baseVolume * 0.7, true);
@@ -352,14 +352,14 @@ export default class AmbientSoundManager extends EventEmitter {
     }
   }
 
-  // Distance-based continuous sound management
+
   playContinuousSoundWithDistance(soundId, soundPosition) {
     if (!this.activeContinuousSounds.has(soundId)) {
       const volume = this.calculateDistanceBasedVolume(soundPosition);
       this.audioManager.playSound(soundId, volume, true);
       this.activeContinuousSounds.add(soundId);
     } else {
-      // Update volume based on current distance
+
       this.updateSoundVolume(soundId, soundPosition);
     }
   }
@@ -368,15 +368,15 @@ export default class AmbientSoundManager extends EventEmitter {
     const cameraPosition = this.audioManager.listener.parent.position;
     const distance = cameraPosition.distanceTo(soundPosition);
 
-    // Calculate volume based on distance (inverse relationship)
-    // At distance 0: full volume, at maxDistance: 0 volume
+
+
     const normalizedDistance = Math.min(
       distance / this.config.maxDistance,
       1.0
     );
     const volume = (1.0 - normalizedDistance) * this.config.baseVolume * 0.7;
 
-    return Math.max(volume, 0); // Ensure volume doesn't go negative
+    return Math.max(volume, 0);
   }
 
   updateSoundVolume(soundId, soundPosition) {
@@ -387,16 +387,16 @@ export default class AmbientSoundManager extends EventEmitter {
     }
   }
 
-  // Random sound scheduling
+
   scheduleRandomSound(soundKey, playFunction, gapType) {
-    // Clear any existing timer for this sound
+
     this.clearTimer(soundKey);
 
-    // Schedule the first play
+
     const delay = this.getRandomDelay(gapType);
     const timerId = setTimeout(() => {
       playFunction();
-      // Schedule the next play
+
       this.rescheduleRandomSound(soundKey, playFunction, gapType);
     }, delay);
 
@@ -404,7 +404,7 @@ export default class AmbientSoundManager extends EventEmitter {
   }
 
   rescheduleRandomSound(soundKey, playFunction, gapType) {
-    // Only reschedule if the sound should still be playing
+
     if (this.shouldSoundBePlaying(soundKey)) {
       const delay = this.getRandomDelay(gapType);
       const timerId = setTimeout(() => {
@@ -465,7 +465,7 @@ export default class AmbientSoundManager extends EventEmitter {
     }
   }
 
-  // Cleanup methods
+
   clearTimer(soundKey) {
     if (this.scheduledTimers.has(soundKey)) {
       clearTimeout(this.scheduledTimers.get(soundKey));
@@ -474,26 +474,26 @@ export default class AmbientSoundManager extends EventEmitter {
   }
 
   stopAllAmbientSounds() {
-    // Clear all timers
+
     this.scheduledTimers.forEach((timerId) => {
       clearTimeout(timerId);
     });
     this.scheduledTimers.clear();
 
-    // Stop all continuous sounds
+
     this.activeContinuousSounds.forEach((soundId) => {
       this.stopContinuousSound(soundId);
     });
     this.activeContinuousSounds.clear();
   }
 
-  // Volume controls
+
   setMasterVolume(volume) {
     this.config.baseVolume = Math.max(0, Math.min(1, volume));
-    // Note: Individual sound volumes are managed by AudioManager
+
   }
 
-  // Tab visibility methods
+
   hasActiveAmbientSounds() {
     return (
       this.activeContinuousSounds.size > 0 || this.scheduledTimers.size > 0
@@ -502,26 +502,26 @@ export default class AmbientSoundManager extends EventEmitter {
 
   pauseAmbientSounds() {
     this.isAmbientSoundsPaused = true;
-    // Stop all ambient sounds using AudioManager's method
+
     this.audioManager.stopAllAmbientSounds();
-    // Also clear our timers
+
     this.scheduledTimers.forEach((timerId) => {
       clearTimeout(timerId);
     });
     this.scheduledTimers.clear();
-    // Clear our tracking
+
     this.activeContinuousSounds.clear();
   }
 
   resumeAmbientSounds() {
     this.isAmbientSoundsPaused = false;
-    // Resume ambient sounds based on current conditions
+
     this.updateAmbientSounds();
   }
 
-  // Update method for distance-based volume adjustment
+
   update() {
-    // Update volume for distance-based sounds
+
     if (this.activeContinuousSounds.has('fireBurningSound')) {
       this.updateSoundVolume('fireBurningSound', this.config.firePosition);
     }
@@ -530,11 +530,11 @@ export default class AmbientSoundManager extends EventEmitter {
     }
   }
 
-  // Cleanup
+
   dispose() {
     this.stopAllAmbientSounds();
 
-    // Remove ambient sound visibility event listeners
+
     document.removeEventListener(
       'visibilitychange',
       this.handleAmbientVisibilityChange

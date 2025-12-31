@@ -235,9 +235,9 @@ export default class Lighting {
     this.environmentMap.current = this.environmentMap[timeOfDay];
     this.environmentMap.intensity = envSettings.intensity;
 
-    // Keep environment map for reflections but remove background
+
     this.scene.environment = this.environmentMap.current;
-    this.scene.background = null; // Remove background - skydome will handle this
+    this.scene.background = null;
     this.scene.environmentIntensity = envSettings.intensity;
 
     this.envMapRotationY = envSettings.rotationY;

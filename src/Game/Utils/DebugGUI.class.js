@@ -36,26 +36,26 @@ import * as THREE from 'three';
  */
 export default class DebugGUI {
   constructor() {
-    // Singleton pattern - return existing instance if it exists
+
     if (DebugGUI.instance) {
       return DebugGUI.instance;
     }
 
-    // Initialize your debug GUI here (dat.gui, lil-gui, etc.)
-    // This is just an example structure
+
+
     this.gui = null;
     this.folders = new Map();
     this.controllers = new Map();
 
-    // Store the instance
+
     DebugGUI.instance = this;
 
     this._initializeGUI();
   }
 
   _initializeGUI() {
-    // Initialize your GUI library here
-    // Example for lil-gui:
+
+
     this.gui = new GUI();
   }
 
@@ -74,7 +74,7 @@ export default class DebugGUI {
     const value = targetObject[targetProperty];
     const label = options.label || targetProperty;
 
-    // Vector2 / Vector3: grouped axis sliders
+
     if (value instanceof THREE.Vector2 || value instanceof THREE.Vector3) {
       const vecFolder = controllerTarget.addFolder(label);
       const axes = ['x', 'y', value instanceof THREE.Vector3 ? 'z' : null].filter(Boolean);
@@ -90,7 +90,7 @@ export default class DebugGUI {
           )
           .name(axis);
 
-        // Call options.onChange with the full vector whenever an axis changes
+
         if (typeof options.onChange === 'function') {
           controller.onChange(() => {
             try {
@@ -105,7 +105,7 @@ export default class DebugGUI {
       return vecFolder;
     }
 
-    // Plain object vector case: {x,y} or {x,y,z}
+
     const isPlainVec =
       value &&
       typeof value === 'object' &&
@@ -140,7 +140,7 @@ export default class DebugGUI {
       return vecFolder;
     }
 
-    // Enum / dropdown: support both arrays and objects
+
     if (options.options && typeof options.options === 'object') {
       const controller = controllerTarget.add(
         targetObject,
@@ -153,7 +153,7 @@ export default class DebugGUI {
       return controller;
     }
 
-    // Boolean: checkbox
+
     if (typeof value === 'boolean') {
       const controller = controllerTarget
         .add(targetObject, targetProperty)
@@ -163,7 +163,7 @@ export default class DebugGUI {
       return controller;
     }
 
-    // Color detection
+
     const isColor =
       options.color ||
       value instanceof THREE.Color ||
@@ -171,10 +171,10 @@ export default class DebugGUI {
 
     let controller;
     if (isColor) {
-      // Color picker
+
       controller = controllerTarget.addColor(targetObject, targetProperty);
     } else {
-      // Number slider
+
       controller = controllerTarget.add(
         targetObject,
         targetProperty,
@@ -190,7 +190,7 @@ export default class DebugGUI {
     return controller;
   }
 
-  // Static method to get the singleton instance
+
   static getInstance() {
     if (!DebugGUI.instance) {
       DebugGUI.instance = new DebugGUI();
@@ -198,10 +198,10 @@ export default class DebugGUI {
     return DebugGUI.instance;
   }
 
-  // Method to destroy the singleton (useful for cleanup)
+
   static destroy() {
     if (DebugGUI.instance) {
-      // Clean up GUI
+
       if (DebugGUI.instance.gui) {
         DebugGUI.instance.gui.destroy();
       }

@@ -46,7 +46,7 @@ export default class MusicControlUI {
   toggleMusic() {
     this.isMusicEnabled = !this.isMusicEnabled;
 
-    // Log audio toggle to console
+
     Console.logAudioToggle(this.isMusicEnabled);
 
     if (this.isMusicEnabled) {

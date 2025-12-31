@@ -21,7 +21,7 @@ void main() {
     float baseline = 0.7;
     float intensity = 1.8;
 
-    float phase = particlesTexture.g * 6.28318530718; // 2*PI * seed
+    float phase = particlesTexture.g * 6.28318530718;
 
     float flicker = 0.5 + 0.5 * sin(uTime * speed + phase);
 

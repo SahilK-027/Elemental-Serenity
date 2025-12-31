@@ -5,7 +5,7 @@ export default class SeasonManager extends EventEmitter {
   constructor(initialSeason = 'spring') {
     super();
 
-    // Singleton pattern
+
     if (SeasonManager.instance) {
       return SeasonManager.instance;
     }
@@ -27,7 +27,7 @@ export default class SeasonManager extends EventEmitter {
   createSeasonConfigs() {
     return {
       spring: {
-        // Bush colors (day/night)
+
         bush: {
           day: {
             shadowColor: [0.003, 0.074, 0.003],
@@ -58,7 +58,7 @@ export default class SeasonManager extends EventEmitter {
             birchColorMultiplier: [0.3, 0.2, 0.01],
           },
         },
-        // Lighting colors (day/night)
+
         lighting: {
           day: {
             key: {
@@ -139,7 +139,7 @@ export default class SeasonManager extends EventEmitter {
             },
           },
         },
-        // Ground colors (day/night)
+
         ground: {
           day: {
             uGroundColorLight: new THREE.Color(0.2784, 0.1372, 0.0235),
@@ -158,7 +158,7 @@ export default class SeasonManager extends EventEmitter {
             uWaterDeep: new THREE.Color(0.03, 0.25, 0.3),
           },
         },
-        // Grass colors (day/night)
+
         grass: {
           day: {
             shadow: new THREE.Color(0.01, 0.16, 0.0),
@@ -173,24 +173,24 @@ export default class SeasonManager extends EventEmitter {
             flowerVisibility: 0.15,
           },
         },
-        // Fire colors (same for all seasons)
+
         fire: {
           day: { smokeAlphaSecondStop: 0.1 },
           night: { smokeAlphaSecondStop: 0.05 },
         },
-        // Falling leaves
+
         fallingLeaves: {
           color: new THREE.Color(0xff6f0d),
         },
-        // Wind lines
+
         windLines: {
           color: new THREE.Color(0xffffff),
         },
-        // Tent lamp
+
         tent: {
           lampColor: new THREE.Color(0xffe286),
         },
-        // Rocks colors (day/night)
+
         rocks: {
           day: {
             uRockColor1: new THREE.Color(0.96, 0.86, 0.54),

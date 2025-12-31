@@ -11,9 +11,9 @@ const isDebugMode =
   typeof window !== 'undefined' &&
   new URLSearchParams(window.location.search).get('mode') === 'debug';
 
-// ═══════════════════════════════════════════════════════════════════════════
-// STYLISH CONSOLE LOGS
-// ═══════════════════════════════════════════════════════════════════════════
+
+
+
 
 Console.banner({
   title: 'Elemental Serenity',
@@ -21,7 +21,7 @@ Console.banner({
   version: '0.0.0',
 });
 
-// Tech Stack (actual dependencies from package.json)
+
 Console.techTable([
   { Layer: 'Build', Technology: 'Vite 6.0', Details: 'ES Modules, HMR' },
   { Layer: '3D Engine', Technology: 'Three.js 0.182', Details: 'WebGLRenderer' },
@@ -178,20 +178,20 @@ resources.on('loaded', () => {
         withMusic
       );
 
-      // Expose game instance globally for settings access
+
       window.gameInstance = game;
 
-      // Log current game state to console
+
       Console.logGameState(game);
 
-      // Listen for track changes
+
       if (game.musicManager) {
         game.musicManager.on('trackChanged', (track) => {
           Console.logMusicChange('track', track.name);
         });
       }
 
-      // Listen for graphics quality changes
+
       window.addEventListener('graphicsQualityChanged', (event) => {
         Console.logGraphicsChange(event.detail.quality);
       });
@@ -202,7 +202,7 @@ resources.on('loaded', () => {
 
       setTimeout(() => {
         loader.remove();
-        // Show control panel after loader is removed
+
         setTimeout(() => {
           controlPanel.classList.add('show');
           pageTitle.classList.add('show');
@@ -269,7 +269,7 @@ seasonManager.onChange((newSeason, oldSeason) => {
     }
   });
 
-  // Log season change to console
+
   Console.logSeasonChange(newSeason, oldSeason);
 
   window.dispatchEvent(
@@ -327,7 +327,7 @@ environmentTimeManager.onChange((newTime, oldTime) => {
     }
   });
 
-  // Log time change to console
+
   Console.logTimeChange(newTime, oldTime);
 
   window.dispatchEvent(

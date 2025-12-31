@@ -16,7 +16,7 @@ import SeasonManager from './World/Managers/SeasonManager/SeasonManager.class';
 
 export default class Game {
   constructor(canvas, resources, isDebugMode, withMusic = true) {
-    // Singleton
+
     if (Game.instance) {
       return Game.instance;
     }
@@ -24,7 +24,7 @@ export default class Game {
 
     this.isDebugMode = isDebugMode;
     this.withMusic = withMusic;
-    
+
     if (this.isDebugMode) {
       this.debug = new DebugGUI();
     }
@@ -38,33 +38,33 @@ export default class Game {
     this.scene = new THREE.Scene();
     this.camera = new Camera();
     this.renderer = new Renderer();
-    
-    // Initialize audio manager
+
+
     this.audioManager = new AudioManager(this.resources);
     this.audioManager.addListenerToCamera(this.camera);
-    
-    // Initialize music manager and toast manager
+
+
     this.toastManager = new ToastManager();
     this.musicManager = new MusicManager(this.audioManager);
-    
-    // Initialize music control UI
+
+
     this.musicControlUI = new MusicControlUI(this.musicManager, this.toastManager);
     this.musicControlUI.setInitialState(this.withMusic);
-    
-    // Initialize ambient sound manager (after musicControlUI)
+
+
     this.ambientSoundManager = new AmbientSoundManager(this.environmentTimeManager, this.seasonManager, this.audioManager, this.musicControlUI);
-    
-    // Listen for track changes to show toast notifications
+
+
     this.musicManager.on('trackChanged', (track) => {
       this.toastManager.showMusicToast(track.name);
     });
-    
+
     this.world = new World();
-    
-    // Initialize lightning button UI (after world is created)
+
+
     this.lightningButtonUI = new LightningButtonUI(this.world.lightning);
 
-    // Start background music if enabled
+
     if (this.withMusic) {
       this.musicManager.startRandomMusic();
     }
@@ -104,8 +104,8 @@ export default class Game {
     this.camera.update();
     this.world.update(this.time.delta, this.time.elapsedTime);
     this.renderer.update();
-    
-    // Update ambient sounds for distance-based volume
+
+
     if (this.ambientSoundManager) {
       this.ambientSoundManager.update();
     }
@@ -156,7 +156,7 @@ export default class Game {
       'Environment'
     );
 
-    // Add season toggle button
+
     const seasonControls = {
       toggleSeason: () => {
         this.seasonManager.toggle();
@@ -172,7 +172,7 @@ export default class Game {
       'Environment'
     );
 
-    // Audio controls
+
     const audioControls = {
       masterVolume: this.audioManager.masterVolume,
       musicVolume: this.audioManager.musicVolume,
@@ -219,7 +219,7 @@ export default class Game {
     this.debug.add(audioControls, 'playBirds', { label: 'Play Random Birds' }, 'Audio');
     this.debug.add(audioControls, 'stopAllSounds', { label: 'Stop All Sounds' }, 'Audio');
 
-    // Ambient sound controls
+
     const ambientControls = {
       ambientVolume: this.ambientSoundManager.config.baseVolume,
       stopAllAmbient: () => this.ambientSoundManager.stopAllAmbientSounds(),
@@ -230,7 +230,7 @@ export default class Game {
       min: 0, max: 1, step: 0.1,
       onChange: (value) => {
         this.ambientSoundManager.config.baseVolume = value;
-        this.ambientSoundManager.setMasterVolume(1.0); // Refresh volumes
+        this.ambientSoundManager.setMasterVolume(1.0);
       }
     }, 'Ambient Sounds');
 
@@ -242,7 +242,7 @@ export default class Game {
     this.sizes.off('resize');
     this.time.off('animate');
 
-    // Cleanup audio
+
     if (this.ambientSoundManager) {
       this.ambientSoundManager.dispose();
     }

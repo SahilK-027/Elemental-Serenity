@@ -73,7 +73,7 @@ void main() {
 
     float wind = (Breeze * uBreezeStrength + Squall * uSquallStrength) * heightMask;
 
-    //wind offset
+
     vec3 windOffset = cameraRight * wind * 0.25 + cameraUp * wind * 0.1;
 
     vec3 billboardPosition = worldPosition + (cameraRight * position.x * scaleX) + (cameraUp * position.y * scaleY) + windOffset;

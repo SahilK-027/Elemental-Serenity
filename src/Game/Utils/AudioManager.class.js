@@ -17,17 +17,17 @@ export default class AudioManager extends EventEmitter {
   }
 
   init() {
-    // Create audio objects for all loaded audio files
+
     this.createAudioObjects();
   }
 
   createAudioObjects() {
     const audioAssets = [
-      // Music
+
       'morningPetalsMusic',
       'windowLightMusic',
       'forestDreamsMusic',
-      // Nature sounds
+
       'birds1Sound',
       'birds2Sound',
       'birds3Sound',
@@ -41,7 +41,7 @@ export default class AudioManager extends EventEmitter {
       'wolfHowlingSound',
       'thunderDistantSound',
       'thunderStrikeSound',
-      // UI sounds
+
       'clickSound',
       'hoverSound',
     ];
@@ -51,7 +51,7 @@ export default class AudioManager extends EventEmitter {
         const audio = new THREE.Audio(this.listener);
         audio.setBuffer(this.resources.items[assetId]);
 
-        // Set default volumes based on type
+
         if (assetId.includes('Music')) {
           audio.setVolume(this.musicVolume * this.masterVolume);
         } else {
@@ -63,7 +63,7 @@ export default class AudioManager extends EventEmitter {
     });
   }
 
-  // Music controls
+
   playMusic(musicId, fadeIn = true, fadeDuration = 2000) {
     if (this.currentMusic && this.currentMusic.isPlaying) {
       this.stopMusic(true, fadeDuration / 2);
@@ -96,7 +96,7 @@ export default class AudioManager extends EventEmitter {
     if (!this.currentMusic || !this.currentMusic.isPlaying) return;
 
     if (fadeOut) {
-      const musicToStop = this.currentMusic; // Store reference
+      const musicToStop = this.currentMusic;
       this.fadeVolume(this.currentMusic, 0, fadeDuration, () => {
         if (musicToStop && musicToStop.isPlaying) {
           musicToStop.stop();
@@ -111,9 +111,9 @@ export default class AudioManager extends EventEmitter {
     }
   }
 
-  // Force stop all music regardless of state
+
   forceStopAllMusic() {
-    // Stop current music without checks
+
     if (this.currentMusic) {
       try {
         this.currentMusic.stop();
@@ -123,7 +123,7 @@ export default class AudioManager extends EventEmitter {
       this.currentMusic = null;
     }
 
-    // Stop all music sounds directly
+
     Object.keys(this.sounds).forEach((soundId) => {
       if (soundId.includes('Music')) {
         const sound = this.sounds[soundId];
@@ -138,7 +138,7 @@ export default class AudioManager extends EventEmitter {
     });
   }
 
-  // Sound effects
+
   playSound(soundId, volume = null, loop = false) {
     const sound = this.sounds[soundId];
     if (!sound) {
@@ -146,7 +146,7 @@ export default class AudioManager extends EventEmitter {
       return;
     }
 
-    // Stop if already playing
+
     if (sound.isPlaying) {
       sound.stop();
     }
@@ -169,7 +169,7 @@ export default class AudioManager extends EventEmitter {
     }
   }
 
-  // Stop all ambient sounds (non-music sounds)
+
   stopAllAmbientSounds() {
     const ambientSoundIds = [
       'birds1Sound',
@@ -191,7 +191,7 @@ export default class AudioManager extends EventEmitter {
     });
   }
 
-  // Volume controls
+
   setMasterVolume(volume) {
     this.masterVolume = Math.max(0, Math.min(1, volume));
     this.updateAllVolumes();
@@ -220,7 +220,7 @@ export default class AudioManager extends EventEmitter {
     });
   }
 
-  // Utility methods
+
   fadeVolume(audio, targetVolume, duration, onComplete = null) {
     const startVolume = audio.getVolume();
     const volumeDiff = targetVolume - startVolume;
@@ -243,12 +243,12 @@ export default class AudioManager extends EventEmitter {
     fade();
   }
 
-  // Add listener to camera for positional audio
+
   addListenerToCamera(camera) {
     camera.cameraInstance.add(this.listener);
   }
 
-  // Get random bird sound
+
   getRandomBirdSound() {
     const birdSounds = [
       'birds1Sound',
@@ -259,7 +259,7 @@ export default class AudioManager extends EventEmitter {
     return birdSounds[Math.floor(Math.random() * birdSounds.length)];
   }
 
-  // Cleanup
+
   dispose() {
     Object.values(this.sounds).forEach((sound) => {
       if (sound.isPlaying) {

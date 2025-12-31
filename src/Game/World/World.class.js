@@ -41,10 +41,10 @@ export default class World {
     this.rain = new Rain();
     this.snowFall = new SnowFall();
 
-    // Initialize particle system and lightning
+
     this.particleSystem = new ParticleSystem();
 
-    // Calculate ground bounds from Ground dimensions
+
     const worldSize = this.ground.WORLD_SIZE;
     const halfSize = worldSize / 2 - 3;
 
@@ -57,10 +57,10 @@ export default class World {
 
     this.lightning = new Lightning(this.particleSystem, groundBounds);
 
-    // Initialize fog to hide ground corners
+
     this.fog = new Fog(worldSize);
 
-    // Setup debug UI
+
     if (this.debugGUI) {
       this.setupDebugUI();
     }
@@ -89,7 +89,7 @@ export default class World {
     this.rain.update(delta, elapsedTime);
     this.snowFall.update(delta, elapsedTime);
 
-    // Update particle system and lightning
+
     this.particleSystem.update(delta, elapsedTime);
     this.lightning.update(delta);
   }

@@ -6,8 +6,8 @@ export default class SnowFall {
   constructor() {
     this.game = Game.getInstance();
     this.seasonManager = SeasonManager.getInstance();
-    
-    // Create snow system with bounds covering the entire scene
+
+
     const snowBounds = {
       yMin: 15.0,
       yMax: 20.0,
@@ -16,15 +16,15 @@ export default class SnowFall {
       originX: 0.0,
       originZ: 0.0,
     };
-    
+
     this.snowSystem = new SnowSystem(snowBounds);
-    
-    // Listen for season changes to control snow visibility
+
+
     this.seasonManager.onChange((newSeason, oldSeason) => {
       this.onSeasonChanged(newSeason, oldSeason);
     });
-    
-    // Set initial visibility based on current season
+
+
     this.updateVisibility();
   }
 

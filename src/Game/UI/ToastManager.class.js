@@ -33,7 +33,7 @@ export default class ToastManager {
     }
   }
 
-  // Base toast styles
+
   getBaseToastStyles() {
     return `
       background: linear-gradient(145deg, #f5f0ec, #ede8e4);
@@ -50,7 +50,7 @@ export default class ToastManager {
       transition: all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
       opacity: 0;
       border: 1px solid rgba(0, 0, 0, 0.06);
-      box-shadow: 
+      box-shadow:
         0 8px 32px rgba(0, 0, 0, 0.1),
         0 2px 8px rgba(0, 0, 0, 0.06),
         inset 0 1px 0 rgba(255, 255, 255, 0.8);
@@ -115,7 +115,7 @@ export default class ToastManager {
     toast.style.cssText = this.getBaseToastStyles();
 
     const iconGradient = 'linear-gradient(145deg, #8b5cf6, #7c3aed)';
-    
+
     const iconContainer = document.createElement('div');
     iconContainer.style.cssText = this.getIconContainerStyles(iconGradient);
 
@@ -410,7 +410,7 @@ export default class ToastManager {
     }
 
     this.activeToasts.push(toast);
-    toast.offsetHeight; // Force reflow
+    toast.offsetHeight;
   }
 
   hideToast(toast) {

@@ -22,7 +22,7 @@ export default class Skydome {
 
     this.initialize();
 
-    // Listen for environment and season changes
+
     this.environmentTimeManager.onChange((newValue) => {
       this.onEnvTimeChanged(newValue);
     });
@@ -54,52 +54,52 @@ export default class Skydome {
       winter: {
         day: {
           zenithColor: new THREE.Color(0.4, 0.6, 0.9),
-          horizonColor: new THREE.Color(0.8, 0.85, 0.95), // Icy white
-          groundColor: new THREE.Color(0.9, 0.92, 0.98), // Snow reflection
-          sunColor: new THREE.Color(0.95, 0.95, 1.0), // Pale sun
-          sunGlowColor: new THREE.Color(0.8, 0.9, 1.0), // Cool glow
+          horizonColor: new THREE.Color(0.8, 0.85, 0.95),
+          groundColor: new THREE.Color(0.9, 0.92, 0.98),
+          sunColor: new THREE.Color(0.95, 0.95, 1.0),
+          sunGlowColor: new THREE.Color(0.8, 0.9, 1.0),
         },
         night: {
-          zenithColor: new THREE.Color(0.01, 0.03, 0.12), // Arctic night
-          horizonColor: new THREE.Color(0.03, 0.08, 0.2), // Aurora hint
-          groundColor: new THREE.Color(0.08, 0.12, 0.25), // Snow glow
-          moonColor: new THREE.Color(1.0, 1.0, 1.0), // Bright moon
-          moonGlowColor: new THREE.Color(0.8, 0.9, 1.0), // Ice blue glow
-          starColor: new THREE.Color(0.9, 0.95, 1.0), // Crystal stars
+          zenithColor: new THREE.Color(0.01, 0.03, 0.12),
+          horizonColor: new THREE.Color(0.03, 0.08, 0.2),
+          groundColor: new THREE.Color(0.08, 0.12, 0.25),
+          moonColor: new THREE.Color(1.0, 1.0, 1.0),
+          moonGlowColor: new THREE.Color(0.8, 0.9, 1.0),
+          starColor: new THREE.Color(0.9, 0.95, 1.0),
         },
       },
       autumn: {
         day: {
-          zenithColor: new THREE.Color(0.6, 0.4, 0.2), // Warm brown-orange
-          horizonColor: new THREE.Color(0.35, 0.66, 0.72), // Golden horizon
-          groundColor: new THREE.Color(1.0, 0.7, 0.4), // Warm gold
-          sunColor: new THREE.Color(0.89, 0.75, 0.06), // Orange sun
-          sunGlowColor: new THREE.Color(0.94, 0.53, 0), // Deep orange glow
+          zenithColor: new THREE.Color(0.6, 0.4, 0.2),
+          horizonColor: new THREE.Color(0.35, 0.66, 0.72),
+          groundColor: new THREE.Color(1.0, 0.7, 0.4),
+          sunColor: new THREE.Color(0.89, 0.75, 0.06),
+          sunGlowColor: new THREE.Color(0.94, 0.53, 0),
         },
         night: {
-          zenithColor: new THREE.Color(0.08, 0.04, 0.08), // Dark purple
-          horizonColor: new THREE.Color(0.15, 0.08, 0.12), // Warm dark
-          groundColor: new THREE.Color(0.25, 0.15, 0.2), // Earth tones
-          moonColor: new THREE.Color(1, 0.5, 0.21), // Harvest moon
-          moonGlowColor: new THREE.Color(0xe5a55d), // Warm glow
-          starColor: new THREE.Color(1.0, 0.9, 0.8), // Warm stars
+          zenithColor: new THREE.Color(0.08, 0.04, 0.08),
+          horizonColor: new THREE.Color(0.15, 0.08, 0.12),
+          groundColor: new THREE.Color(0.25, 0.15, 0.2),
+          moonColor: new THREE.Color(1, 0.5, 0.21),
+          moonGlowColor: new THREE.Color(0xe5a55d),
+          starColor: new THREE.Color(1.0, 0.9, 0.8),
         },
       },
       rainy: {
         day: {
-          zenithColor: new THREE.Color(0.25, 0.3, 0.4), // Storm clouds
-          horizonColor: new THREE.Color(0.4, 0.5, 0.6), // Gray horizon
-          groundColor: new THREE.Color(0.5, 0.6, 0.7), // Misty bottom
-          sunColor: new THREE.Color(0.7, 0.7, 0.8), // Dim sun
-          sunGlowColor: new THREE.Color(0.6, 0.6, 0.7), // Muted glow
+          zenithColor: new THREE.Color(0.25, 0.3, 0.4),
+          horizonColor: new THREE.Color(0.4, 0.5, 0.6),
+          groundColor: new THREE.Color(0.5, 0.6, 0.7),
+          sunColor: new THREE.Color(0.7, 0.7, 0.8),
+          sunGlowColor: new THREE.Color(0.6, 0.6, 0.7),
         },
         night: {
-          zenithColor: new THREE.Color(0.03, 0.05, 0.08), // Storm night
-          horizonColor: new THREE.Color(0.06, 0.1, 0.15), // Lightning hint
-          groundColor: new THREE.Color(0.1, 0.15, 0.2), // Wet ground
-          moonColor: new THREE.Color(0.6, 0.7, 0.8), // Dim moon
-          moonGlowColor: new THREE.Color(0.5, 0.6, 0.8), // Muted glow
-          starColor: new THREE.Color(0.7, 0.8, 0.9), // Dim stars
+          zenithColor: new THREE.Color(0.03, 0.05, 0.08),
+          horizonColor: new THREE.Color(0.06, 0.1, 0.15),
+          groundColor: new THREE.Color(0.1, 0.15, 0.2),
+          moonColor: new THREE.Color(0.6, 0.7, 0.8),
+          moonGlowColor: new THREE.Color(0.5, 0.6, 0.8),
+          starColor: new THREE.Color(0.7, 0.8, 0.9),
         },
       },
     };
@@ -108,50 +108,50 @@ export default class Skydome {
   initialize() {
     this.createSkydome();
 
-    // Apply colors after creation
+
     setTimeout(() => {
       this.updateSkyColors();
     }, 0);
   }
 
   createSkydome() {
-    // Reduced geometry complexity for better performance
-    const geometry = new THREE.SphereGeometry(150, 32, 16); // Reduced from 64x32
 
-    // Create shader material with everything built-in
+    const geometry = new THREE.SphereGeometry(150, 32, 16);
+
+
     this.skydomeMaterial = new THREE.ShaderMaterial({
       uniforms: {
-        // Sky gradient colors
+
         uZenithColor: { value: new THREE.Color(0.2, 0.5, 0.9) },
         uHorizonColor: { value: new THREE.Color(0.7, 0.85, 0.95) },
         uGroundColor: { value: new THREE.Color(0.95, 0.9, 0.85) },
 
-        // Sun properties - anime style
-        uSunPosition: { value: new THREE.Vector3(-0.846, -0.085, -1.0) }, // Normalized direction
-        uSunColor: { value: new THREE.Color(1.0, 0.95, 0.8) }, // Bright warm white core
-        uSunGlowColor: { value: new THREE.Color(1.0, 0.7, 0.3) }, // Orange glow
-        uSunSize: { value: 0.005 }, // Larger disc for anime style
-        uSunGlowSize: { value: 0.03386 }, // Larger glow area
-        uSunRayCount: { value: 12.0 }, // Number of radiating rays
-        uSunRayLength: { value: 0.0352 }, // Length of rays
-        uSunRaySharpness: { value: 8.0 }, // Sharpness of rays
 
-        // Moon properties
-        uMoonPosition: { value: new THREE.Vector3(-0.5, -0.085, -1.0) }, // Normalized direction
+        uSunPosition: { value: new THREE.Vector3(-0.846, -0.085, -1.0) },
+        uSunColor: { value: new THREE.Color(1.0, 0.95, 0.8) },
+        uSunGlowColor: { value: new THREE.Color(1.0, 0.7, 0.3) },
+        uSunSize: { value: 0.005 },
+        uSunGlowSize: { value: 0.03386 },
+        uSunRayCount: { value: 12.0 },
+        uSunRayLength: { value: 0.0352 },
+        uSunRaySharpness: { value: 8.0 },
+
+
+        uMoonPosition: { value: new THREE.Vector3(-0.5, -0.085, -1.0) },
         uMoonColor: { value: new THREE.Color(0.95, 0.95, 1.0) },
         uMoonGlowColor: { value: new THREE.Color(0.7, 0.8, 1.0) },
-        uMoonSize: { value: 0.0268665 }, // Slightly larger for better visibility
-        uMoonGlowSize: { value: 0.0266345 }, // Larger glow for layered effect
+        uMoonSize: { value: 0.0268665 },
+        uMoonGlowSize: { value: 0.0266345 },
 
-        // Stars properties - more stars, no twinkling
+
         uStarColor: { value: new THREE.Color(1.0, 1.0, 1.0) },
-        uStarDensity: { value: 10.0 }, // Increased for more stars
-        uStarBrightness: { value: 2.5 }, // Increased brightness
+        uStarDensity: { value: 10.0 },
+        uStarBrightness: { value: 2.5 },
 
-        // Animation and control
+
         uTime: { value: 0 },
         uIsNight: { value: 0.0 },
-        uSeason: { value: 0.0 }, // 0=spring, 1=winter, 2=autumn, 3=rainy
+        uSeason: { value: 0.0 },
         uAtmosphereIntensity: { value: 0.0 },
       },
       vertexShader: skydomeVertexShader,
@@ -162,7 +162,7 @@ export default class Skydome {
     this.skydome = new THREE.Mesh(geometry, this.skydomeMaterial);
     this.scene.add(this.skydome);
 
-    // Initialize GUI after shader material is ready
+
     if (this.game.isDebugMode) {
       this.initGUI();
     }
@@ -182,23 +182,23 @@ export default class Skydome {
     const colors = this.skyColors[this.currentSeason][this.envTime];
 
     if (this.skydomeMaterial && this.skydomeMaterial.uniforms) {
-      // Update sky gradient colors
+
       this.skydomeMaterial.uniforms.uZenithColor.value.copy(colors.zenithColor);
       this.skydomeMaterial.uniforms.uHorizonColor.value.copy(
         colors.horizonColor
       );
       this.skydomeMaterial.uniforms.uGroundColor.value.copy(colors.groundColor);
 
-      // Update day/night mode
+
       this.skydomeMaterial.uniforms.uIsNight.value =
         this.envTime === 'night' ? 1.0 : 0.0;
 
-      // Update season uniform (0=spring, 1=winter, 2=autumn, 3=rainy)
+
       const seasonMap = { spring: 0, winter: 1, autumn: 2, rainy: 3 };
       this.skydomeMaterial.uniforms.uSeason.value =
         seasonMap[this.currentSeason] || 0;
 
-      // Update celestial object colors
+
       if (this.envTime === 'day') {
         this.skydomeMaterial.uniforms.uSunColor.value.copy(colors.sunColor);
         this.skydomeMaterial.uniforms.uSunGlowColor.value.copy(
@@ -215,7 +215,7 @@ export default class Skydome {
   }
 
   update(elapsedTime) {
-    // Update shader time uniform for animations
+
     if (this.skydomeMaterial && this.skydomeMaterial.uniforms) {
       this.skydomeMaterial.uniforms.uTime.value = elapsedTime;
     }
@@ -231,7 +231,7 @@ export default class Skydome {
 
     const skyFolder = this.debugGUI.addFolder('Skydome');
 
-    // Sky gradient colors
+
     skyFolder
       .addColor(this.skydomeMaterial.uniforms.uZenithColor, 'value')
       .name('Zenith Color');
@@ -242,7 +242,7 @@ export default class Skydome {
       .addColor(this.skydomeMaterial.uniforms.uGroundColor, 'value')
       .name('Ground Color');
 
-    // Day/Night toggle
+
     skyFolder
       .add(this.skydomeMaterial.uniforms.uIsNight, 'value', 0, 1)
       .name('Night Mode');
@@ -253,7 +253,7 @@ export default class Skydome {
       .add(this.skydomeMaterial.uniforms.uAtmosphereIntensity, 'value', 0, 3.0)
       .name('Atmosphere');
 
-    // Sun controls
+
     const sunFolder = skyFolder.addFolder('Sun');
     sunFolder
       .add(this.skydomeMaterial.uniforms.uSunPosition.value, 'x', -1, 1)
@@ -287,7 +287,7 @@ export default class Skydome {
       .add(this.skydomeMaterial.uniforms.uSunRaySharpness, 'value', 1, 8)
       .name('Ray Sharpness');
 
-    // Moon controls
+
     const moonFolder = skyFolder.addFolder('Moon');
     moonFolder
       .add(this.skydomeMaterial.uniforms.uMoonPosition.value, 'x', -1, 1)
@@ -311,7 +311,7 @@ export default class Skydome {
       .add(this.skydomeMaterial.uniforms.uMoonGlowSize, 'value', 0.0005, 0.2)
       .name('Moon Glow Size');
 
-    // Stars controls
+
     const starsFolder = skyFolder.addFolder('Stars');
     starsFolder
       .addColor(this.skydomeMaterial.uniforms.uStarColor, 'value')

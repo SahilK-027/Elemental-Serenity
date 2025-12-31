@@ -1,6 +1,6 @@
-// src/utils/consoleStylish.js
-// Vite / ESM-friendly stylish console logging utility
-// Use like: import { Console } from './utils/consoleStylish';
+
+
+
 
 const pad = (n) => String(n).padStart(2, '0');
 
@@ -60,19 +60,19 @@ function styled(level, label, message) {
 /** Display ASCII art banner */
 function asciiArt() {
   const art = `
-%c███████╗██╗     ███████╗███╗   ███╗███████╗███╗   ██╗████████╗ █████╗ ██╗     
-%c██╔════╝██║     ██╔════╝████╗ ████║██╔════╝████╗  ██║╚══██╔══╝██╔══██╗██║     
-%c█████╗  ██║     █████╗  ██╔████╔██║█████╗  ██╔██╗ ██║   ██║   ███████║██║     
-%c██╔══╝  ██║     ██╔══╝  ██║╚██╔╝██║██╔══╝  ██║╚██╗██║   ██║   ██╔══██║██║     
+%c███████╗██╗     ███████╗███╗   ███╗███████╗███╗   ██╗████████╗ █████╗ ██╗
+%c██╔════╝██║     ██╔════╝████╗ ████║██╔════╝████╗  ██║╚══██╔══╝██╔══██╗██║
+%c█████╗  ██║     █████╗  ██╔████╔██║█████╗  ██╔██╗ ██║   ██║   ███████║██║
+%c██╔══╝  ██║     ██╔══╝  ██║╚██╔╝██║██╔══╝  ██║╚██╗██║   ██║   ██╔══██║██║
 %c███████╗███████╗███████╗██║ ╚═╝ ██║███████╗██║ ╚████║   ██║   ██║  ██║███████╗
 %c╚══════╝╚══════╝╚══════╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝╚══════╝
-                                                                               
-%c███████╗███████╗██████╗ ███████╗███╗   ██╗██╗████████╗██╗   ██╗               
-%c██╔════╝██╔════╝██╔══██╗██╔════╝████╗  ██║██║╚══██╔══╝╚██╗ ██╔╝               
-%c███████╗█████╗  ██████╔╝█████╗  ██╔██╗ ██║██║   ██║    ╚████╔╝                
-%c╚════██║██╔══╝  ██╔══██╗██╔══╝  ██║╚██╗██║██║   ██║     ╚██╔╝                 
-%c███████║███████╗██║  ██║███████╗██║ ╚████║██║   ██║      ██║                  
-%c╚══════╝╚══════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝╚═╝   ╚═╝      ╚═╝                  
+
+%c███████╗███████╗██████╗ ███████╗███╗   ██╗██╗████████╗██╗   ██╗
+%c██╔════╝██╔════╝██╔══██╗██╔════╝████╗  ██║██║╚══██╔══╝╚██╗ ██╔╝
+%c███████╗█████╗  ██████╔╝█████╗  ██╔██╗ ██║██║   ██║    ╚████╔╝
+%c╚════██║██╔══╝  ██╔══██╗██╔══╝  ██║╚██╗██║██║   ██║     ╚██╔╝
+%c███████║███████╗██║  ██║███████╗██║ ╚████║██║   ██║      ██║
+%c╚══════╝╚══════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝╚═╝   ╚═╝      ╚═╝
 `;
 
   const gradient = [
@@ -100,13 +100,13 @@ function banner({
   version = '1.0.0',
   github = 'https://github.com/SahilK-027/elemental-serenity',
 } = {}) {
-  // Clear console for clean start
+
   console.clear();
 
-  // ASCII Art
+
   asciiArt();
 
-  // Subtitle line
+
   console.log(
     `%c✨ ${subtitle} %c v${version}`,
     css({
@@ -125,7 +125,7 @@ function banner({
     })
   );
 
-  // GitHub link with enhanced badge style
+
   console.log(
     `%c%c Code on GitHub %c ${github} %c →`,
     css({
@@ -159,7 +159,7 @@ function banner({
       'border-radius': '0 6px 6px 0',
     })
   );
-  
+
   console.log('');
 }
 
@@ -275,7 +275,7 @@ function logGameState(game) {
 
   section('Current State', '📊');
 
-  // Graphics Settings
+
   groupOpen('🖥️ Graphics Settings');
 
   const storedQuality = localStorage.getItem('graphicsQuality') || 'medium';
@@ -314,7 +314,7 @@ function logGameState(game) {
   }
   groupEnd();
 
-  // World State
+
   groupOpen('🌍 World State');
   const currentSeason = seasonManager?.currentSeason || 'unknown';
   const currentTime = envTimeManager?.envTime || 'unknown';
@@ -338,7 +338,7 @@ function logGameState(game) {
   );
   groupEnd();
 
-  // Audio State
+
   groupOpen('🔊 Audio State');
   const musicEnabled = game.withMusic;
   const masterVol = audioManager?.masterVolume ?? 1;
@@ -363,7 +363,7 @@ function logGameState(game) {
   }
   groupEnd();
 
-  // Viewport
+
   groupOpen('💻 Viewport');
   keyValue('Window', `${window.innerWidth} × ${window.innerHeight}`, '#67e8f9');
   keyValue('Device Pixel Ratio', `${window.devicePixelRatio}x`, '#facc15');
@@ -374,7 +374,7 @@ function logGameState(game) {
   );
   groupEnd();
 
-  // Debug Mode Hint
+
   divider('─', 60);
   const debugHintStyle = css({
     color: '#94a3b8',

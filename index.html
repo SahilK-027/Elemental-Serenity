@@ -3037,7 +3037,7 @@
     <script type="module" src="/src/main.js"></script>
 
     <script>
-      // Settings Modal Functionality
+
       class SettingsManager {
         constructor() {
           this.hamburgerMenu = document.getElementById('hamburger-menu');
@@ -3049,12 +3049,12 @@
           this.volumeValue = document.querySelector('.volume-value');
           this.graphicsQuality = document.getElementById('graphics-quality');
 
-          // Load settings from localStorage or use defaults
+
           const savedSettings = this.loadSettings();
           this.settings = {
-            volume: savedSettings.volume || 50, // Default to 50% (0.5 in AudioManager)
+            volume: savedSettings.volume || 50,
             graphicsQuality: savedSettings.graphicsQuality || 'medium',
-            // Custom graphics settings
+
             customGrass: savedSettings.customGrass || 12500,
             customParticles: savedSettings.customParticles || 500,
             customShadows: savedSettings.customShadows || 'PCFShadowMap',
@@ -3062,28 +3062,28 @@
             customAntialias: savedSettings.customAntialias || false,
           };
 
-          // Initialize previousVolume for music toggle functionality
+
           this.previousVolume = undefined;
 
-          // Apply the loaded graphics quality to the dropdown
+
           this.graphicsQuality.value = this.settings.graphicsQuality;
 
-          // Apply the loaded volume to the slider
+
           this.volumeSlider.value = this.settings.volume;
           this.volumeValue.textContent = this.settings.volume + '%';
 
-          // Initialize preset description
+
           this.presetDetails = document.getElementById('preset-details');
           this.updatePresetDescription(this.settings.graphicsQuality);
 
-          // Initialize custom graphics controls
+
           this.initCustomGraphicsControls();
 
           this.init();
         }
 
         init() {
-          // Show hamburger menu when control panel is shown
+
           const controlPanel = document.getElementById('control-panel');
           const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
@@ -3093,9 +3093,9 @@
               ) {
                 if (controlPanel.classList.contains('show')) {
                   this.hamburgerMenu.classList.add('show');
-                  // Initialize volume based on game state
+
                   this.initializeVolumeFromGame();
-                  // Set up music control UI listener
+
                   this.setupMusicControlListener();
                 }
               }
@@ -3103,40 +3103,40 @@
           });
           observer.observe(controlPanel, { attributes: true });
 
-          // Event listeners
+
           this.hamburgerMenu.addEventListener('click', () => this.openModal());
           this.modalClose.addEventListener('click', () => this.closeModal());
           this.settingsModal.addEventListener('click', (e) => {
             if (e.target === this.settingsModal) this.closeModal();
           });
 
-          // Tab switching
+
           this.tabButtons.forEach((button) => {
             button.addEventListener('click', () =>
               this.switchTab(button.dataset.tab)
             );
           });
 
-          // Volume control
+
           this.volumeSlider.addEventListener('input', (e) => {
             this.settings.volume = parseInt(e.target.value);
             this.volumeValue.textContent = this.settings.volume + '%';
-            this.saveSettings(); // Save to localStorage
+            this.saveSettings();
             this.updateAudioVolume(this.settings.volume / 100);
           });
 
-          // Graphics quality
+
           this.graphicsQuality.addEventListener('change', (e) => {
             const oldQuality = this.settings.graphicsQuality;
             this.settings.graphicsQuality = e.target.value;
-            this.saveSettings(); // Save to localStorage
+            this.saveSettings();
             this.updatePresetDescription(e.target.value);
             this.toggleCustomOptions(e.target.value === 'custom');
 
             if (e.target.value !== 'custom') {
               this.updateGraphicsQuality(e.target.value);
-              
-              // Show reload banner if antialiasing setting changed
+
+
               const qualitySettings = this.getQualitySettings();
               const oldSettings = qualitySettings[oldQuality] || this.getCustomSettings();
               const newSettings = qualitySettings[e.target.value];
@@ -3149,12 +3149,12 @@
                 this.showReloadBanner();
               }
             } else {
-              // Apply current custom settings
+
               this.applyCustomSettings();
             }
           });
 
-          // ESC key to close modal
+
           document.addEventListener('keydown', (e) => {
             if (
               e.key === 'Escape' &&
@@ -3166,11 +3166,11 @@
         }
 
         setupMusicControlListener() {
-          // Listen for music control button clicks to sync volume UI
+
           const musicControlButton = document.getElementById('music-control');
           if (musicControlButton) {
             musicControlButton.addEventListener('click', () => {
-              // Wait a bit for the music control to update, then sync our UI
+
               setTimeout(() => {
                 this.syncVolumeWithMusicState();
               }, 100);
@@ -3184,8 +3184,8 @@
               window.gameInstance.musicControlUI.isMusicEnabled;
 
             if (!isMusicEnabled) {
-              // Music is disabled, set volume UI to 0 but remember the actual volume
-              // Only store previousVolume if it's not already 0 (to avoid storing 0 as previous)
+
+
               if (this.settings.volume > 0) {
                 this.previousVolume = this.settings.volume;
               }
@@ -3193,7 +3193,7 @@
               this.volumeSlider.value = 0;
               this.volumeValue.textContent = '0%';
             } else {
-              // Music is enabled, restore previous volume or default to 50%
+
               const volumeToRestore =
                 this.previousVolume !== undefined ? this.previousVolume : 50;
 
@@ -3201,33 +3201,33 @@
               this.volumeSlider.value = volumeToRestore;
               this.volumeValue.textContent = volumeToRestore + '%';
 
-              // Actually set the audio volume
+
               this.updateAudioVolume(volumeToRestore / 100);
 
-              // Save the restored volume to localStorage
+
               this.saveSettings();
 
-              // Clear previousVolume after restoration
+
               this.previousVolume = undefined;
             }
           }
         }
 
         initializeVolumeFromGame() {
-          // Check if user chose "Explore in Silence" and adjust volume accordingly
+
           if (window.gameInstance && window.gameInstance.audioManager) {
             const currentVolume = window.gameInstance.audioManager.masterVolume;
             const volumePercent = Math.round(currentVolume * 100);
 
-            // If the game was started without music, the volume should reflect that
+
             if (!window.gameInstance.withMusic) {
-              // Store 50% as the default volume for when music gets enabled
+
               this.previousVolume = 50;
               this.settings.volume = 0;
               this.volumeSlider.value = 0;
               this.volumeValue.textContent = '0%';
             } else {
-              // Game started with music, use the current volume or default to 50%
+
               const initialVolume = volumePercent > 0 ? volumePercent : 50;
               this.settings.volume = initialVolume;
               this.volumeSlider.value = initialVolume;
@@ -3259,32 +3259,32 @@
         }
 
         switchTab(tabName) {
-          // Update tab buttons
+
           this.tabButtons.forEach((btn) => {
             btn.classList.toggle('active', btn.dataset.tab === tabName);
           });
 
-          // Update tab contents
+
           this.tabContents.forEach((content) => {
             content.classList.toggle('active', content.id === tabName + '-tab');
           });
         }
 
         updateAudioVolume(volume) {
-          // This will be called by the main game to update audio volume
+
           if (window.gameInstance && window.gameInstance.audioManager) {
             window.gameInstance.audioManager.setMasterVolume(volume);
           }
         }
 
         updateGraphicsQuality(quality) {
-          // This will be called by the main game to update graphics settings
+
           const settings = this.getQualitySettings();
 
           if (window.gameInstance) {
             const gameSettings = settings[quality];
 
-            // Update grass density
+
             if (
               window.gameInstance.world &&
               window.gameInstance.world.ground &&
@@ -3294,13 +3294,13 @@
                 window.gameInstance.world.ground.grassManager;
               grassManager.GRASS_PER_TILE = gameSettings.grassPerTile;
 
-              // Trigger grass regeneration
+
               if (typeof grassManager.regenerateGrass === 'function') {
                 grassManager.regenerateGrass();
               }
             }
 
-            // Update fire effects
+
             if (window.gameInstance.world && window.gameInstance.world.fire) {
               const fire = window.gameInstance.world.fire;
               if (fire.fireEmitterParams) {
@@ -3320,7 +3320,7 @@
               }
             }
 
-            // Emit graphics quality change event
+
             const graphicsChangeEvent = new CustomEvent(
               'graphicsQualityChanged',
               {
@@ -3331,7 +3331,7 @@
           }
         }
 
-        // Load settings from localStorage
+
         loadSettings() {
           try {
             const saved = localStorage.getItem('gameSettings');
@@ -3342,7 +3342,7 @@
           }
         }
 
-        // Save settings to localStorage
+
         saveSettings() {
           try {
             localStorage.setItem('gameSettings', JSON.stringify(this.settings));
@@ -3351,7 +3351,7 @@
           }
         }
 
-        // Get quality settings object (same as in updateGraphicsQuality)
+
         getQualitySettings() {
           return {
             low: {
@@ -3393,7 +3393,7 @@
           };
         }
 
-        // Get preset descriptions for UI
+
         getPresetDescriptions() {
           return {
             low: 'Reduced grass density, basic shadows, lower particle effects. \nBest for older devices or battery saving.',
@@ -3404,7 +3404,7 @@
           };
         }
 
-        // Update the preset description in the UI
+
         updatePresetDescription(quality) {
           if (this.presetDetails) {
             const descriptions = this.getPresetDescriptions();
@@ -3412,7 +3412,7 @@
           }
         }
 
-        // Initialize custom graphics controls
+
         initCustomGraphicsControls() {
           this.customOptionsContainer = document.getElementById('custom-graphics-options');
           this.grassSlider = document.getElementById('grass-density');
@@ -3425,7 +3425,7 @@
           this.pixelRatioValue = document.getElementById('pixel-ratio-value');
           this.antialiasToggle = document.getElementById('antialias-toggle');
 
-          // Apply saved custom settings to controls
+
           if (this.grassSlider) {
             this.grassSlider.value = this.settings.customGrass;
             this.grassValue.textContent = this.settings.customGrass.toLocaleString();
@@ -3446,12 +3446,12 @@
             this.antialiasToggle.checked = this.settings.customAntialias;
           }
 
-          // Show custom options if custom is selected
+
           if (this.settings.graphicsQuality === 'custom') {
             this.toggleCustomOptions(true);
           }
 
-          // Add event listeners for custom controls
+
           this.grassSlider?.addEventListener('input', (e) => {
             const value = parseInt(e.target.value);
             this.settings.customGrass = value;
@@ -3488,7 +3488,7 @@
             this.settings.customAntialias = e.target.checked;
             this.saveSettings();
             this.applyCustomSettings();
-            
+
             if (oldAntialias !== e.target.checked) {
               this.showReloadBanner();
             }
@@ -3526,11 +3526,11 @@
 
         applyCustomSettings() {
           if (this.settings.graphicsQuality !== 'custom') return;
-          
+
           const customSettings = this.getCustomSettings();
-          
+
           if (window.gameInstance) {
-            // Update grass density
+
             if (
               window.gameInstance.world &&
               window.gameInstance.world.ground &&
@@ -3543,7 +3543,7 @@
               }
             }
 
-            // Update fire effects
+
             if (window.gameInstance.world && window.gameInstance.world.fire) {
               const fire = window.gameInstance.world.fire;
               if (fire.fireEmitterParams) {
@@ -3560,7 +3560,7 @@
               }
             }
 
-            // Emit graphics quality change event
+
             const graphicsChangeEvent = new CustomEvent('graphicsQualityChanged', {
               detail: { quality: 'custom', settings: customSettings },
             });
@@ -3568,15 +3568,15 @@
           }
         }
 
-        // Show reload banner when graphics settings change
+
         showReloadBanner() {
-          // Remove existing banner if any
+
           const existingBanner = document.getElementById('reload-banner');
           if (existingBanner) {
             existingBanner.remove();
           }
 
-          // Create reload banner
+
           const banner = document.createElement('div');
           banner.id = 'reload-banner';
           banner.innerHTML = `
@@ -3605,7 +3605,7 @@
             </div>
           `;
 
-          // Add animation styles
+
           if (!document.getElementById('reload-banner-styles')) {
             const styles = document.createElement('style');
             styles.id = 'reload-banner-styles';
@@ -3619,24 +3619,24 @@
               }
 
               @keyframes bannerSlideIn {
-                from { 
-                  transform: translateX(120%) scale(0.9); 
-                  opacity: 0; 
+                from {
+                  transform: translateX(120%) scale(0.9);
+                  opacity: 0;
                 }
-                to { 
-                  transform: translateX(0) scale(1); 
-                  opacity: 1; 
+                to {
+                  transform: translateX(0) scale(1);
+                  opacity: 1;
                 }
               }
 
               @keyframes bannerSlideOut {
-                from { 
-                  transform: translateX(0) scale(1); 
-                  opacity: 1; 
+                from {
+                  transform: translateX(0) scale(1);
+                  opacity: 1;
                 }
-                to { 
-                  transform: translateX(120%) scale(0.9); 
-                  opacity: 0; 
+                to {
+                  transform: translateX(120%) scale(0.9);
+                  opacity: 0;
                 }
               }
 
@@ -3651,7 +3651,7 @@
                 padding: 18px 20px;
                 border-radius: 16px;
                 border: 1px solid rgba(0, 0, 0, 0.06);
-                box-shadow: 
+                box-shadow:
                   0 12px 40px rgba(0, 0, 0, 0.12),
                   0 4px 12px rgba(0, 0, 0, 0.08),
                   inset 0 1px 0 rgba(255, 255, 255, 0.8);
@@ -3821,13 +3821,13 @@
 
           document.body.appendChild(banner);
 
-          // Dismiss function with animation
+
           const dismissBanner = () => {
             banner.classList.add('hiding');
             setTimeout(() => banner.remove(), 300);
           };
 
-          // Add event listeners
+
           document
             .getElementById('reload-now-btn')
             .addEventListener('click', () => {
@@ -3842,7 +3842,7 @@
             .getElementById('banner-close-btn')
             .addEventListener('click', dismissBanner);
 
-          // Auto-dismiss after 10 seconds
+
           setTimeout(() => {
             if (document.getElementById('reload-banner')) {
               dismissBanner();
@@ -3851,17 +3851,17 @@
         }
       }
 
-      // Initialize settings manager when DOM is loaded
+
       document.addEventListener('DOMContentLoaded', () => {
         window.settingsManager = new SettingsManager();
 
-        // Apply saved graphics settings on page load
+
         const savedQuality = window.settingsManager.settings.graphicsQuality;
         const qualitySettings = window.settingsManager.getQualitySettings();
         const currentSettings = qualitySettings[savedQuality];
 
         if (currentSettings) {
-          // Set graphics settings in localStorage for renderer initialization
+
           localStorage.setItem(
             'graphicsAntialias',
             currentSettings.antialias.toString()
@@ -3876,15 +3876,15 @@
           );
         }
 
-        // Trigger initial graphics quality event when game loads
+
         setTimeout(() => {
           if (window.settingsManager) {
             const currentQuality =
               window.settingsManager.settings.graphicsQuality;
             window.settingsManager.updateGraphicsQuality(currentQuality);
           }
-        }, 1000); // Wait for game to initialize
+        }, 1000);
       });
-    </script>
+</script>
   </body>
 </html>

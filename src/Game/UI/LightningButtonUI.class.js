@@ -13,18 +13,18 @@ export default class LightningButtonUI {
   }
 
   init() {
-    // Create wrapper div
+
     this.wrapper = document.createElement('div');
     this.wrapper.className = 'lightning-btn-wrapper';
 
-    // Create button element
+
     this.button = document.createElement('button');
     this.button.id = 'lightning-strike';
     this.button.className = 'lightning-btn';
     this.button.title = 'Strike Lightning';
     this.button.innerHTML = '<i class="fas fa-bolt"></i>';
 
-    // Create electric arcs (CSS animated)
+
     const arcs = document.createElement('div');
     arcs.className = 'electric-arcs';
     arcs.innerHTML = `
@@ -34,11 +34,11 @@ export default class LightningButtonUI {
       <span class="arc arc-4"></span>
     `;
 
-    // Assemble wrapper
+
     this.wrapper.appendChild(this.button);
     this.wrapper.appendChild(arcs);
 
-    // Add to control panel
+
     const controlPanel = document.getElementById('control-panel');
     if (controlPanel) {
       const musicControl = document.getElementById('music-control');
@@ -49,11 +49,11 @@ export default class LightningButtonUI {
       }
     }
 
-    // Bind click handler
+
     this.handleClick = this.handleClick.bind(this);
     this.button.addEventListener('click', this.handleClick);
 
-    // Check initial season
+
     this.updateVisibility(this.seasonManager.currentSeason);
   }
 

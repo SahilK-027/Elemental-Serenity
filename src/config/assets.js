@@ -158,7 +158,7 @@ const ASSETS = [
     type: 'texture',
     path: ['/textures/flowers/flower_2_128x128.png'],
   },
-  // Music
+
   {
     id: 'morningPetalsMusic',
     type: 'audio',
@@ -174,7 +174,7 @@ const ASSETS = [
     type: 'audio',
     path: ['/audio/musics/forest_dreams.mp3'],
   },
-  // Nature Sounds
+
   {
     id: 'birds1Sound',
     type: 'audio',
@@ -240,7 +240,7 @@ const ASSETS = [
     type: 'audio',
     path: ['/audio/sounds/thunder/near/thunder_strike.mp3'],
   },
-  // UI Sounds
+
   {
     id: 'clickSound',
     type: 'audio',

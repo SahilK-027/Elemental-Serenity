@@ -3,14 +3,14 @@ import EventEmitter from './EventEmitter.class';
 export default class MusicManager extends EventEmitter {
   constructor(audioManager) {
     super();
-    
+
     this.audioManager = audioManager;
     this.musicTracks = [
       { id: 'morningPetalsMusic', name: 'Morning Petals' },
       { id: 'windowLightMusic', name: 'Window Light' },
       { id: 'forestDreamsMusic', name: 'Forest Dreams' }
     ];
-    
+
     this.currentTrackIndex = -1;
     this.isPlaying = false;
     this.isPaused = false;
@@ -18,7 +18,7 @@ export default class MusicManager extends EventEmitter {
     this.fadeOutDuration = 1000;
     this.trackCheckInterval = null;
     this.pausedTrackId = null;
-    
+
     this.init();
   }
 
@@ -27,7 +27,7 @@ export default class MusicManager extends EventEmitter {
 
   startRandomMusic() {
     if (this.isPlaying) return;
-    
+
     this.isPlaying = true;
     this.isPaused = false;
     this.playNextRandomTrack();
@@ -35,15 +35,15 @@ export default class MusicManager extends EventEmitter {
 
   pauseMusic() {
     if (!this.isPlaying) return;
-    
+
     this.isPaused = true;
     this.isPlaying = false;
-    
+
     if (this.audioManager.currentMusic && this.audioManager.currentMusic.isPlaying) {
       this.pausedTrackId = this.getCurrentTrack()?.id;
       this.audioManager.stopMusic(true, this.fadeOutDuration);
     }
-    
+
     if (this.trackCheckInterval) {
       clearInterval(this.trackCheckInterval);
       this.trackCheckInterval = null;
@@ -55,10 +55,10 @@ export default class MusicManager extends EventEmitter {
       this.startRandomMusic();
       return;
     }
-    
+
     this.isPlaying = true;
     this.isPaused = false;
-    
+
     if (this.pausedTrackId && this.currentTrackIndex >= 0) {
       const track = this.musicTracks[this.currentTrackIndex];
       if (track && track.id === this.pausedTrackId) {
@@ -67,7 +67,7 @@ export default class MusicManager extends EventEmitter {
         return;
       }
     }
-    
+
     this.playNextRandomTrack();
   }
 
@@ -77,7 +77,7 @@ export default class MusicManager extends EventEmitter {
     this.pausedTrackId = null;
     this.audioManager.stopMusic(true, this.fadeOutDuration);
     this.currentTrackIndex = -1;
-    
+
     if (this.trackCheckInterval) {
       clearInterval(this.trackCheckInterval);
       this.trackCheckInterval = null;
@@ -86,22 +86,22 @@ export default class MusicManager extends EventEmitter {
 
   playNextRandomTrack() {
     if (!this.isPlaying) return;
-    
+
     let nextIndex;
     do {
       nextIndex = Math.floor(Math.random() * this.musicTracks.length);
     } while (nextIndex === this.currentTrackIndex && this.musicTracks.length > 1);
-    
+
     this.currentTrackIndex = nextIndex;
     const track = this.musicTracks[this.currentTrackIndex];
-    
+
     this.playTrackWithoutLoop(track);
-    
+
     this.trigger('trackChanged', {
       name: track.name,
       id: track.id
     });
-    
+
     this.startTrackMonitoring(track.id);
   }
 
@@ -118,7 +118,7 @@ export default class MusicManager extends EventEmitter {
 
     this.audioManager.currentMusic = music;
     music.setLoop(false);
-    
+
     music.setVolume(0);
     music.play();
     this.audioManager.fadeVolume(music, this.audioManager.musicVolume * this.audioManager.masterVolume, this.fadeInDuration);
@@ -134,7 +134,7 @@ export default class MusicManager extends EventEmitter {
 
     const duration = audio.buffer ? audio.buffer.duration : 0;
     let startTime = performance.now();
-    
+
     this.trackCheckInterval = setInterval(() => {
       if (!this.isPlaying) {
         clearInterval(this.trackCheckInterval);
@@ -142,11 +142,11 @@ export default class MusicManager extends EventEmitter {
       }
 
       const elapsed = (performance.now() - startTime) / 1000;
-      
+
       if (elapsed >= duration - 0.5 || !audio.isPlaying) {
         clearInterval(this.trackCheckInterval);
         this.trackCheckInterval = null;
-        
+
         setTimeout(() => {
           if (this.isPlaying) {
             this.playNextRandomTrack();

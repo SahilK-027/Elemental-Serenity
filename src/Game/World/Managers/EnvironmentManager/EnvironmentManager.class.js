@@ -4,7 +4,7 @@ export default class EnvironmentTimeManager extends EventEmitter {
   constructor(initialTime = null) {
     super();
 
-    // Singleton pattern
+
     if (EnvironmentTimeManager.instance) {
       return EnvironmentTimeManager.instance;
     }

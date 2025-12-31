@@ -13,17 +13,17 @@ export default class Fog {
     this.currentSeason = this.seasonManager.currentSeason;
     this.debugGUI = this.game.debug;
 
-    // Fog distance based on world size - starts near edges to hide corners
+
     this.worldSize = worldSize;
     this.fogNear = 47;
     this.fogFar = 57;
 
-    // Horizon colors matching Skydome presets
+
     this.fogColors = this.createFogColorPresets();
 
     this.initialize();
 
-    // Listen for environment and season changes
+
     this.environmentTimeManager.onChange((newValue) => {
       this.onEnvTimeChanged(newValue);
     });
