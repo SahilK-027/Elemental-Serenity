@@ -1,5 +1,7 @@
 # Elemental Serenity
 
+<img src="./elemental_serenity.jpg" width="100%" height="100%"/>
+
 A Stylized Diorama with WebGL and Three.js
 
 ## Installation
