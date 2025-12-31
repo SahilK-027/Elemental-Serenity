@@ -13,7 +13,7 @@ export default class Camera {
     this.ratioOverflow = 0;
     this.initialCameraPosition = null;
     this.adjustedCameraPosition = null;
-    this.baseMaxDistance = 33.3;
+    this.baseMaxDistance = 35;
 
     this.setPerspectiveCameraInstance(fov, near, far);
     this.setOrbitControls();
@@ -31,11 +31,7 @@ export default class Camera {
       far
     );
 
-    this.cameraInstance.position.set(
-      17.597935731576186,
-      10.305503178423523,
-      26.32487914932968
-    );
+    this.cameraInstance.position.set(18.25, 10.69, 27.32);
     this.scene.add(this.cameraInstance);
   }
 
@@ -62,7 +58,7 @@ export default class Camera {
     this.adjustedCameraPosition = direction.multiplyScalar(newDistance);
     this.cameraInstance.position.copy(this.adjustedCameraPosition);
 
-    this.controls.maxDistance = Math.max(this.baseMaxDistance, newDistance * 1.2);
+    this.controls.maxDistance = Math.max(this.baseMaxDistance, newDistance);
   }
 
   resize() {
@@ -74,6 +70,7 @@ export default class Camera {
   }
 
   update() {
+    console.log(this.cameraInstance.position);
     this.controls.update();
   }
 }

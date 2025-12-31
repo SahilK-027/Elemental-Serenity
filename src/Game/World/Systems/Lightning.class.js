@@ -33,9 +33,11 @@ export default class Lightning {
     this.nextLightningTime = this.getRandomDelay();
     this.elapsedTime = 0;
 
-    // Lightning parameters
-    this.cameraShakeDuration = 0.5;
-    this.cameraShakeIntensity = 0.7;
+    // Camera shake parameters
+    this.cameraShakeDuration = 0.6;
+    this.cameraShakeIntensity = 0.85;
+    this.cameraShakeFrequency = 25; // Hz - higher = faster vibration
+    this.cameraShakeDecay = 2.5; // Exponential decay curve
 
     // Colors
     this.colorA = new THREE.Color(0x0000ff);
@@ -298,23 +300,51 @@ export default class Lightning {
     return emitter;
   }
 
-  triggerCameraShake() {
+  triggerCameraShake(strikePosition = null) {
     const camera = this.game.camera.cameraInstance;
     const originalPosition = camera.position.clone();
-    const shakeStart = Date.now();
+    const shakeStart = performance.now();
+
+    // Calculate direction from camera to strike for directional bias
+    let shakeDirection = new THREE.Vector3(0, 0, 1);
+    if (strikePosition) {
+      shakeDirection = new THREE.Vector3()
+        .subVectors(strikePosition, camera.position)
+        .normalize();
+    }
 
     const shake = () => {
-      const elapsed = (Date.now() - shakeStart) / 1000;
+      const elapsed = (performance.now() - shakeStart) / 1000;
+      const progress = Math.min(elapsed / this.cameraShakeDuration, 1);
 
-      if (elapsed < this.cameraShakeDuration) {
-        const intensity =
-          this.cameraShakeIntensity * (1 - elapsed / this.cameraShakeDuration);
+      if (progress < 1) {
+        // Easing: ease-out cubic for smooth ramp-up, then exponential decay
+        const easeIn = progress < 0.1 ? Math.pow(progress / 0.1, 2) : 1;
+        const decayFactor = Math.pow(1 - progress, this.cameraShakeDecay);
+        const currentIntensity = this.cameraShakeIntensity * decayFactor * easeIn;
+
+        // Multi-frequency noise for organic feel
+        const time = elapsed * this.cameraShakeFrequency;
+        const noise1 = Math.sin(time * 1.0) * 0.6;
+        const noise2 = Math.sin(time * 2.3) * 0.3;
+        const noise3 = Math.sin(time * 4.7) * 0.1;
+        const combinedNoise = noise1 + noise2 + noise3;
+
+        // Apply shake with directional bias
+        const randomX = (Math.random() - 0.5) * 2;
+        const randomY = (Math.random() - 0.5) * 2;
+        const randomZ = (Math.random() - 0.5) * 2;
+
         camera.position.x =
-          originalPosition.x + (Math.random() - 0.5) * intensity;
+          originalPosition.x +
+          (randomX + shakeDirection.x * combinedNoise * 0.5) * currentIntensity;
         camera.position.y =
-          originalPosition.y + (Math.random() - 0.5) * intensity;
+          originalPosition.y +
+          (randomY + shakeDirection.y * combinedNoise * 0.5) * currentIntensity;
         camera.position.z =
-          originalPosition.z + (Math.random() - 0.5) * intensity;
+          originalPosition.z +
+          (randomZ + shakeDirection.z * combinedNoise * 0.5) * currentIntensity;
+
         requestAnimationFrame(shake);
       } else {
         camera.position.copy(originalPosition);
@@ -327,7 +357,7 @@ export default class Lightning {
   strike(position) {
     const arcMesh = this.createArcMesh(position);
     this.createExplosionParticles(position);
-    this.triggerCameraShake();
+    this.triggerCameraShake(position);
     
     // Trigger thunder sound through AmbientSoundManager if available
     if (this.game.ambientSoundManager) {
@@ -476,6 +506,36 @@ export default class Lightning {
       'positionRadiusVariance',
       { min: 0, max: 5, step: 0.1, label: 'Position Radius Variance' },
       folder
+    );
+
+    // Camera shake controls
+    const shakeFolder = 'Lightning/Camera Shake';
+    this.game.debug.add(
+      this,
+      'cameraShakeDuration',
+      { min: 0.1, max: 2, step: 0.05, label: 'Duration' },
+      shakeFolder
+    );
+
+    this.game.debug.add(
+      this,
+      'cameraShakeIntensity',
+      { min: 0, max: 2, step: 0.05, label: 'Intensity' },
+      shakeFolder
+    );
+
+    this.game.debug.add(
+      this,
+      'cameraShakeFrequency',
+      { min: 5, max: 50, step: 1, label: 'Frequency (Hz)' },
+      shakeFolder
+    );
+
+    this.game.debug.add(
+      this,
+      'cameraShakeDecay',
+      { min: 0.5, max: 5, step: 0.1, label: 'Decay Curve' },
+      shakeFolder
     );
 
     this._addParticleInterpolantGUI();
