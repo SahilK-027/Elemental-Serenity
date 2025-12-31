@@ -36,10 +36,12 @@ export default class Fire {
     this.fireEmitterParams = null;
     this.smokeEmitterParams = null;
     this.amberEmitterParams = null;
-    
-    this.originalFireEmissionRate = 500;
-    this.originalAmberEmissionRate = 30;
-    this.originalSmokeEmissionRate = 50;
+
+    // Load particle settings from localStorage
+    const particleSettings = this.getInitialParticleSettings();
+    this.originalFireEmissionRate = particleSettings.fireEmissionRate;
+    this.originalAmberEmissionRate = particleSettings.amberEmissionRate;
+    this.originalSmokeEmissionRate = particleSettings.smokeEmissionRate;
     this.originalSmokePosition = { x: -5.4, y: 1.9, z: -6.9 };
     this.rainySmokePosition = { x: -5.4, y: 0.6, z: -6.9 };
     this.rainySmokeEmissionRate = 8;
@@ -75,6 +77,46 @@ export default class Fire {
     });
 
     this.updateFireEffectsForSeason();
+  }
+
+  // Get initial particle settings from localStorage based on saved graphics quality
+  getInitialParticleSettings() {
+    const defaults = {
+      fireEmissionRate: 500,
+      smokeEmissionRate: 50,
+      amberEmissionRate: 30,
+    };
+
+    try {
+      const savedSettings = localStorage.getItem('gameSettings');
+      if (!savedSettings) return defaults;
+
+      const settings = JSON.parse(savedSettings);
+      const quality = settings.graphicsQuality || 'medium';
+
+      // If custom quality, use the saved custom particle value
+      if (quality === 'custom') {
+        const customParticles = settings.customParticles || 500;
+        return {
+          fireEmissionRate: customParticles,
+          smokeEmissionRate: Math.round(customParticles * 0.1),
+          amberEmissionRate: Math.round(customParticles * 0.06),
+        };
+      }
+
+      // Otherwise use preset values
+      const presetSettings = {
+        low: { fireEmissionRate: 350, smokeEmissionRate: 35, amberEmissionRate: 20 },
+        medium: { fireEmissionRate: 500, smokeEmissionRate: 50, amberEmissionRate: 30 },
+        high: { fireEmissionRate: 650, smokeEmissionRate: 65, amberEmissionRate: 40 },
+        ultra: { fireEmissionRate: 800, smokeEmissionRate: 80, amberEmissionRate: 50 },
+      };
+
+      return presetSettings[quality] || defaults;
+    } catch (error) {
+      console.warn('Failed to load particle settings from localStorage:', error);
+      return defaults;
+    }
   }
 
   _createDefaultStops() {

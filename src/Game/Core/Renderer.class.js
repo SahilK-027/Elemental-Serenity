@@ -32,6 +32,45 @@ export default class Renderer {
     );
   }
 
+  // Get initial graphics settings from localStorage based on saved graphics quality
+  getInitialGraphicsSettings() {
+    const defaults = {
+      antialias: false,
+      shadowMapType: 'PCFShadowMap',
+      pixelRatioCap: 2,
+    };
+
+    try {
+      const savedSettings = localStorage.getItem('gameSettings');
+      if (!savedSettings) return defaults;
+
+      const settings = JSON.parse(savedSettings);
+      const quality = settings.graphicsQuality || 'medium';
+
+      // If custom quality, use the saved custom values
+      if (quality === 'custom') {
+        return {
+          antialias: settings.customAntialias || false,
+          shadowMapType: settings.customShadows || 'PCFShadowMap',
+          pixelRatioCap: settings.customPixelRatio || 2,
+        };
+      }
+
+      // Otherwise use preset values
+      const presetSettings = {
+        low: { antialias: false, shadowMapType: 'BasicShadowMap', pixelRatioCap: 2 },
+        medium: { antialias: false, shadowMapType: 'PCFShadowMap', pixelRatioCap: 2 },
+        high: { antialias: true, shadowMapType: 'PCFSoftShadowMap', pixelRatioCap: 2 },
+        ultra: { antialias: true, shadowMapType: 'PCFSoftShadowMap', pixelRatioCap: 3 },
+      };
+
+      return presetSettings[quality] || defaults;
+    } catch (error) {
+      console.warn('Failed to load graphics settings from localStorage:', error);
+      return defaults;
+    }
+  }
+
   setRendererInstance() {
     const toneMappingOptions = {
       NoToneMapping: THREE.NoToneMapping,
@@ -44,8 +83,8 @@ export default class Renderer {
     };
 
     // Get antialiasing setting from localStorage (set by graphics quality)
-    const storedAntialias = localStorage.getItem('graphicsAntialias');
-    const useAntialias = storedAntialias ? storedAntialias === 'true' : false;
+    const graphicsSettings = this.getInitialGraphicsSettings();
+    const useAntialias = graphicsSettings.antialias;
 
     this.rendererInstance = new THREE.WebGLRenderer({
       canvas: this.canvas,
@@ -73,25 +112,20 @@ export default class Renderer {
     this.rendererInstance.toneMappingExposure = 1.75;
     this.rendererInstance.shadowMap.enabled = true;
 
-    // Get shadow map type from localStorage (set by graphics quality)
-    const storedShadowMapType = localStorage.getItem('graphicsShadowMapType');
+    // Get shadow map type from graphics settings
     const shadowMapTypes = {
       BasicShadowMap: THREE.BasicShadowMap,
       PCFShadowMap: THREE.PCFShadowMap,
       PCFSoftShadowMap: THREE.PCFSoftShadowMap,
     };
     this.rendererInstance.shadowMap.type =
-      shadowMapTypes[storedShadowMapType] || THREE.PCFShadowMap;
+      shadowMapTypes[graphicsSettings.shadowMapType] || THREE.PCFShadowMap;
 
     this.rendererInstance.setSize(this.sizes.width, this.sizes.height);
 
-    // Get pixel ratio cap from localStorage (set by graphics quality)
-    const storedPixelRatioCap = localStorage.getItem('graphicsPixelRatioCap');
-    const pixelRatioCap = storedPixelRatioCap
-      ? parseInt(storedPixelRatioCap)
-      : 2;
+    // Apply pixel ratio cap from graphics settings
     this.rendererInstance.setPixelRatio(
-      Math.min(this.sizes.pixelRatio, pixelRatioCap)
+      Math.min(this.sizes.pixelRatio, graphicsSettings.pixelRatioCap)
     );
 
     if (this.isDebugMode) {
@@ -152,12 +186,9 @@ export default class Renderer {
     this.rendererInstance.setSize(this.sizes.width, this.sizes.height);
 
     // Respect the pixel ratio cap from graphics settings
-    const storedPixelRatioCap = localStorage.getItem('graphicsPixelRatioCap');
-    const pixelRatioCap = storedPixelRatioCap
-      ? parseInt(storedPixelRatioCap)
-      : 2;
+    const graphicsSettings = this.getInitialGraphicsSettings();
     this.rendererInstance.setPixelRatio(
-      Math.min(this.sizes.pixelRatio, pixelRatioCap)
+      Math.min(this.sizes.pixelRatio, graphicsSettings.pixelRatioCap)
     );
   }
 

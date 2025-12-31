@@ -36,7 +36,9 @@ export class GrassManager {
     this.gridRows = gridRows;
     this.gridSpacing = gridSpacing;
     this.grassSize = 1.185;
-    this.GRASS_PER_TILE = 12500;
+    
+    // Load grass density from localStorage based on saved graphics quality
+    this.GRASS_PER_TILE = this.getInitialGrassDensity();
 
     this.FLOWERS_PER_TILE = 20;
     this.flowerInstancedMesh = null;
@@ -68,6 +70,37 @@ export class GrassManager {
     this.loadSharedResources();
     this.createAllGrassInSingleMesh();
     this.createFlowers();
+  }
+
+  // Get initial grass density from localStorage based on saved graphics quality
+  getInitialGrassDensity() {
+    const defaultDensity = 12500;
+    
+    try {
+      const savedSettings = localStorage.getItem('gameSettings');
+      if (!savedSettings) return defaultDensity;
+      
+      const settings = JSON.parse(savedSettings);
+      const quality = settings.graphicsQuality || 'medium';
+      
+      // If custom quality, use the saved custom grass value
+      if (quality === 'custom') {
+        return settings.customGrass || defaultDensity;
+      }
+      
+      // Otherwise use preset values
+      const presetDensities = {
+        low: 10000,
+        medium: 12500,
+        high: 25000,
+        ultra: 50000,
+      };
+      
+      return presetDensities[quality] || defaultDensity;
+    } catch (error) {
+      console.warn('Failed to load grass density from localStorage:', error);
+      return defaultDensity;
+    }
   }
 
   loadSharedResources() {

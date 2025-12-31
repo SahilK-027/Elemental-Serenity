@@ -1327,6 +1327,114 @@
         line-height: 1.5;
       }
 
+      /* Custom Graphics Options */
+      .custom-graphics-options {
+        display: none;
+        margin-top: 20px;
+        padding: 18px;
+        background: linear-gradient(
+          145deg,
+          rgba(0, 0, 0, 0.02),
+          rgba(0, 0, 0, 0.01)
+        );
+        border-radius: 12px;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        gap: 18px;
+        flex-direction: column;
+      }
+
+      .custom-graphics-options.show {
+        display: flex;
+        animation: slideDown 0.3s ease;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .custom-option {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .custom-option-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .custom-option-header label {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.75);
+      }
+
+      .custom-option-value {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: rgba(0, 0, 0, 0.6);
+        font-variant-numeric: tabular-nums;
+        min-width: 60px;
+        text-align: right;
+      }
+
+      .custom-slider {
+        width: 100%;
+        height: 6px;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+        outline: none;
+        -webkit-appearance: none;
+        transition: background 0.2s ease;
+      }
+
+      .custom-slider:hover {
+        background: rgba(0, 0, 0, 0.15);
+      }
+
+      .custom-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 18px;
+        height: 18px;
+        background: linear-gradient(145deg, #1a1a1a, #000);
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .custom-slider::-webkit-slider-thumb:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      }
+
+      .custom-option-range {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.7rem;
+        color: rgba(0, 0, 0, 0.4);
+      }
+
+      .custom-option .custom-select {
+        width: 100%;
+      }
+
+      .custom-option .custom-select select {
+        width: 100%;
+      }
+
+      .custom-option .toggle-switch {
+        align-self: flex-start;
+      }
+
       .toggle-switch {
         position: relative;
         width: 52px;
@@ -1735,6 +1843,20 @@
           font-size: 0.82rem;
         }
 
+        .custom-graphics-options {
+          margin-top: 16px;
+          padding: 14px;
+          gap: 16px;
+        }
+
+        .custom-option-header label {
+          font-size: 0.82rem;
+        }
+
+        .custom-option-value {
+          font-size: 0.78rem;
+        }
+
         .credit-category {
           padding: 14px 16px;
         }
@@ -1930,6 +2052,33 @@
 
         .preset-details {
           font-size: 0.78rem;
+        }
+
+        .custom-graphics-options {
+          margin-top: 14px;
+          padding: 12px;
+          gap: 14px;
+        }
+
+        .custom-option-header label {
+          font-size: 0.8rem;
+        }
+
+        .custom-option-value {
+          font-size: 0.75rem;
+        }
+
+        .custom-slider {
+          height: 8px;
+        }
+
+        .custom-slider::-webkit-slider-thumb {
+          width: 20px;
+          height: 20px;
+        }
+
+        .custom-option-range {
+          font-size: 0.65rem;
         }
 
         .credit-category {
@@ -2213,6 +2362,7 @@
                     <option value="medium" selected>Medium</option>
                     <option value="high">High</option>
                     <option value="ultra">Ultra</option>
+                    <option value="custom">Custom</option>
                   </select>
                 </div>
               </div>
@@ -2220,6 +2370,69 @@
                 <div class="preset-info">
                   <span class="preset-label">Affects:</span>
                   <span class="preset-details" id="preset-details">Grass density, particle effects, shadow quality, and pixel ratio</span>
+                </div>
+              </div>
+              
+              <!-- Custom Graphics Options (hidden by default) -->
+              <div class="custom-graphics-options" id="custom-graphics-options">
+                <div class="custom-option">
+                  <div class="custom-option-header">
+                    <label for="grass-density">Grass Density</label>
+                    <span class="custom-option-value" id="grass-density-value">12,500</span>
+                  </div>
+                  <input type="range" id="grass-density" min="5000" max="100000" step="5000" value="12500" class="custom-slider" />
+                  <div class="custom-option-range">
+                    <span>5K</span>
+                    <span>100K</span>
+                  </div>
+                </div>
+                
+                <div class="custom-option">
+                  <div class="custom-option-header">
+                    <label for="particle-density">Fire Particles</label>
+                    <span class="custom-option-value" id="particle-density-value">500</span>
+                  </div>
+                  <input type="range" id="particle-density" min="200" max="1200" step="50" value="500" class="custom-slider" />
+                  <div class="custom-option-range">
+                    <span>200</span>
+                    <span>1200</span>
+                  </div>
+                </div>
+                
+                <div class="custom-option">
+                  <div class="custom-option-header">
+                    <label for="shadow-quality">Shadow Quality</label>
+                    <span class="custom-option-value" id="shadow-quality-value">Standard</span>
+                  </div>
+                  <div class="custom-select">
+                    <select id="shadow-quality">
+                      <option value="BasicShadowMap">Basic</option>
+                      <option value="PCFShadowMap" selected>Standard</option>
+                      <option value="PCFSoftShadowMap">Soft</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="custom-option">
+                  <div class="custom-option-header">
+                    <label for="pixel-ratio">Pixel Ratio Cap</label>
+                    <span class="custom-option-value" id="pixel-ratio-value">2x</span>
+                  </div>
+                  <input type="range" id="pixel-ratio" min="1" max="4" step="0.5" value="2" class="custom-slider" />
+                  <div class="custom-option-range">
+                    <span>1x</span>
+                    <span>4x</span>
+                  </div>
+                </div>
+                
+                <div class="custom-option">
+                  <div class="custom-option-header">
+                    <label for="antialias-toggle">Antialiasing</label>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="antialias-toggle" />
+                    <span class="toggle-slider"></span>
+                  </label>
                 </div>
               </div>
             </div>
@@ -2841,6 +3054,12 @@
           this.settings = {
             volume: savedSettings.volume || 50, // Default to 50% (0.5 in AudioManager)
             graphicsQuality: savedSettings.graphicsQuality || 'medium',
+            // Custom graphics settings
+            customGrass: savedSettings.customGrass || 12500,
+            customParticles: savedSettings.customParticles || 500,
+            customShadows: savedSettings.customShadows || 'PCFShadowMap',
+            customPixelRatio: savedSettings.customPixelRatio || 2,
+            customAntialias: savedSettings.customAntialias || false,
           };
 
           // Initialize previousVolume for music toggle functionality
@@ -2856,6 +3075,9 @@
           // Initialize preset description
           this.presetDetails = document.getElementById('preset-details');
           this.updatePresetDescription(this.settings.graphicsQuality);
+
+          // Initialize custom graphics controls
+          this.initCustomGraphicsControls();
 
           this.init();
         }
@@ -2908,20 +3130,27 @@
             const oldQuality = this.settings.graphicsQuality;
             this.settings.graphicsQuality = e.target.value;
             this.saveSettings(); // Save to localStorage
-            this.updateGraphicsQuality(e.target.value);
             this.updatePresetDescription(e.target.value);
+            this.toggleCustomOptions(e.target.value === 'custom');
 
-            // Show reload banner if antialiasing setting changed
-            const qualitySettings = this.getQualitySettings();
-            const oldSettings = qualitySettings[oldQuality];
-            const newSettings = qualitySettings[e.target.value];
+            if (e.target.value !== 'custom') {
+              this.updateGraphicsQuality(e.target.value);
+              
+              // Show reload banner if antialiasing setting changed
+              const qualitySettings = this.getQualitySettings();
+              const oldSettings = qualitySettings[oldQuality] || this.getCustomSettings();
+              const newSettings = qualitySettings[e.target.value];
 
-            if (
-              oldSettings &&
-              newSettings &&
-              oldSettings.antialias !== newSettings.antialias
-            ) {
-              this.showReloadBanner();
+              if (
+                oldSettings &&
+                newSettings &&
+                oldSettings.antialias !== newSettings.antialias
+              ) {
+                this.showReloadBanner();
+              }
+            } else {
+              // Apply current custom settings
+              this.applyCustomSettings();
             }
           });
 
@@ -3171,6 +3400,7 @@
             medium: 'Balanced grass density, standard shadows, moderate particle effects. \nGood for most devices.',
             high: 'Dense grass, soft shadows, antialiasing enabled, rich particle effects. \nFor capable hardware.',
             ultra: 'Super high grass density, highest quality shadows, full antialiasing, denser particles. \nOnly For high-end devices.',
+            custom: 'Fine-tune individual settings below to match your hardware and preferences.',
           };
         }
 
@@ -3179,6 +3409,162 @@
           if (this.presetDetails) {
             const descriptions = this.getPresetDescriptions();
             this.presetDetails.textContent = descriptions[quality] || descriptions.medium;
+          }
+        }
+
+        // Initialize custom graphics controls
+        initCustomGraphicsControls() {
+          this.customOptionsContainer = document.getElementById('custom-graphics-options');
+          this.grassSlider = document.getElementById('grass-density');
+          this.grassValue = document.getElementById('grass-density-value');
+          this.particleSlider = document.getElementById('particle-density');
+          this.particleValue = document.getElementById('particle-density-value');
+          this.shadowSelect = document.getElementById('shadow-quality');
+          this.shadowValue = document.getElementById('shadow-quality-value');
+          this.pixelRatioSlider = document.getElementById('pixel-ratio');
+          this.pixelRatioValue = document.getElementById('pixel-ratio-value');
+          this.antialiasToggle = document.getElementById('antialias-toggle');
+
+          // Apply saved custom settings to controls
+          if (this.grassSlider) {
+            this.grassSlider.value = this.settings.customGrass;
+            this.grassValue.textContent = this.settings.customGrass.toLocaleString();
+          }
+          if (this.particleSlider) {
+            this.particleSlider.value = this.settings.customParticles;
+            this.particleValue.textContent = this.settings.customParticles;
+          }
+          if (this.shadowSelect) {
+            this.shadowSelect.value = this.settings.customShadows;
+            this.updateShadowValueLabel(this.settings.customShadows);
+          }
+          if (this.pixelRatioSlider) {
+            this.pixelRatioSlider.value = this.settings.customPixelRatio;
+            this.pixelRatioValue.textContent = this.settings.customPixelRatio + 'x';
+          }
+          if (this.antialiasToggle) {
+            this.antialiasToggle.checked = this.settings.customAntialias;
+          }
+
+          // Show custom options if custom is selected
+          if (this.settings.graphicsQuality === 'custom') {
+            this.toggleCustomOptions(true);
+          }
+
+          // Add event listeners for custom controls
+          this.grassSlider?.addEventListener('input', (e) => {
+            const value = parseInt(e.target.value);
+            this.settings.customGrass = value;
+            this.grassValue.textContent = value.toLocaleString();
+            this.saveSettings();
+            this.applyCustomSettings();
+          });
+
+          this.particleSlider?.addEventListener('input', (e) => {
+            const value = parseInt(e.target.value);
+            this.settings.customParticles = value;
+            this.particleValue.textContent = value;
+            this.saveSettings();
+            this.applyCustomSettings();
+          });
+
+          this.shadowSelect?.addEventListener('change', (e) => {
+            this.settings.customShadows = e.target.value;
+            this.updateShadowValueLabel(e.target.value);
+            this.saveSettings();
+            this.applyCustomSettings();
+          });
+
+          this.pixelRatioSlider?.addEventListener('input', (e) => {
+            const value = parseFloat(e.target.value);
+            this.settings.customPixelRatio = value;
+            this.pixelRatioValue.textContent = value + 'x';
+            this.saveSettings();
+            this.applyCustomSettings();
+          });
+
+          this.antialiasToggle?.addEventListener('change', (e) => {
+            const oldAntialias = this.settings.customAntialias;
+            this.settings.customAntialias = e.target.checked;
+            this.saveSettings();
+            this.applyCustomSettings();
+            
+            if (oldAntialias !== e.target.checked) {
+              this.showReloadBanner();
+            }
+          });
+        }
+
+        updateShadowValueLabel(value) {
+          const labels = {
+            'BasicShadowMap': 'Basic',
+            'PCFShadowMap': 'Standard',
+            'PCFSoftShadowMap': 'Soft'
+          };
+          if (this.shadowValue) {
+            this.shadowValue.textContent = labels[value] || 'Standard';
+          }
+        }
+
+        toggleCustomOptions(show) {
+          if (this.customOptionsContainer) {
+            this.customOptionsContainer.classList.toggle('show', show);
+          }
+        }
+
+        getCustomSettings() {
+          return {
+            grassPerTile: this.settings.customGrass,
+            fireEmissionRate: this.settings.customParticles,
+            smokeEmissionRate: Math.round(this.settings.customParticles * 0.1),
+            amberEmissionRate: Math.round(this.settings.customParticles * 0.06),
+            antialias: this.settings.customAntialias,
+            shadowMapType: this.settings.customShadows,
+            pixelRatioCap: this.settings.customPixelRatio,
+          };
+        }
+
+        applyCustomSettings() {
+          if (this.settings.graphicsQuality !== 'custom') return;
+          
+          const customSettings = this.getCustomSettings();
+          
+          if (window.gameInstance) {
+            // Update grass density
+            if (
+              window.gameInstance.world &&
+              window.gameInstance.world.ground &&
+              window.gameInstance.world.ground.grassManager
+            ) {
+              const grassManager = window.gameInstance.world.ground.grassManager;
+              grassManager.GRASS_PER_TILE = customSettings.grassPerTile;
+              if (typeof grassManager.regenerateGrass === 'function') {
+                grassManager.regenerateGrass();
+              }
+            }
+
+            // Update fire effects
+            if (window.gameInstance.world && window.gameInstance.world.fire) {
+              const fire = window.gameInstance.world.fire;
+              if (fire.fireEmitterParams) {
+                fire.originalFireEmissionRate = customSettings.fireEmissionRate;
+                fire.fireEmitterParams.emissionRate = customSettings.fireEmissionRate;
+              }
+              if (fire.smokeEmitterParams) {
+                fire.originalSmokeEmissionRate = customSettings.smokeEmissionRate;
+                fire.smokeEmitterParams.emissionRate = customSettings.smokeEmissionRate;
+              }
+              if (fire.amberEmitterParams) {
+                fire.originalAmberEmissionRate = customSettings.amberEmissionRate;
+                fire.amberEmitterParams.emissionRate = customSettings.amberEmissionRate;
+              }
+            }
+
+            // Emit graphics quality change event
+            const graphicsChangeEvent = new CustomEvent('graphicsQualityChanged', {
+              detail: { quality: 'custom', settings: customSettings },
+            });
+            window.dispatchEvent(graphicsChangeEvent);
           }
         }
 
