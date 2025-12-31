@@ -5,10 +5,36 @@ import EnvironmentTimeManager from './Game/World/Managers/EnvironmentManager/Env
 import ASSETS from './config/assets.js';
 import reveal from './reveal.js';
 import ToastManager from './Game/UI/ToastManager.class.js';
+import { Console } from './utils/consoleStylish.js';
 
 const isDebugMode =
   typeof window !== 'undefined' &&
   new URLSearchParams(window.location.search).get('mode') === 'debug';
+
+// ═══════════════════════════════════════════════════════════════════════════
+// STYLISH CONSOLE LOGS
+// ═══════════════════════════════════════════════════════════════════════════
+
+Console.banner({
+  title: 'Elemental Serenity',
+  subtitle: 'Interactive 3D Nature Experience',
+  version: '0.0.0',
+});
+
+// Tech Stack (actual dependencies from package.json)
+Console.techTable([
+  { Layer: 'Build', Technology: 'Vite 6.0', Details: 'ES Modules, HMR' },
+  { Layer: '3D Engine', Technology: 'Three.js 0.182', Details: 'WebGLRenderer' },
+  { Layer: 'Animation', Technology: 'GSAP 3.14.2', Details: 'Tweening & Timelines' },
+  { Layer: 'Shaders', Technology: 'GLSL', Details: 'vite-plugin-glsl 1.3.1' },
+  { Layer: 'Debug UI', Technology: 'lil-gui 0.21', Details: 'Runtime controls (?mode=debug)' },
+  { Layer: 'Perf Monitor', Technology: 'three-perf 1.0.11', Details: 'FPS & draw calls' },
+  { Layer: 'Styles', Technology: 'Sass 1.97', Details: 'SCSS preprocessing' },
+]);
+
+Console.divider('═', 60);
+Console.info('LOADING', 'Preparing assets...');
+Console.divider('═', 60);
 
 const loader = document.getElementById('loader');
 const progressBar = document.getElementById('progress-bar');
@@ -155,6 +181,21 @@ resources.on('loaded', () => {
       // Expose game instance globally for settings access
       window.gameInstance = game;
 
+      // Log current game state to console
+      Console.logGameState(game);
+
+      // Listen for track changes
+      if (game.musicManager) {
+        game.musicManager.on('trackChanged', (track) => {
+          Console.logMusicChange('track', track.name);
+        });
+      }
+
+      // Listen for graphics quality changes
+      window.addEventListener('graphicsQualityChanged', (event) => {
+        Console.logGraphicsChange(event.detail.quality);
+      });
+
       shaderReveal.start();
 
       loader.classList.add('hidden');
@@ -228,6 +269,9 @@ seasonManager.onChange((newSeason, oldSeason) => {
     }
   });
 
+  // Log season change to console
+  Console.logSeasonChange(newSeason, oldSeason);
+
   window.dispatchEvent(
     new CustomEvent('seasonChange', {
       detail: {
@@ -282,6 +326,9 @@ environmentTimeManager.onChange((newTime, oldTime) => {
       button.classList.add('active');
     }
   });
+
+  // Log time change to console
+  Console.logTimeChange(newTime, oldTime);
 
   window.dispatchEvent(
     new CustomEvent('timeChange', {

@@ -1,3 +1,5 @@
+import { Console } from '../../utils/consoleStylish';
+
 export default class MusicControlUI {
   constructor(musicManager, toastManager) {
     this.musicManager = musicManager;
@@ -6,7 +8,7 @@ export default class MusicControlUI {
     this.icon = null;
     this.isMusicEnabled = true;
     this.wasPlayingBeforeHide = false;
-    
+
     this.init();
     this.setupVisibilityHandlers();
   }
@@ -14,7 +16,7 @@ export default class MusicControlUI {
   init() {
     this.button = document.getElementById('music-control');
     this.icon = this.button.querySelector('i');
-    
+
     if (!this.button || !this.icon) {
       console.error('Music control button not found in DOM');
       return;
@@ -43,13 +45,16 @@ export default class MusicControlUI {
 
   toggleMusic() {
     this.isMusicEnabled = !this.isMusicEnabled;
-    
+
+    // Log audio toggle to console
+    Console.logAudioToggle(this.isMusicEnabled);
+
     if (this.isMusicEnabled) {
       this.enableMusic();
     } else {
       this.disableMusic();
     }
-    
+
     this.updateButtonState();
   }
 
@@ -59,7 +64,7 @@ export default class MusicControlUI {
 
   disableMusic() {
     this.musicManager.pauseMusic();
-    
+
     this.toastManager.showToast('Music disabled', 'info', 2000);
   }
 
@@ -93,7 +98,7 @@ export default class MusicControlUI {
     window.addEventListener('beforeunload', this.handleBeforeUnload);
 
     window.addEventListener('pagehide', this.handlePageHide);
-    
+
     window.addEventListener('unload', this.handleUnload);
   }
 
@@ -158,8 +163,11 @@ export default class MusicControlUI {
     if (this.button) {
       this.button.removeEventListener('click', this.toggleMusic);
     }
-    
-    document.removeEventListener('visibilitychange', this.handleVisibilityChange);
+
+    document.removeEventListener(
+      'visibilitychange',
+      this.handleVisibilityChange
+    );
     window.removeEventListener('blur', this.handleWindowBlur);
     window.removeEventListener('focus', this.handleWindowFocus);
     window.removeEventListener('beforeunload', this.handleBeforeUnload);
