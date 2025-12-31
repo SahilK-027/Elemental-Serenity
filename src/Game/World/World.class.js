@@ -14,6 +14,8 @@ import FireFlies from './Components/FireFlies/FireFlies.class';
 import FallingLeaves from './Components/FallingLeaves/FallingLeaves.class';
 import Rain from './Components/Rain/Rain.class';
 import SnowFall from './Components/SnowFall/SnowFall.class';
+import { ParticleSystem } from './Systems/ParticleSystem.class';
+import Lightning from './Systems/Lightning.class';
 
 export default class World {
   constructor() {
@@ -37,6 +39,28 @@ export default class World {
     this.fireFlies = new FireFlies();
     this.rain = new Rain();
     this.snowFall = new SnowFall();
+    
+    // Initialize particle system and lightning
+    this.particleSystem = new ParticleSystem();
+    this.lightning = new Lightning(this.particleSystem);
+    
+    // Setup debug UI
+    if (this.debugGUI) {
+      this.setupDebugUI();
+    }
+  }
+
+  setupDebugUI() {
+    const lightningControls = {
+      strikeNow: () => this.lightning.manualStrike(),
+    };
+
+    this.debugGUI.add(
+      lightningControls,
+      'strikeNow',
+      { label: 'Strike Lightning' },
+      'Lightning'
+    );
   }
 
   update(delta, elapsedTime) {
@@ -48,5 +72,9 @@ export default class World {
     this.fireFlies.update(elapsedTime);
     this.rain.update(delta, elapsedTime);
     this.snowFall.update(delta, elapsedTime);
+    
+    // Update particle system and lightning
+    this.particleSystem.update(delta, elapsedTime);
+    this.lightning.update(delta);
   }
 }
