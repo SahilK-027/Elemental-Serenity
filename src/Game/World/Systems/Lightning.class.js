@@ -8,8 +8,10 @@ import {
   ParticleRendererParams,
 } from './ParticleSystem.class';
 import * as MATH from '../../Utils/Math.class';
-import lightningVertexShader from '../../../Shaders/Materials/fire/vertex.glsl';
-import lightningFragmentShader from '../../../Shaders/Materials/fire/fragment.glsl';
+import particleExplosionVertexShader from '../../../Shaders/Materials/fire/vertex.glsl';
+import particleExplosionFragmentShader from '../../../Shaders/Materials/fire/fragment.glsl';
+import lightningArcVertexShader from '../../../Shaders/Materials/lightning/vertex.glsl';
+import lightningArcFragmentShader from '../../../Shaders/Materials/lightning/fragment.glsl';
 
 export default class Lightning {
   #explosionMaterial = null;
@@ -34,7 +36,7 @@ export default class Lightning {
     this.elapsedTime = 0;
 
     // Camera shake parameters
-    this.cameraShakeDuration = 0.6;
+    this.cameraShakeDuration = 0.65;
     this.cameraShakeIntensity = 0.85;
     this.cameraShakeFrequency = 25; // Hz - higher = faster vibration
     this.cameraShakeDecay = 2.5; // Exponential decay curve
@@ -141,8 +143,8 @@ export default class Lightning {
     this._buildInterpolantsAndTextures();
 
     this.#explosionMaterial = new THREE.ShaderMaterial({
-      vertexShader: lightningVertexShader,
-      fragmentShader: lightningFragmentShader,
+      vertexShader: particleExplosionVertexShader,
+      fragmentShader: particleExplosionFragmentShader,
       uniforms: {
         uTime: { value: 0 },
         uParticleTexture: { value: particleTexture },
@@ -210,46 +212,8 @@ export default class Lightning {
         uColorB: { value: this.colorB },
         uIntensity: { value: this.intensity },
       },
-      vertexShader: `
-      varying vec2 vUv;
-      varying float vProgress;
-      
-      void main() {
-        vUv = uv;
-        // Use the Y position (0 to 1) as progress along the arc
-        vProgress = position.y / 15.0; // height is 15
-        
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-      }
-    `,
-      fragmentShader: `
-      uniform float uTime;
-      uniform float uStartTime;
-      uniform float uDuration;
-      uniform vec3 uColorA;
-      uniform vec3 uColorB;
-      uniform float uIntensity;
-      
-      varying vec2 vUv;
-      varying float vProgress;
-      
-      void main() {
-        // Calculate time progress (0 to 1)
-        float localTime = uTime - uStartTime;
-        float timeProgress = clamp(localTime / uDuration, 0.0, 1.0);
-        
-        // Fade out over time
-        float alpha = 1.0 - timeProgress;
-        
-        // Mix colors from bottom (colorA) to top (colorB)
-        vec3 mixedColor = mix(uColorA, uColorB, vProgress);
-        
-        // Brighten the color
-        vec3 finalColor = mixedColor * uIntensity;
-        
-        gl_FragColor = vec4(finalColor * 1.3, alpha);
-      }
-    `,
+      vertexShader: lightningArcVertexShader,
+      fragmentShader: lightningArcFragmentShader,
     });
 
     const mesh = new THREE.Mesh(geometry, material);
@@ -321,7 +285,8 @@ export default class Lightning {
         // Easing: ease-out cubic for smooth ramp-up, then exponential decay
         const easeIn = progress < 0.1 ? Math.pow(progress / 0.1, 2) : 1;
         const decayFactor = Math.pow(1 - progress, this.cameraShakeDecay);
-        const currentIntensity = this.cameraShakeIntensity * decayFactor * easeIn;
+        const currentIntensity =
+          this.cameraShakeIntensity * decayFactor * easeIn;
 
         // Multi-frequency noise for organic feel
         const time = elapsed * this.cameraShakeFrequency;
@@ -358,7 +323,7 @@ export default class Lightning {
     const arcMesh = this.createArcMesh(position);
     this.createExplosionParticles(position);
     this.triggerCameraShake(position);
-    
+
     // Trigger thunder sound through AmbientSoundManager if available
     if (this.game.ambientSoundManager) {
       this.game.ambientSoundManager.playThunderStrike();
@@ -380,9 +345,13 @@ export default class Lightning {
 
   strikeRandom() {
     // Generate random position within ground bounds
-    const x = this.groundBounds.minX + Math.random() * (this.groundBounds.maxX - this.groundBounds.minX);
-    const z = this.groundBounds.minZ + Math.random() * (this.groundBounds.maxZ - this.groundBounds.minZ);
-    
+    const x =
+      this.groundBounds.minX +
+      Math.random() * (this.groundBounds.maxX - this.groundBounds.minX);
+    const z =
+      this.groundBounds.minZ +
+      Math.random() * (this.groundBounds.maxZ - this.groundBounds.minZ);
+
     const position = new THREE.Vector3(x, 0, z);
     this.strike(position);
   }
@@ -417,10 +386,7 @@ export default class Lightning {
     }
 
     // Only trigger automatic lightning during rainy season
-    if (
-      this.isRainySeason() &&
-      this.elapsedTime >= this.nextLightningTime
-    ) {
+    if (this.isRainySeason() && this.elapsedTime >= this.nextLightningTime) {
       this.strikeRandom();
       this.elapsedTime = 0;
       this.nextLightningTime = this.getRandomDelay();
