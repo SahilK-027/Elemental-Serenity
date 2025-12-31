@@ -42,9 +42,13 @@ export default class Lightning {
     this.cameraShakeDecay = 2.5; // Exponential decay curve
 
     // Colors
-    this.colorA = new THREE.Color(0x0000ff);
-    this.colorB = new THREE.Color(0x00ffff);
+    this.colorA = new THREE.Color(0xff8117);
+    this.colorB = new THREE.Color(0xffd500);
     this.intensity = 3;
+
+    // Lighning colours
+    this.colorLightningA = new THREE.Color(0x0000ff);
+    this.colorLightningB = new THREE.Color(0x00ffff);
 
     // Particle configuration
     // Recommended explosion preset — faster, punchier, wider radius
@@ -78,7 +82,7 @@ export default class Lightning {
   _createParticleStops() {
     this.sizeStops = [
       { time: 0.0, value: 0.1 },
-      { time: 0.1, value: 1.0 },
+      { time: 0.1, value: 0.68 },
       { time: 1.0, value: 0.0 },
     ];
 
@@ -208,8 +212,8 @@ export default class Lightning {
         uTime: { value: startTime },
         uStartTime: { value: startTime },
         uDuration: { value: this.arc.duration },
-        uColorA: { value: this.colorA },
-        uColorB: { value: this.colorB },
+        uColorA: { value: this.colorLightningA },
+        uColorB: { value: this.colorLightningB },
         uIntensity: { value: this.intensity },
       },
       vertexShader: lightningArcVertexShader,

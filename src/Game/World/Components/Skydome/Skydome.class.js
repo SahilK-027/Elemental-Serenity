@@ -39,8 +39,8 @@ export default class Skydome {
           zenithColor: new THREE.Color(0.0, 0.35, 0.82),
           horizonColor: new THREE.Color(0.46, 0.74, 0.93),
           groundColor: new THREE.Color(0.04, 0.55, 0.65),
-          sunColor: new THREE.Color(0xffffff),
-          sunGlowColor: new THREE.Color(0.96, 0.38, 0),
+          sunColor: new THREE.Color(0.639, 0.494, 0.058),
+          sunGlowColor: new THREE.Color(1.0, 0.635, 0),
         },
         night: {
           zenithColor: new THREE.Color(0.02, 0.05, 0.15),
@@ -127,7 +127,7 @@ export default class Skydome {
         uGroundColor: { value: new THREE.Color(0.95, 0.9, 0.85) },
 
         // Sun properties - anime style
-        uSunPosition: { value: new THREE.Vector3(-0.846, -0.05, -1.0) }, // Normalized direction
+        uSunPosition: { value: new THREE.Vector3(-0.846, -0.085, -1.0) }, // Normalized direction
         uSunColor: { value: new THREE.Color(1.0, 0.95, 0.8) }, // Bright warm white core
         uSunGlowColor: { value: new THREE.Color(1.0, 0.7, 0.3) }, // Orange glow
         uSunSize: { value: 0.005 }, // Larger disc for anime style
@@ -137,11 +137,11 @@ export default class Skydome {
         uSunRaySharpness: { value: 8.0 }, // Sharpness of rays
 
         // Moon properties
-        uMoonPosition: { value: new THREE.Vector3(-0.4, -0.05, -1.0) }, // Normalized direction
+        uMoonPosition: { value: new THREE.Vector3(-0.5, -0.085, -1.0) }, // Normalized direction
         uMoonColor: { value: new THREE.Color(0.95, 0.95, 1.0) },
         uMoonGlowColor: { value: new THREE.Color(0.7, 0.8, 1.0) },
-        uMoonSize: { value: 0.022472 }, // Slightly larger for better visibility
-        uMoonGlowSize: { value: 0.061946 }, // Larger glow for layered effect
+        uMoonSize: { value: 0.0268665 }, // Slightly larger for better visibility
+        uMoonGlowSize: { value: 0.0266345 }, // Larger glow for layered effect
 
         // Stars properties - more stars, no twinkling
         uStarColor: { value: new THREE.Color(1.0, 1.0, 1.0) },

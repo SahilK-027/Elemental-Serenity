@@ -187,12 +187,6 @@ void main() {
                 );
 
             finalColor += sunContribution;
-
-            // Add subtle sky warming near sun (atmospheric scattering)
-            float sunDot = dot(direction, sunDir);
-            float warmth = max(0.0, sunDot);
-            warmth = warmth * warmth * warmth;
-            finalColor += vec3(1.0, 0.6, 0.3) * warmth * 0.08;
         }
     } else {
         // NIGHT TIME - Add moon and stars
