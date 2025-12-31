@@ -70,7 +70,6 @@ export default class Camera {
   }
 
   update() {
-    console.log(this.cameraInstance.position);
     this.controls.update();
   }
 }
