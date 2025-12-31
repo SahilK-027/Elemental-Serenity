@@ -10,6 +10,7 @@ import MusicManager from './Utils/MusicManager.class';
 import AmbientSoundManager from './Utils/AmbientSoundManager.class';
 import ToastManager from './UI/ToastManager.class';
 import MusicControlUI from './UI/MusicControlUI.class';
+import LightningButtonUI from './UI/LightningButtonUI.class';
 import EnvironmentTimeManager from './World/Managers/EnvironmentManager/EnvironmentManager.class';
 import SeasonManager from './World/Managers/SeasonManager/SeasonManager.class';
 
@@ -59,6 +60,9 @@ export default class Game {
     });
     
     this.world = new World();
+    
+    // Initialize lightning button UI (after world is created)
+    this.lightningButtonUI = new LightningButtonUI(this.world.lightning);
 
     // Start background music if enabled
     if (this.withMusic) {
@@ -253,6 +257,9 @@ export default class Game {
     }
     if (this.musicControlUI) {
       this.musicControlUI.destroy();
+    }
+    if (this.lightningButtonUI) {
+      this.lightningButtonUI.destroy();
     }
 
     this.scene.traverse((child) => {
