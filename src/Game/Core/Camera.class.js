@@ -40,9 +40,9 @@ export default class Camera {
     this.controls.enableDamping = true;
     this.controls.enablePan = false;
     this.controls.enableZoom = true;
-
-
-
+    this.controls.maxPolarAngle = Math.PI / 2.2;
+    this.controls.minPolarAngle = Math.PI / 4;
+    this.controls.maxDistance = this.baseMaxDistance;
   }
 
   updateCameraForAspectRatio() {
