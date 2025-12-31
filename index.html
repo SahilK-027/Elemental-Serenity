@@ -282,7 +282,8 @@
         display: none;
         opacity: 0;
         transform: scale(0.8) translateY(20px);
-        transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        transition: opacity 0.4s ease,
+          transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         width: 46px;
         height: 46px;
       }
@@ -307,37 +308,27 @@
         justify-content: center;
         font-size: 1.1rem;
         transition: all 0.3s ease;
-        box-shadow: 
-          0 0 20px rgba(0, 212, 255, 0.5),
-          0 0 40px rgba(0, 212, 255, 0.2),
-          0 4px 15px rgba(0, 0, 0, 0.4),
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.5),
+          0 0 40px rgba(0, 212, 255, 0.2), 0 4px 15px rgba(0, 0, 0, 0.4),
           inset 0 0 15px rgba(0, 212, 255, 0.1);
         z-index: 2;
       }
 
       .lightning-btn i {
         color: #00ffff;
-        text-shadow: 
-          0 0 10px #00ffff, 
-          0 0 20px #00d4ff, 
-          0 0 30px #0099ff,
+        text-shadow: 0 0 10px #00ffff, 0 0 20px #00d4ff, 0 0 30px #0099ff,
           0 0 40px rgba(0, 255, 255, 0.5);
         animation: bolt-pulse 1.5s ease-in-out infinite;
       }
 
       @keyframes bolt-pulse {
-        0%, 100% {
-          text-shadow: 
-            0 0 10px #00ffff, 
-            0 0 20px #00d4ff, 
-            0 0 30px #0099ff;
+        0%,
+        100% {
+          text-shadow: 0 0 10px #00ffff, 0 0 20px #00d4ff, 0 0 30px #0099ff;
           transform: scale(1);
         }
         50% {
-          text-shadow: 
-            0 0 15px #ffffff, 
-            0 0 25px #00ffff, 
-            0 0 40px #00d4ff,
+          text-shadow: 0 0 15px #ffffff, 0 0 25px #00ffff, 0 0 40px #00d4ff,
             0 0 60px #0099ff;
           transform: scale(1.15);
         }
@@ -346,10 +337,8 @@
       .lightning-btn:hover {
         background: linear-gradient(145deg, #0a1020, #141e38);
         border-color: #00ffff;
-        box-shadow: 
-          0 0 30px rgba(0, 255, 255, 0.6),
-          0 0 50px rgba(0, 212, 255, 0.3),
-          0 6px 20px rgba(0, 0, 0, 0.5),
+        box-shadow: 0 0 30px rgba(0, 255, 255, 0.6),
+          0 0 50px rgba(0, 212, 255, 0.3), 0 6px 20px rgba(0, 0, 0, 0.5),
           inset 0 0 20px rgba(0, 255, 255, 0.15);
         transform: translateY(-2px);
       }
@@ -387,28 +376,32 @@
       .arc-1 {
         border-top-color: #00ffff;
         border-right-color: #00d4ff;
-        filter: drop-shadow(0 0 4px #00ffff) drop-shadow(0 0 8px #00d4ff) drop-shadow(0 0 15px #0099ff);
+        filter: drop-shadow(0 0 4px #00ffff) drop-shadow(0 0 8px #00d4ff)
+          drop-shadow(0 0 15px #0099ff);
         animation-delay: 0s !important;
       }
 
       .arc-2 {
         border-bottom-color: #00b4ff;
         border-left-color: #0088ff;
-        filter: drop-shadow(0 0 4px #00b4ff) drop-shadow(0 0 8px #0088ff) drop-shadow(0 0 15px #0066ff);
+        filter: drop-shadow(0 0 4px #00b4ff) drop-shadow(0 0 8px #0088ff)
+          drop-shadow(0 0 15px #0066ff);
         animation-delay: 0.5s !important;
       }
 
       .arc-3 {
         border-top-color: #00d4ff;
         border-left-color: #00ffff;
-        filter: drop-shadow(0 0 4px #00ffff) drop-shadow(0 0 8px #00d4ff) drop-shadow(0 0 15px #0099ff);
+        filter: drop-shadow(0 0 4px #00ffff) drop-shadow(0 0 8px #00d4ff)
+          drop-shadow(0 0 15px #0099ff);
         animation-delay: 1s !important;
       }
 
       .arc-4 {
         border-bottom-color: #0088ff;
         border-right-color: #00b4ff;
-        filter: drop-shadow(0 0 4px #00b4ff) drop-shadow(0 0 8px #0088ff) drop-shadow(0 0 15px #0066ff);
+        filter: drop-shadow(0 0 4px #00b4ff) drop-shadow(0 0 8px #0088ff)
+          drop-shadow(0 0 15px #0066ff);
         animation-delay: 1.5s !important;
       }
 
@@ -437,20 +430,15 @@
       .lightning-btn-wrapper.striking .lightning-btn {
         background: linear-gradient(145deg, #1a1a3a, #2a2a5a);
         border-color: #ffffff;
-        box-shadow: 
-          0 0 50px rgba(0, 255, 255, 1),
-          0 0 80px rgba(0, 180, 255, 0.8),
-          0 0 100px rgba(0, 212, 255, 0.6),
+        box-shadow: 0 0 50px rgba(0, 255, 255, 1),
+          0 0 80px rgba(0, 180, 255, 0.8), 0 0 100px rgba(0, 212, 255, 0.6),
           inset 0 0 30px rgba(255, 255, 255, 0.3);
       }
 
       .lightning-btn-wrapper.striking .lightning-btn i {
         animation: none;
         color: #ffffff;
-        text-shadow: 
-          0 0 20px #ffffff, 
-          0 0 40px #00ffff, 
-          0 0 60px #00d4ff,
+        text-shadow: 0 0 20px #ffffff, 0 0 40px #00ffff, 0 0 60px #00d4ff,
           0 0 80px #0088ff;
         transform: scale(1.3);
       }
@@ -1436,7 +1424,9 @@
                     color: rgba(0, 0, 0, 0.7);
                   "
                 >
-                  <strong><i class="fa-brands fa-github" style="font-size: 18px;"></i></strong>
+                  <strong
+                    ><i class="fa-brands fa-github" style="font-size: 18px"></i
+                  ></strong>
                   <a
                     href="https://github.com/SahilK-027/Elemental-Serenity"
                     target="_blank"
@@ -2134,21 +2124,11 @@
             const isMusicEnabled =
               window.gameInstance.musicControlUI.isMusicEnabled;
 
-            console.log('🎵 Syncing volume with music state:', {
-              isMusicEnabled,
-              currentVolume: this.settings.volume,
-              previousVolume: this.previousVolume,
-            });
-
             if (!isMusicEnabled) {
               // Music is disabled, set volume UI to 0 but remember the actual volume
               // Only store previousVolume if it's not already 0 (to avoid storing 0 as previous)
               if (this.settings.volume > 0) {
                 this.previousVolume = this.settings.volume;
-                console.log(
-                  '🔇 Music disabled, storing previous volume:',
-                  this.previousVolume
-                );
               }
               this.settings.volume = 0;
               this.volumeSlider.value = 0;
@@ -2157,11 +2137,6 @@
               // Music is enabled, restore previous volume or default to 50%
               const volumeToRestore =
                 this.previousVolume !== undefined ? this.previousVolume : 50;
-
-              console.log(
-                '🔊 Music enabled, restoring volume to:',
-                volumeToRestore
-              );
 
               this.settings.volume = volumeToRestore;
               this.volumeSlider.value = volumeToRestore;
@@ -2211,10 +2186,6 @@
             if (antialiasToggle) {
               antialiasToggle.checked = currentAntialias;
             }
-
-            console.log(
-              `Initialized antialiasing toggle to: ${currentAntialias}`
-            );
           }
         }
 
@@ -2244,13 +2215,6 @@
           // This will be called by the main game to update audio volume
           if (window.gameInstance && window.gameInstance.audioManager) {
             window.gameInstance.audioManager.setMasterVolume(volume);
-
-            // Don't interfere with music control when user is manually adjusting volume
-            // The music control UI should handle its own state
-
-            console.log(
-              `Master volume changed to: ${Math.round(volume * 100)}%`
-            );
           }
         }
 
@@ -2297,11 +2261,6 @@
               }
             }
 
-            console.log(
-              `Graphics quality changed to: ${quality}`,
-              gameSettings
-            );
-
             // Emit graphics quality change event
             const graphicsChangeEvent = new CustomEvent(
               'graphicsQualityChanged',
@@ -2318,10 +2277,8 @@
           try {
             const saved = localStorage.getItem('gameSettings');
             const settings = saved ? JSON.parse(saved) : {};
-            console.log('📁 Loaded settings from localStorage:', settings);
             return settings;
           } catch (error) {
-            console.warn('Failed to load settings from localStorage:', error);
             return {};
           }
         }
@@ -2504,11 +2461,6 @@
             currentSettings.pixelRatioCap.toString()
           );
         }
-
-        // Add a test listener to verify the event system works
-        window.addEventListener('graphicsQualityChanged', (event) => {
-          console.log('🎮 Graphics Quality Event Received:', event.detail);
-        });
 
         // Trigger initial graphics quality event when game loads
         setTimeout(() => {

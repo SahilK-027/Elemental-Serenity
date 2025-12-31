@@ -105,10 +105,6 @@ export default class AmbientSoundManager extends EventEmitter {
   }
 
   handleAmbientVisibilityChange() {
-    console.log(
-      'Ambient visibility change:',
-      document.hidden ? 'hidden' : 'visible'
-    );
     if (document.hidden) {
       // Page is hidden - pause ambient sounds if music is enabled
       if (
@@ -116,7 +112,6 @@ export default class AmbientSoundManager extends EventEmitter {
         this.musicControlUI.isMusicEnabled &&
         this.hasActiveAmbientSounds()
       ) {
-        console.log('Pausing ambient sounds - tab hidden');
         this.wasAmbientPlayingBeforeHide = true;
         this.pauseAmbientSounds();
       }
@@ -127,7 +122,6 @@ export default class AmbientSoundManager extends EventEmitter {
         this.musicControlUI.isMusicEnabled &&
         this.wasAmbientPlayingBeforeHide
       ) {
-        console.log('Resuming ambient sounds - tab visible');
         this.wasAmbientPlayingBeforeHide = false;
         // Small delay to ensure smooth transition
         setTimeout(() => {
@@ -138,26 +132,22 @@ export default class AmbientSoundManager extends EventEmitter {
   }
 
   handleAmbientWindowBlur() {
-    console.log('Ambient window blur');
     if (
       this.musicControlUI &&
       this.musicControlUI.isMusicEnabled &&
       this.hasActiveAmbientSounds()
     ) {
-      console.log('Pausing ambient sounds - window blur');
       this.wasAmbientPlayingBeforeHide = true;
       this.pauseAmbientSounds();
     }
   }
 
   handleAmbientWindowFocus() {
-    console.log('Ambient window focus');
     if (
       this.musicControlUI &&
       this.musicControlUI.isMusicEnabled &&
       this.wasAmbientPlayingBeforeHide
     ) {
-      console.log('Resuming ambient sounds - window focus');
       this.wasAmbientPlayingBeforeHide = false;
       setTimeout(() => {
         this.resumeAmbientSounds();
@@ -288,18 +278,24 @@ export default class AmbientSoundManager extends EventEmitter {
   handleFire(season, timeOfDay) {
     // When: all seasons except rainy (day or night)
     const shouldPlay = season !== 'rainy';
-    
+
     if (shouldPlay) {
-      this.playContinuousSoundWithDistance('fireBurningSound', this.config.firePosition);
+      this.playContinuousSoundWithDistance(
+        'fireBurningSound',
+        this.config.firePosition
+      );
     }
   }
 
   handleLakeWaves(season, timeOfDay) {
     // When: all seasons (day or night)
     const shouldPlay = true;
-    
+
     if (shouldPlay) {
-      this.playContinuousSoundWithDistance('lakeWavesSound', this.config.lakePosition);
+      this.playContinuousSoundWithDistance(
+        'lakeWavesSound',
+        this.config.lakePosition
+      );
     }
   }
 
@@ -371,12 +367,15 @@ export default class AmbientSoundManager extends EventEmitter {
   calculateDistanceBasedVolume(soundPosition) {
     const cameraPosition = this.audioManager.listener.parent.position;
     const distance = cameraPosition.distanceTo(soundPosition);
-    
+
     // Calculate volume based on distance (inverse relationship)
     // At distance 0: full volume, at maxDistance: 0 volume
-    const normalizedDistance = Math.min(distance / this.config.maxDistance, 1.0);
+    const normalizedDistance = Math.min(
+      distance / this.config.maxDistance,
+      1.0
+    );
     const volume = (1.0 - normalizedDistance) * this.config.baseVolume * 0.7;
-    
+
     return Math.max(volume, 0); // Ensure volume doesn't go negative
   }
 
@@ -502,7 +501,6 @@ export default class AmbientSoundManager extends EventEmitter {
   }
 
   pauseAmbientSounds() {
-    console.log('Pausing ambient sounds - stopping all sounds and timers');
     this.isAmbientSoundsPaused = true;
     // Stop all ambient sounds using AudioManager's method
     this.audioManager.stopAllAmbientSounds();
@@ -516,9 +514,6 @@ export default class AmbientSoundManager extends EventEmitter {
   }
 
   resumeAmbientSounds() {
-    console.log(
-      'Resuming ambient sounds - updating based on current conditions'
-    );
     this.isAmbientSoundsPaused = false;
     // Resume ambient sounds based on current conditions
     this.updateAmbientSounds();

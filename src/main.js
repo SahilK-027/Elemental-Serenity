@@ -197,9 +197,9 @@ const handleSeasonToggle = (event) => {
   const clickedButton = event.currentTarget;
   const uiSeason = clickedButton.dataset.season;
   const managerSeason = seasonMapping[uiSeason];
-  
+
   const currentSeason = seasonManager.currentSeason;
-  
+
   if (currentSeason === managerSeason) {
     return;
   }
@@ -213,8 +213,6 @@ const handleSeasonToggle = (event) => {
   seasonManager.setSeason(managerSeason);
 
   toastManager.showSeasonToast(managerSeason);
-
-  console.log(`Season changed to: ${managerSeason} (UI: ${uiSeason})`);
 };
 
 seasonButtons.forEach((button) => {
@@ -222,8 +220,6 @@ seasonButtons.forEach((button) => {
 });
 
 seasonManager.onChange((newSeason, oldSeason) => {
-  console.log(`Season Manager: Changed from ${oldSeason} to ${newSeason}`);
-
   const uiSeason = reverseSeasonMapping[newSeason];
   seasonButtons.forEach((button) => {
     button.classList.remove('active');
@@ -246,14 +242,10 @@ seasonManager.onChange((newSeason, oldSeason) => {
 const initializeSeasonUI = () => {
   const currentSeason = seasonManager.currentSeason;
   const uiSeason = reverseSeasonMapping[currentSeason];
-  console.log(
-    `Initializing season UI: Manager season = ${currentSeason}, UI season = ${uiSeason}`
-  );
   seasonButtons.forEach((button) => {
     button.classList.remove('active');
     if (button.dataset.season === uiSeason) {
       button.classList.add('active');
-      console.log(`Set ${uiSeason} button as active`);
     }
   });
 };
@@ -261,9 +253,9 @@ const initializeSeasonUI = () => {
 const handleDayNightToggle = (event) => {
   const clickedButton = event.currentTarget;
   const selectedTime = clickedButton.dataset.time;
-  
+
   const currentTime = environmentTimeManager.envTime;
-  
+
   if (currentTime === selectedTime) {
     return;
   }
@@ -277,8 +269,6 @@ const handleDayNightToggle = (event) => {
   environmentTimeManager.setTime(selectedTime);
 
   toastManager.showDayNightToast(selectedTime);
-
-  console.log(`Time changed to: ${selectedTime}`);
 };
 
 dayNightButtons.forEach((button) => {
@@ -286,10 +276,6 @@ dayNightButtons.forEach((button) => {
 });
 
 environmentTimeManager.onChange((newTime, oldTime) => {
-  console.log(
-    `Environment Time Manager: Changed from ${oldTime} to ${newTime}`
-  );
-
   dayNightButtons.forEach((button) => {
     button.classList.remove('active');
     if (button.dataset.time === newTime) {
@@ -309,12 +295,10 @@ environmentTimeManager.onChange((newTime, oldTime) => {
 
 const initializeDayNightUI = () => {
   const currentTime = environmentTimeManager.envTime;
-  console.log(`Initializing day/night UI: Current time = ${currentTime}`);
   dayNightButtons.forEach((button) => {
     button.classList.remove('active');
     if (button.dataset.time === currentTime) {
       button.classList.add('active');
-      console.log(`Set ${currentTime} button as active`);
     }
   });
 };

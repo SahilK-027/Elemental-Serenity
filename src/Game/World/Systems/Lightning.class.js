@@ -224,8 +224,6 @@ export default class Lightning {
     mesh.position.copy(position);
     mesh.frustumCulled = false;
 
-    console.log('Lightning arc created at', position);
-
     this.scene.add(mesh);
     this.#activeLightningArcs.push(mesh);
 

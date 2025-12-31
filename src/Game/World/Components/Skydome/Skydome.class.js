@@ -162,10 +162,6 @@ export default class Skydome {
     this.skydome = new THREE.Mesh(geometry, this.skydomeMaterial);
     this.scene.add(this.skydome);
 
-    console.log(
-      'Shader-only skydome created with enhanced stars and textured moon'
-    );
-
     // Initialize GUI after shader material is ready
     if (this.game.isDebugMode) {
       this.initGUI();
@@ -184,12 +180,6 @@ export default class Skydome {
 
   updateSkyColors() {
     const colors = this.skyColors[this.currentSeason][this.envTime];
-
-    console.log('Updating sky colors:', {
-      season: this.currentSeason,
-      time: this.envTime,
-      colors: colors,
-    });
 
     if (this.skydomeMaterial && this.skydomeMaterial.uniforms) {
       // Update sky gradient colors
@@ -221,8 +211,6 @@ export default class Skydome {
         );
         this.skydomeMaterial.uniforms.uStarColor.value.copy(colors.starColor);
       }
-
-      console.log('Sky uniforms updated');
     }
   }
 

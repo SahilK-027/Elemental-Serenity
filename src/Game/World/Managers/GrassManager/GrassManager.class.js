@@ -462,7 +462,6 @@ export class GrassManager {
 
   // Method to regenerate grass with new density settings
   regenerateGrass() {
-    console.log(`Regenerating grass with density: ${this.GRASS_PER_TILE}`);
     
     // Remove existing grass
     if (this.grassInstancedMesh) {

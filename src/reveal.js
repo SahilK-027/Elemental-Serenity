@@ -215,11 +215,9 @@ export default class ShaderReveal {
 
   start() {
     if (this.hasStarted) {
-      console.log('Shader reveal already started, ignoring duplicate call');
       return;
     }
 
-    console.log('Starting unified reveal experience');
     this.hasStarted = true;
 
     this.createTextOverlay();

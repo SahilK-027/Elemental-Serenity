@@ -47,7 +47,7 @@ export default class World {
     // Calculate ground bounds from Ground dimensions
     const worldSize = this.ground.WORLD_SIZE;
     const halfSize = worldSize / 2 - 3;
-    console.log(halfSize);
+
     const groundBounds = {
       minX: -halfSize,
       maxX: halfSize,
