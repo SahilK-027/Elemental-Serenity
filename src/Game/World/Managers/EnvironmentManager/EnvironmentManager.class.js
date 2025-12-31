@@ -1,7 +1,7 @@
 import EventEmitter from '../../../Utils/EventEmitter.class';
 
 export default class EnvironmentTimeManager extends EventEmitter {
-  constructor(initialTime = 'night') {
+  constructor(initialTime = null) {
     super();
 
     // Singleton pattern
@@ -10,13 +10,23 @@ export default class EnvironmentTimeManager extends EventEmitter {
     }
     EnvironmentTimeManager.instance = this;
 
-    this._envTime = initialTime;
     this.availableTimes = ['day', 'night'];
+    this._envTime = initialTime ?? this._getTimeFromLocalHour();
+  }
+
+  /**
+   * Determines day/night based on user's local time
+   * Day: 6:00 AM (6) to 5:59 PM (17)
+   * Night: 6:00 PM (18) to 5:59 AM (5)
+   */
+  _getTimeFromLocalHour() {
+    const hour = new Date().getHours();
+    return hour >= 6 && hour < 18 ? 'day' : 'night';
   }
 
   static getInstance() {
     if (!EnvironmentTimeManager.instance) {
-      EnvironmentTimeManager.instance = new EnvironmentTimeManager('day');
+      EnvironmentTimeManager.instance = new EnvironmentTimeManager();
     }
     return EnvironmentTimeManager.instance;
   }
@@ -71,6 +81,6 @@ export default class EnvironmentTimeManager extends EventEmitter {
   }
 
   reset() {
-    this.envTime = 'night';
+    this.envTime = this._getTimeFromLocalHour();
   }
 }
