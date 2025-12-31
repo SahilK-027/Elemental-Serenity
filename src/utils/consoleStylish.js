@@ -127,7 +127,7 @@ function banner({
 
   // GitHub link with enhanced badge style
   console.log(
-    `%c  %c Code on GitHub %c ${github} %c →`,
+    `%c%c Code on GitHub %c ${github} %c →`,
     css({
       padding: '4px',
     }),

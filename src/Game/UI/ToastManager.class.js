@@ -14,14 +14,14 @@ export default class ToastManager {
     this.toastContainer.id = 'toast-container';
     this.toastContainer.style.cssText = `
       position: fixed;
-      top: 20px;
-      left: 20px;
+      top: 24px;
+      left: 24px;
       z-index: 10000;
       pointer-events: none;
       font-family: 'Inter', sans-serif;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
     `;
 
     if (document.body) {
@@ -33,109 +33,362 @@ export default class ToastManager {
     }
   }
 
+  // Base toast styles
+  getBaseToastStyles() {
+    return `
+      background: linear-gradient(145deg, #f5f0ec, #ede8e4);
+      color: rgba(0, 0, 0, 0.9);
+      padding: 14px 18px;
+      border-radius: 14px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transform: translateX(-120%) scale(0.9);
+      transition: all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+      opacity: 0;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        0 2px 8px rgba(0, 0, 0, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      max-width: 280px;
+      min-width: 200px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+    `;
+  }
+
+  getIconContainerStyles(gradient) {
+    return `
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: ${gradient};
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    `;
+  }
+
+  getIconStyles() {
+    return `
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.95);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    `;
+  }
+
+  getLabelStyles() {
+    return `
+      font-size: 0.7rem;
+      color: rgba(0, 0, 0, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      margin-bottom: 3px;
+    `;
+  }
+
+  getTitleStyles() {
+    return `
+      font-size: 0.88rem;
+      color: rgba(0, 0, 0, 0.85);
+      font-weight: 600;
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    `;
+  }
+
   showMusicToast(trackName) {
     this.clearMusicToasts();
 
     const toast = document.createElement('div');
     toast.className = 'music-toast';
+    toast.style.cssText = this.getBaseToastStyles();
 
-    toast.style.cssText = `
-      background: #ede8e4;
-      color: rgba(0, 0, 0, 0.9);
-      padding: 16px 20px;
-      border-radius: 8px;
-      font-size: 0.875rem;
-      font-weight: 500;
-      letter-spacing: 0.025em;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transform: translateX(-320px);
-      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-      opacity: 0;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-      box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.15),
-        0 2px 8px rgba(0, 0, 0, 0.1);
-      max-width: 240px;
-      min-width: 170px;
-      position: relative;
-      overflow: hidden;
-    `;
-
+    const iconGradient = 'linear-gradient(145deg, #8b5cf6, #7c3aed)';
+    
     const iconContainer = document.createElement('div');
-    iconContainer.style.cssText = `
-      width: 36px;
-      height: 36px;
-      border-radius: 6px;
-      background: linear-gradient(135deg, #7444ff 0%, #522bc7 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-    `;
+    iconContainer.style.cssText = this.getIconContainerStyles(iconGradient);
 
     const icon = document.createElement('i');
     icon.className = 'fas fa-music';
-    icon.style.cssText = `
-      font-size: 0.875rem;
-      color: rgba(255, 255, 255, 0.95);
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    `;
-
+    icon.style.cssText = this.getIconStyles();
     iconContainer.appendChild(icon);
 
     const textContent = document.createElement('div');
     textContent.style.cssText = `
       display: flex;
       flex-direction: column;
-      gap: 4px;
       flex: 1;
       min-width: 0;
     `;
 
     const label = document.createElement('div');
     label.textContent = 'Now Playing';
-    label.style.cssText = `
-      font-size: 0.75rem;
-      color: rgba(0, 0, 0, 0.6);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      font-weight: 600;
-      margin-bottom: 2px;
-    `;
+    label.style.cssText = this.getLabelStyles();
 
     const title = document.createElement('div');
     title.textContent = trackName;
-    title.style.cssText = `
-      font-size: 0.9rem;
-      color: rgba(0, 0, 0, 0.9);
-      font-weight: 500;
-      line-height: 1.3;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    `;
+    title.style.cssText = this.getTitleStyles();
 
     const progressBar = document.createElement('div');
     progressBar.style.cssText = `
       position: absolute;
       bottom: 0;
       left: 0;
-      height: 2px;
-      background: linear-gradient(90deg, #7444ff 0%, #522bc7 100%);
+      height: 3px;
+      background: linear-gradient(90deg, #8b5cf6, #7c3aed);
       width: 0%;
       transition: width 4s linear;
+      border-radius: 0 0 0 14px;
     `;
 
     textContent.appendChild(label);
     textContent.appendChild(title);
-
     toast.appendChild(iconContainer);
     toast.appendChild(textContent);
     toast.appendChild(progressBar);
 
+    this.insertToast(toast);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        toast.style.transform = 'translateX(0) scale(1)';
+        toast.style.opacity = '1';
+
+        setTimeout(() => {
+          progressBar.style.width = '100%';
+        }, 100);
+      });
+    });
+
+    setTimeout(() => {
+      this.hideToast(toast);
+    }, 4000);
+
+    return toast;
+  }
+
+  showDayNightToast(timeOfDay) {
+    const toast = document.createElement('div');
+    toast.className = 'daynight-toast';
+
+    let icon, iconGradient, displayName;
+    if (timeOfDay === 'day') {
+      icon = 'fas fa-sun';
+      iconGradient = 'linear-gradient(145deg, #fbbf24, #f59e0b)';
+      displayName = 'Daytime';
+    } else {
+      icon = 'fas fa-moon';
+      iconGradient = 'linear-gradient(145deg, #818cf8, #6366f1)';
+      displayName = 'Nighttime';
+    }
+
+    toast.style.cssText = this.getBaseToastStyles();
+
+    const iconContainer = document.createElement('div');
+    iconContainer.style.cssText = this.getIconContainerStyles(iconGradient);
+
+    const iconElement = document.createElement('i');
+    iconElement.className = icon;
+    iconElement.style.cssText = this.getIconStyles();
+    iconContainer.appendChild(iconElement);
+
+    const textContent = document.createElement('div');
+    textContent.style.cssText = `
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 0;
+    `;
+
+    const label = document.createElement('div');
+    label.textContent = 'Time Changed';
+    label.style.cssText = this.getLabelStyles();
+
+    const title = document.createElement('div');
+    title.textContent = displayName;
+    title.style.cssText = this.getTitleStyles();
+
+    textContent.appendChild(label);
+    textContent.appendChild(title);
+    toast.appendChild(iconContainer);
+    toast.appendChild(textContent);
+
+    this.insertToast(toast);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        toast.style.transform = 'translateX(0) scale(1)';
+        toast.style.opacity = '1';
+      });
+    });
+
+    setTimeout(() => {
+      this.hideToast(toast);
+    }, 3000);
+
+    return toast;
+  }
+
+  showSeasonToast(season) {
+    const toast = document.createElement('div');
+    toast.className = 'season-toast';
+
+    let icon, iconGradient, displayName;
+    switch (season) {
+      case 'spring':
+        icon = 'fas fa-seedling';
+        iconGradient = 'linear-gradient(145deg, #34d399, #10b981)';
+        displayName = 'Blooming Spring';
+        break;
+      case 'summer':
+        icon = 'fas fa-sun';
+        iconGradient = 'linear-gradient(145deg, #fbbf24, #f59e0b)';
+        displayName = 'Sunny Summer';
+        break;
+      case 'autumn':
+      case 'fall':
+        icon = 'fa-brands fa-canadian-maple-leaf';
+        iconGradient = 'linear-gradient(145deg, #fb923c, #f97316)';
+        displayName = 'Cozy Autumn';
+        break;
+      case 'winter':
+        icon = 'fas fa-snowflake';
+        iconGradient = 'linear-gradient(145deg, #60a5fa, #3b82f6)';
+        displayName = 'Frosty Winter';
+        break;
+      default:
+        icon = 'fas fa-cloud-rain';
+        iconGradient = 'linear-gradient(145deg, #9ca3af, #6b7280)';
+        displayName = 'Thundering Rain';
+    }
+
+    toast.style.cssText = this.getBaseToastStyles();
+
+    const iconContainer = document.createElement('div');
+    iconContainer.style.cssText = this.getIconContainerStyles(iconGradient);
+
+    const iconElement = document.createElement('i');
+    iconElement.className = icon;
+    iconElement.style.cssText = this.getIconStyles();
+    iconContainer.appendChild(iconElement);
+
+    const textContent = document.createElement('div');
+    textContent.style.cssText = `
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 0;
+    `;
+
+    const label = document.createElement('div');
+    label.textContent = 'Season Changed';
+    label.style.cssText = this.getLabelStyles();
+
+    const title = document.createElement('div');
+    title.textContent = displayName;
+    title.style.cssText = this.getTitleStyles();
+
+    textContent.appendChild(label);
+    textContent.appendChild(title);
+    toast.appendChild(iconContainer);
+    toast.appendChild(textContent);
+
+    this.insertToast(toast);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        toast.style.transform = 'translateX(0) scale(1)';
+        toast.style.opacity = '1';
+      });
+    });
+
+    setTimeout(() => {
+      this.hideToast(toast);
+    }, 3000);
+
+    return toast;
+  }
+
+  showToast(message, type = 'info', duration = 3000) {
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+
+    let iconGradient, icon;
+    const isMusicDisabled = message === 'Music disabled';
+
+    if (isMusicDisabled) {
+      iconGradient = 'linear-gradient(145deg, #374151, #1f2937)';
+      icon = 'fas fa-volume-mute';
+    } else {
+      switch (type) {
+        case 'success':
+          iconGradient = 'linear-gradient(145deg, #34d399, #10b981)';
+          icon = 'fas fa-check';
+          break;
+        case 'error':
+          iconGradient = 'linear-gradient(145deg, #f87171, #ef4444)';
+          icon = 'fas fa-exclamation';
+          break;
+        case 'warning':
+          iconGradient = 'linear-gradient(145deg, #fbbf24, #f59e0b)';
+          icon = 'fas fa-exclamation-triangle';
+          break;
+        default:
+          iconGradient = 'linear-gradient(145deg, #60a5fa, #3b82f6)';
+          icon = 'fas fa-info';
+      }
+    }
+
+    toast.style.cssText = this.getBaseToastStyles();
+
+    const iconContainer = document.createElement('div');
+    iconContainer.style.cssText = this.getIconContainerStyles(iconGradient);
+
+    const iconElement = document.createElement('i');
+    iconElement.className = icon;
+    iconElement.style.cssText = this.getIconStyles();
+    iconContainer.appendChild(iconElement);
+
+    const textContent = document.createElement('div');
+    textContent.textContent = message;
+    textContent.style.cssText = `
+      font-size: 0.85rem;
+      color: rgba(0, 0, 0, 0.8);
+      font-weight: 500;
+      flex: 1;
+    `;
+
+    toast.appendChild(iconContainer);
+    toast.appendChild(textContent);
+
+    this.insertToast(toast);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        toast.style.transform = 'translateX(0) scale(1)';
+        toast.style.opacity = '1';
+      });
+    });
+
+    setTimeout(() => {
+      this.hideToast(toast);
+    }, duration);
+
+    return toast;
+  }
+
+  insertToast(toast) {
     const existingToasts = Array.from(this.toastContainer.children);
     let insertAfter = null;
 
@@ -157,31 +410,13 @@ export default class ToastManager {
     }
 
     this.activeToasts.push(toast);
-
-    toast.offsetHeight;
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        toast.style.transform = 'translateX(0)';
-        toast.style.opacity = '1';
-
-        setTimeout(() => {
-          progressBar.style.width = '100%';
-        }, 100);
-      });
-    });
-
-    setTimeout(() => {
-      this.hideToast(toast);
-    }, 4000);
-
-    return toast;
+    toast.offsetHeight; // Force reflow
   }
 
   hideToast(toast) {
     if (!toast || !toast.parentNode) return;
 
-    toast.style.transform = 'translateX(-320px)';
+    toast.style.transform = 'translateX(-120%) scale(0.9)';
     toast.style.opacity = '0';
 
     setTimeout(() => {
@@ -189,261 +424,20 @@ export default class ToastManager {
         toast.parentNode.removeChild(toast);
       }
       this.activeToasts = this.activeToasts.filter((t) => t !== toast);
-    }, 500);
+    }, 450);
   }
 
   clearMusicToasts() {
     const musicToasts = this.activeToasts.filter(
       (toast) => toast.className === 'music-toast'
     );
-
     musicToasts.forEach((toast) => this.hideToast(toast));
-  }
-
-  showDayNightToast(timeOfDay) {
-    const toast = document.createElement('div');
-    toast.className = 'daynight-toast';
-
-    let icon, iconGradient;
-    if (timeOfDay === 'day') {
-      icon = 'fas fa-sun';
-      iconGradient = 'linear-gradient(135deg, #ffa726 0%, #ff9800 100%)';
-    } else {
-      icon = 'fas fa-moon';
-      iconGradient = 'linear-gradient(135deg, #5c6bc0 0%, #3f51b5 100%)';
-    }
-
-    toast.style.cssText = `
-      background: #ede8e4;
-      color: rgba(0, 0, 0, 0.9);
-      padding: 16px 20px;
-      border-radius: 8px;
-      font-size: 0.875rem;
-      font-weight: 500;
-      letter-spacing: 0.025em;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transform: translateX(-320px);
-      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-      opacity: 0;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-      box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.15),
-        0 2px 8px rgba(0, 0, 0, 0.1);
-      max-width: 240px;
-      min-width: 170px;
-      position: relative;
-      overflow: hidden;
-    `;
-
-    const iconContainer = document.createElement('div');
-    iconContainer.style.cssText = `
-      width: 36px;
-      height: 36px;
-      border-radius: 6px;
-      background: ${iconGradient};
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-    `;
-
-    const iconElement = document.createElement('i');
-    iconElement.className = icon;
-    iconElement.style.cssText = `
-      font-size: 0.875rem;
-      color: rgba(255, 255, 255, 0.95);
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    `;
-
-    iconContainer.appendChild(iconElement);
-
-    const textContent = document.createElement('div');
-    textContent.style.cssText = `
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      flex: 1;
-      min-width: 0;
-    `;
-
-    const label = document.createElement('div');
-    label.textContent = 'Time Changed';
-    label.style.cssText = `
-      font-size: 0.75rem;
-      color: rgba(0, 0, 0, 0.6);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      font-weight: 600;
-      margin-bottom: 2px;
-    `;
-
-    const title = document.createElement('div');
-    title.textContent = timeOfDay === 'day' ? 'Daytime' : 'Nighttime';
-    title.style.cssText = `
-      font-size: 0.9rem;
-      color: rgba(0, 0, 0, 0.9);
-      font-weight: 500;
-      line-height: 1.3;
-    `;
-
-    textContent.appendChild(label);
-    textContent.appendChild(title);
-    toast.appendChild(iconContainer);
-    toast.appendChild(textContent);
-
-    this.toastContainer.appendChild(toast);
-    this.activeToasts.push(toast);
-
-    toast.offsetHeight;
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        toast.style.transform = 'translateX(0)';
-        toast.style.opacity = '1';
-      });
-    });
-
-    setTimeout(() => {
-      this.hideToast(toast);
-    }, 3000);
-
-    return toast;
-  }
-
-  showSeasonToast(season) {
-    const toast = document.createElement('div');
-    toast.className = 'season-toast';
-
-    let icon, iconGradient;
-    switch (season) {
-      case 'spring':
-        icon = 'fas fa-seedling';
-        iconGradient = 'linear-gradient(135deg, #66bb6a 0%, #4caf50 100%)';
-        break;
-      case 'summer':
-        icon = 'fas fa-sun';
-        iconGradient = 'linear-gradient(135deg, #ffa726 0%, #ff9800 100%)';
-        break;
-      case 'autumn':
-      case 'fall':
-        icon = 'fa-brands fa-canadian-maple-leaf';
-        iconGradient = 'linear-gradient(135deg, #ff8a65 0%, #ff5722 100%)';
-        break;
-      case 'winter':
-        icon = 'fas fa-snowflake';
-        iconGradient = 'linear-gradient(135deg, #90a4ae 0%, #607d8b 100%)';
-        break;
-      default:
-        icon = 'fas fa-cloud-rain';
-        iconGradient = 'linear-gradient(135deg, #757575 0%, #424242 100%)';
-    }
-
-    toast.style.cssText = `
-      background: #ede8e4;
-      color: rgba(0, 0, 0, 0.9);
-      padding: 16px 20px;
-      border-radius: 8px;
-      font-size: 0.875rem;
-      font-weight: 500;
-      letter-spacing: 0.025em;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transform: translateX(-320px);
-      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-      opacity: 0;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-      box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.15),
-        0 2px 8px rgba(0, 0, 0, 0.1);
-      max-width: 240px;
-      min-width: 170px;
-      position: relative;
-      overflow: hidden;
-    `;
-
-    const iconContainer = document.createElement('div');
-    iconContainer.style.cssText = `
-      width: 36px;
-      height: 36px;
-      border-radius: 6px;
-      background: ${iconGradient};
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-    `;
-
-    const iconElement = document.createElement('i');
-    iconElement.className = icon;
-    iconElement.style.cssText = `
-      font-size: 0.875rem;
-      color: rgba(255, 255, 255, 0.95);
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    `;
-
-    iconContainer.appendChild(iconElement);
-
-    const textContent = document.createElement('div');
-    textContent.style.cssText = `
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      flex: 1;
-      min-width: 0;
-    `;
-
-    const label = document.createElement('div');
-    label.textContent = 'Season Changed';
-    label.style.cssText = `
-      font-size: 0.75rem;
-      color: rgba(0, 0, 0, 0.6);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      font-weight: 600;
-      margin-bottom: 2px;
-    `;
-
-    const title = document.createElement('div');
-    title.textContent = season.charAt(0).toUpperCase() + season.slice(1);
-    title.style.cssText = `
-      font-size: 0.9rem;
-      color: rgba(0, 0, 0, 0.9);
-      font-weight: 500;
-      line-height: 1.3;
-    `;
-
-    textContent.appendChild(label);
-    textContent.appendChild(title);
-    toast.appendChild(iconContainer);
-    toast.appendChild(textContent);
-
-    this.toastContainer.appendChild(toast);
-    this.activeToasts.push(toast);
-
-    toast.offsetHeight;
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        toast.style.transform = 'translateX(0)';
-        toast.style.opacity = '1';
-      });
-    });
-
-    setTimeout(() => {
-      this.hideToast(toast);
-    }, 3000);
-
-    return toast;
   }
 
   clearDayNightToasts() {
     const dayNightToasts = this.activeToasts.filter(
       (toast) => toast.className === 'daynight-toast'
     );
-
     dayNightToasts.forEach((toast) => this.hideToast(toast));
   }
 
@@ -451,79 +445,7 @@ export default class ToastManager {
     const seasonToasts = this.activeToasts.filter(
       (toast) => toast.className === 'season-toast'
     );
-
     seasonToasts.forEach((toast) => this.hideToast(toast));
-  }
-
-  showToast(message, type = 'info', duration = 3000) {
-    const toast = document.createElement('div');
-    toast.className = `toast toast-${type}`;
-
-    let backgroundColor, textColor, borderColor;
-
-    if (message === 'Music disabled') {
-      backgroundColor = 'rgba(0, 0, 0, 0.9)';
-      textColor = 'rgba(255, 255, 255, 0.95)';
-      borderColor = 'rgba(255, 255, 255, 0.1)';
-    } else {
-      switch (type) {
-        case 'success':
-          backgroundColor = '#ede8e4';
-          textColor = 'rgba(0, 0, 0, 0.9)';
-          borderColor = 'rgba(0, 0, 0, 0.1)';
-          break;
-        case 'error':
-          backgroundColor = 'rgba(239, 68, 68, 0.9)';
-          textColor = 'rgba(255, 255, 255, 0.95)';
-          borderColor = 'rgba(239, 68, 68, 0.3)';
-          break;
-        case 'warning':
-          backgroundColor = 'rgba(245, 158, 11, 0.9)';
-          textColor = 'rgba(255, 255, 255, 0.95)';
-          borderColor = 'rgba(245, 158, 11, 0.3)';
-          break;
-        default:
-          backgroundColor = '#ede8e4';
-          textColor = 'rgba(0, 0, 0, 0.9)';
-          borderColor = 'rgba(0, 0, 0, 0.1)';
-      }
-    }
-
-    toast.style.cssText = `
-      background: ${backgroundColor};
-      color: ${textColor};
-      padding: 12px 16px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      letter-spacing: 0.3px;
-      transform: translateX(-320px);
-      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-      opacity: 0;
-      border: 1.5px solid ${borderColor};
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-      width: fit-content !important;
-      border-radius: 8px;
-    `;
-
-    toast.textContent = message;
-
-    this.toastContainer.appendChild(toast);
-    this.activeToasts.push(toast);
-
-    toast.offsetHeight;
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        toast.style.transform = 'translateX(0)';
-        toast.style.opacity = '1';
-      });
-    });
-
-    setTimeout(() => {
-      this.hideToast(toast);
-    }, duration);
-
-    return toast;
   }
 
   destroy() {
