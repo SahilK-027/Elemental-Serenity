@@ -118,52 +118,144 @@ export default class ShaderReveal {
   createTextOverlay() {
     this.textOverlay = document.createElement('div');
     this.textOverlay.innerHTML = `
-      <div class="reveal-content" style="
-        text-align: center;
-        font-family: 'Inter', sans-serif;
-        max-width: 600px;
-        margin: 0 auto;
-      ">
-        <h1 class="reveal-title" style="
-          font-family: 'Schoolbell', sans-serif;
-          font-size: clamp(2.5rem, 6vw, 3rem);
-          font-weight: 700;
-          color: #000;
-          margin: 0 0 1.5rem 0;
-          opacity: 0;
-          transition: opacity 1.2s ease-out;
-        ">A Dream Realized</h1>
+      <div class="reveal-content">
+        <h1 class="reveal-title">A Dream Realized</h1>
 
-        <div class="reveal-description" style="
-          font-family: 'Inter', sans-serif;
-          font-size: clamp(0.85rem, 2vw, 1rem);
-          line-height: 1.7;
-          color: rgba(0, 0, 0, 0.6);
-          font-weight: 400;
-        ">
-          <p class="reveal-line" style="
-            margin: 0.2rem 0;
-            opacity: 0;
-            transition: opacity 0.8s ease-out;
-          "> For as long as I can remember, I've dreamed of creating a quiet digital corner where stylised nature could breathe, seasons freely shifting, days fading into nights, leaves whispering in an invisible breeze.
-          <br>
-          <br>
+        <div class="reveal-description">
+          <p class="reveal-line">For as long as I can remember, I've dreamed of creating a quiet digital corner where stylised nature could breathe, seasons freely shifting, days fading into nights, leaves whispering in an invisible breeze.
+          <br><br>
           And this project turned that dream into reality, built one shader, one texture, and one late night at a time. Countless tutorials, devlogs, and fellow creators kept me going and reminded me that shared passion multiplies.
-          <br>
-          <br>
+          <br><br>
           Thank you for visiting. I hope it brings you a moment of quiet wonder!
           </p>
-          <p class="reveal-footer" style="
-            margin: 0.8rem 0 0 0;
-            font-style: italic;
-            opacity: 0;
-            transition: opacity 0.8s ease-out;
-            text-align: right;
-          ">
-          — Sahil K.
-          </p>
+          <p class="reveal-footer">— Sahil K.</p>
         </div>
       </div>
+      <style>
+        .reveal-content {
+          text-align: center;
+          font-family: 'Inter', sans-serif;
+          max-width: min(600px, 90vw);
+          margin: 0 auto;
+          padding: 1rem;
+        }
+
+        .reveal-title {
+          font-family: 'Schoolbell', sans-serif;
+          font-size: clamp(1.8rem, 5vw, 3rem);
+          font-weight: 700;
+          color: #000;
+          margin: 0 0 1.2rem 0;
+          opacity: 0;
+          transition: opacity 1.2s ease-out;
+          line-height: 1.2;
+        }
+
+        .reveal-description {
+          font-family: 'Inter', sans-serif;
+          font-size: clamp(0.8rem, 2.5vw, 1rem);
+          line-height: 1.6;
+          color: rgba(0, 0, 0, 0.6);
+          font-weight: 400;
+        }
+
+        .reveal-line {
+          margin: 0.2rem 0;
+          opacity: 0;
+          transition: opacity 0.8s ease-out;
+        }
+
+        .reveal-footer {
+          margin: 0.8rem 0 0 0;
+          font-style: italic;
+          opacity: 0;
+          transition: opacity 0.8s ease-out;
+          text-align: right;
+        }
+
+        /* Small phones */
+        @media (max-width: 380px) {
+          .reveal-content {
+            padding: 0.5rem;
+          }
+          .reveal-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.8rem;
+          }
+          .reveal-description {
+            font-size: 0.75rem;
+            line-height: 1.5;
+          }
+        }
+
+        /* Landscape mobile - reduce text for limited height */
+        @media (max-height: 500px) and (orientation: landscape) {
+          .reveal-content {
+            max-width: min(700px, 85vw);
+          }
+          .reveal-title {
+            font-size: clamp(1.3rem, 4vh, 1.8rem);
+            margin-bottom: 0.5rem;
+          }
+          .reveal-description {
+            font-size: clamp(0.65rem, 2vh, 0.85rem);
+            line-height: 1.4;
+          }
+          .reveal-line br {
+            display: none;
+          }
+          .reveal-line br + br {
+            display: inline;
+          }
+          .reveal-line br + br::before {
+            content: ' ';
+          }
+          .reveal-footer {
+            margin-top: 0.5rem;
+          }
+        }
+
+        /* Very short landscape (iPhone SE landscape, etc) */
+        @media (max-height: 380px) and (orientation: landscape) {
+          .reveal-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.4rem;
+          }
+          .reveal-description {
+            font-size: 0.6rem;
+            line-height: 1.35;
+          }
+        }
+
+        /* Tablets */
+        @media (min-width: 768px) and (min-height: 600px) {
+          .reveal-content {
+            max-width: 550px;
+          }
+          .reveal-title {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+          }
+          .reveal-description {
+            font-size: 0.95rem;
+            line-height: 1.7;
+          }
+        }
+
+        /* Large screens */
+        @media (min-width: 1200px) {
+          .reveal-content {
+            max-width: 620px;
+          }
+          .reveal-title {
+            font-size: 3rem;
+          }
+          .reveal-description {
+            font-size: 1rem;
+            line-height: 1.8;
+          }
+        }
+      </style>
     `;
 
     this.textOverlay.style.cssText = `
@@ -172,6 +264,7 @@ export default class ShaderReveal {
       left: 0;
       width: 100vw;
       height: 100vh;
+      height: 100dvh;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -179,8 +272,9 @@ export default class ShaderReveal {
       z-index: 1001;
       opacity: 1;
       pointer-events: none;
-      padding: 2rem;
+      padding: env(safe-area-inset-top, 1rem) env(safe-area-inset-right, 1rem) env(safe-area-inset-bottom, 1rem) env(safe-area-inset-left, 1rem);
       box-sizing: border-box;
+      overflow: hidden;
     `;
 
     document.body.appendChild(this.textOverlay);

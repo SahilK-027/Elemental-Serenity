@@ -7,6 +7,27 @@ import reveal from './reveal.js';
 import ToastManager from './Game/UI/ToastManager.class.js';
 import { Console } from './utils/consoleStylish.js';
 
+// Haptic feedback utilities for iOS Brrrowser and Android
+const Haptics = {
+  // Light tap for button presses
+  buttonTap() {
+    if (navigator.haptic) {
+      navigator.haptic([{ intensity: 0.7, sharpness: 0.1 }]);
+    } else if (navigator.vibrate) {
+      navigator.vibrate(10);
+    }
+  },
+
+  // Strong impact for thunder/lightning
+  thunder() {
+    if (navigator.haptic) {
+      navigator.haptic('error');
+    } else if (navigator.vibrate) {
+      navigator.vibrate([50, 30, 100, 50, 200]);
+    }
+  },
+};
+
 const isDebugMode =
   typeof window !== 'undefined' &&
   new URLSearchParams(window.location.search).get('mode') === 'debug';
@@ -214,8 +235,14 @@ resources.on('loaded', () => {
     }, 200);
   };
 
-  exploreWithMusic.addEventListener('click', () => startGame(true));
-  exploreWithoutMusic.addEventListener('click', () => startGame(false));
+  exploreWithMusic.addEventListener('click', () => {
+    Haptics.buttonTap();
+    startGame(true);
+  });
+  exploreWithoutMusic.addEventListener('click', () => {
+    Haptics.buttonTap();
+    startGame(false);
+  });
 });
 
 const seasonMapping = {
@@ -244,6 +271,8 @@ const handleSeasonToggle = (event) => {
   if (currentSeason === managerSeason) {
     return;
   }
+
+  Haptics.buttonTap();
 
   seasonButtons.forEach((button) => {
     button.classList.remove('active');
@@ -303,6 +332,8 @@ const handleDayNightToggle = (event) => {
   if (currentTime === selectedTime) {
     return;
   }
+
+  Haptics.buttonTap();
 
   dayNightButtons.forEach((button) => {
     button.classList.remove('active');

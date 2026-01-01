@@ -44,6 +44,13 @@ export default class MusicControlUI {
   }
 
   toggleMusic() {
+    // Haptic feedback
+    if (navigator.haptic) {
+      navigator.haptic([{ intensity: 0.7, sharpness: 0.1 }]);
+    } else if (navigator.vibrate) {
+      navigator.vibrate(10);
+    }
+
     this.isMusicEnabled = !this.isMusicEnabled;
 
 

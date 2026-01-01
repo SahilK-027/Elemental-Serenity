@@ -3076,6 +3076,15 @@
     <script type="module" src="/src/main.js"></script>
 
     <script>
+      // Haptic feedback helper for settings UI
+      function buttonVibrate() {
+        if (navigator.haptic) {
+          navigator.haptic([{ intensity: 0.7, sharpness: 0.1 }]);
+        } else if (navigator.vibrate) {
+          navigator.vibrate(10);
+        }
+      }
+
       class SettingsManager {
         constructor() {
           this.hamburgerMenu = document.getElementById('hamburger-menu');
@@ -3134,16 +3143,23 @@
           });
           observer.observe(controlPanel, { attributes: true });
 
-          this.hamburgerMenu.addEventListener('click', () => this.openModal());
-          this.modalClose.addEventListener('click', () => this.closeModal());
+          this.hamburgerMenu.addEventListener('click', () => {
+            buttonVibrate();
+            this.openModal();
+          });
+          this.modalClose.addEventListener('click', () => {
+            buttonVibrate();
+            this.closeModal();
+          });
           this.settingsModal.addEventListener('click', (e) => {
             if (e.target === this.settingsModal) this.closeModal();
           });
 
           this.tabButtons.forEach((button) => {
-            button.addEventListener('click', () =>
-              this.switchTab(button.dataset.tab)
-            );
+            button.addEventListener('click', () => {
+              buttonVibrate();
+              this.switchTab(button.dataset.tab);
+            });
           });
 
           this.volumeSlider.addEventListener('input', (e) => {

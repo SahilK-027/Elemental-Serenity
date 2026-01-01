@@ -22,14 +22,23 @@ export default class Lightning {
     this.particleSystem = particleSystem;
     this.scene = this.game.scene;
 
-
-
-    this.groundBounds = groundBounds || {
+    // Store the base bounds (for landscape/ideal ratio)
+    this.baseGroundBounds = groundBounds || {
       minX: -5.5,
       maxX: 5.5,
       minZ: -5.5,
       maxZ: 5.5,
     };
+
+    // Active bounds that get adjusted for aspect ratio
+    this.groundBounds = { ...this.baseGroundBounds };
+
+    // Update bounds for current aspect ratio
+    this.updateBoundsForAspectRatio();
+
+    // Listen for resize events
+    this.handleResize = this.updateBoundsForAspectRatio.bind(this);
+    window.addEventListener('resize', this.handleResize);
 
 
     this.nextLightningTime = this.getRandomDelay();
@@ -363,7 +372,41 @@ export default class Lightning {
   }
 
   setGroundBounds(bounds) {
-    this.groundBounds = bounds;
+    this.baseGroundBounds = { ...bounds };
+    this.updateBoundsForAspectRatio();
+  }
+
+  updateBoundsForAspectRatio() {
+    const sizes = this.game.sizes;
+    const aspectRatio = sizes.width / sizes.height;
+    const idealRatio = 16 / 9;
+
+    // Copy base bounds
+    this.groundBounds = { ...this.baseGroundBounds };
+
+    // On portrait devices (aspect < 1), shrink X bounds
+    // On narrow landscape (aspect < ideal), also shrink proportionally
+    if (aspectRatio < idealRatio) {
+      const shrinkFactor = aspectRatio / idealRatio;
+
+      // Calculate center and half-width for X
+      const centerX = (this.baseGroundBounds.minX + this.baseGroundBounds.maxX) / 2;
+      const halfWidthX = (this.baseGroundBounds.maxX - this.baseGroundBounds.minX) / 2;
+
+      // Apply shrink to X bounds
+      this.groundBounds.minX = centerX - halfWidthX * shrinkFactor;
+      this.groundBounds.maxX = centerX + halfWidthX * shrinkFactor;
+
+      // For very portrait screens (phones held vertically), also shrink Z a bit
+      if (aspectRatio < 1) {
+        const centerZ = (this.baseGroundBounds.minZ + this.baseGroundBounds.maxZ) / 2;
+        const halfWidthZ = (this.baseGroundBounds.maxZ - this.baseGroundBounds.minZ) / 2;
+        const zShrink = 0.7 + aspectRatio * 0.3; // Range from 0.7 to 1.0
+
+        this.groundBounds.minZ = centerZ - halfWidthZ * zShrink;
+        this.groundBounds.maxZ = centerZ + halfWidthZ * zShrink;
+      }
+    }
   }
 
   isRainySeason() {
@@ -396,6 +439,9 @@ export default class Lightning {
   }
 
   dispose() {
+    // Remove resize listener
+    window.removeEventListener('resize', this.handleResize);
+
     if (this.#explosionMaterial) {
       this.#explosionMaterial.dispose();
     }
