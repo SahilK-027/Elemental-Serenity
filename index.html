@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
@@ -289,8 +292,8 @@
         border-color: rgba(0, 0, 0, 0.1);
         color: rgba(0, 0, 0, 1);
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1),
-          0 2px 8px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 1);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06),
+          inset 0 1px 0 rgba(255, 255, 255, 1);
       }
 
       .explore-button-light:active {
@@ -313,8 +316,8 @@
         border-color: rgba(255, 255, 255, 0.12);
         color: rgba(255, 255, 255, 1);
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3),
-          0 2px 8px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.15),
+          inset 0 1px 0 rgba(255, 255, 255, 0.15);
       }
 
       .explore-button-dark:active {
@@ -349,8 +352,8 @@
       /* Right Side Control Panel */
       #control-panel {
         position: fixed;
-        right: 24px;
-        bottom: 24px;
+        right: calc(24px + env(safe-area-inset-right, 0px));
+        bottom: calc(24px + env(safe-area-inset-bottom, 0px));
         display: none;
         flex-direction: column;
         gap: 14px;
@@ -902,8 +905,8 @@
 
       #page-title {
         position: fixed;
-        left: 24px;
-        bottom: 24px;
+        left: calc(24px + env(safe-area-inset-left, 0px));
+        bottom: calc(24px + env(safe-area-inset-bottom, 0px));
         gap: 16px;
         z-index: 1000;
       }
@@ -911,8 +914,8 @@
       /* Hamburger Menu Button */
       #hamburger-menu {
         position: fixed;
-        top: 24px;
-        right: 24px;
+        top: calc(24px + env(safe-area-inset-top, 0px));
+        right: calc(24px + env(safe-area-inset-right, 0px));
         width: 48px;
         height: 48px;
         border-radius: 50%;
@@ -1735,8 +1738,6 @@
         }
 
         #control-panel {
-          right: 16px;
-          bottom: 16px;
           gap: 16px;
         }
 
@@ -1760,8 +1761,8 @@
 
         #page-title {
           font-size: 2.2rem;
-          left: 16px;
-          bottom: 16px;
+          left: calc(24px + env(safe-area-inset-left, 0px));
+          bottom: calc(24px + env(safe-area-inset-bottom, 0px));
         }
 
         .modal-container {
@@ -1904,16 +1905,14 @@
         }
 
         #hamburger-menu {
-          top: 12px;
-          right: 12px;
+          top: calc(12px + env(safe-area-inset-top, 0px));
+          right: calc(12px + env(safe-area-inset-right, 0px));
           width: 40px;
           height: 40px;
           font-size: 0.9rem;
         }
 
         #control-panel {
-          right: 12px;
-          bottom: 12px;
           gap: 10px;
         }
 
@@ -1944,8 +1943,8 @@
 
         #page-title {
           font-size: 1.8rem;
-          left: 12px;
-          bottom: 12px;
+          left: calc(12px + env(safe-area-inset-left, 0px));
+          bottom: calc(12px + env(safe-area-inset-bottom, 0px));
         }
 
         #page-title .fa-square {
@@ -2237,10 +2236,13 @@
 
         #control-panel {
           flex-direction: row;
-          bottom: auto;
-          top: 50%;
-          transform: translateY(-50%);
-          right: 12px;
+          top: auto;
+        }
+
+        #page-title {
+          left: calc(24px + env(safe-area-inset-left, 0px));
+          bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+          font-size: 3.6vw;
         }
 
         #daynight-toggle,
@@ -2369,40 +2371,67 @@
               <div class="preset-description" id="preset-description">
                 <div class="preset-info">
                   <span class="preset-label">Affects:</span>
-                  <span class="preset-details" id="preset-details">Grass density, particle effects, shadow quality, and pixel ratio</span>
+                  <span class="preset-details" id="preset-details"
+                    >Grass density, particle effects, shadow quality, and pixel
+                    ratio</span
+                  >
                 </div>
               </div>
-              
+
               <!-- Custom Graphics Options (hidden by default) -->
               <div class="custom-graphics-options" id="custom-graphics-options">
                 <div class="custom-option">
                   <div class="custom-option-header">
                     <label for="grass-density">Grass Density</label>
-                    <span class="custom-option-value" id="grass-density-value">12,500</span>
+                    <span class="custom-option-value" id="grass-density-value"
+                      >12,500</span
+                    >
                   </div>
-                  <input type="range" id="grass-density" min="5000" max="100000" step="5000" value="12500" class="custom-slider" />
+                  <input
+                    type="range"
+                    id="grass-density"
+                    min="5000"
+                    max="100000"
+                    step="5000"
+                    value="12500"
+                    class="custom-slider"
+                  />
                   <div class="custom-option-range">
                     <span>5K</span>
                     <span>100K</span>
                   </div>
                 </div>
-                
+
                 <div class="custom-option">
                   <div class="custom-option-header">
                     <label for="particle-density">Fire Particles</label>
-                    <span class="custom-option-value" id="particle-density-value">500</span>
+                    <span
+                      class="custom-option-value"
+                      id="particle-density-value"
+                      >500</span
+                    >
                   </div>
-                  <input type="range" id="particle-density" min="200" max="1200" step="50" value="500" class="custom-slider" />
+                  <input
+                    type="range"
+                    id="particle-density"
+                    min="200"
+                    max="1200"
+                    step="50"
+                    value="500"
+                    class="custom-slider"
+                  />
                   <div class="custom-option-range">
                     <span>200</span>
                     <span>1200</span>
                   </div>
                 </div>
-                
+
                 <div class="custom-option">
                   <div class="custom-option-header">
                     <label for="shadow-quality">Shadow Quality</label>
-                    <span class="custom-option-value" id="shadow-quality-value">Standard</span>
+                    <span class="custom-option-value" id="shadow-quality-value"
+                      >Standard</span
+                    >
                   </div>
                   <div class="custom-select">
                     <select id="shadow-quality">
@@ -2412,19 +2441,29 @@
                     </select>
                   </div>
                 </div>
-                
+
                 <div class="custom-option">
                   <div class="custom-option-header">
                     <label for="pixel-ratio">Pixel Ratio Cap</label>
-                    <span class="custom-option-value" id="pixel-ratio-value">2x</span>
+                    <span class="custom-option-value" id="pixel-ratio-value"
+                      >2x</span
+                    >
                   </div>
-                  <input type="range" id="pixel-ratio" min="1" max="4" step="0.5" value="2" class="custom-slider" />
+                  <input
+                    type="range"
+                    id="pixel-ratio"
+                    min="1"
+                    max="4"
+                    step="0.5"
+                    value="2"
+                    class="custom-slider"
+                  />
                   <div class="custom-option-range">
                     <span>1x</span>
                     <span>4x</span>
                   </div>
                 </div>
-                
+
                 <div class="custom-option">
                   <div class="custom-option-header">
                     <label for="antialias-toggle">Antialiasing</label>
@@ -3037,7 +3076,6 @@
     <script type="module" src="/src/main.js"></script>
 
     <script>
-
       class SettingsManager {
         constructor() {
           this.hamburgerMenu = document.getElementById('hamburger-menu');
@@ -3048,7 +3086,6 @@
           this.volumeSlider = document.getElementById('volume-slider');
           this.volumeValue = document.querySelector('.volume-value');
           this.graphicsQuality = document.getElementById('graphics-quality');
-
 
           const savedSettings = this.loadSettings();
           this.settings = {
@@ -3062,20 +3099,15 @@
             customAntialias: savedSettings.customAntialias || false,
           };
 
-
           this.previousVolume = undefined;
 
-
           this.graphicsQuality.value = this.settings.graphicsQuality;
-
 
           this.volumeSlider.value = this.settings.volume;
           this.volumeValue.textContent = this.settings.volume + '%';
 
-
           this.presetDetails = document.getElementById('preset-details');
           this.updatePresetDescription(this.settings.graphicsQuality);
-
 
           this.initCustomGraphicsControls();
 
@@ -3083,7 +3115,6 @@
         }
 
         init() {
-
           const controlPanel = document.getElementById('control-panel');
           const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
@@ -3103,13 +3134,11 @@
           });
           observer.observe(controlPanel, { attributes: true });
 
-
           this.hamburgerMenu.addEventListener('click', () => this.openModal());
           this.modalClose.addEventListener('click', () => this.closeModal());
           this.settingsModal.addEventListener('click', (e) => {
             if (e.target === this.settingsModal) this.closeModal();
           });
-
 
           this.tabButtons.forEach((button) => {
             button.addEventListener('click', () =>
@@ -3117,14 +3146,12 @@
             );
           });
 
-
           this.volumeSlider.addEventListener('input', (e) => {
             this.settings.volume = parseInt(e.target.value);
             this.volumeValue.textContent = this.settings.volume + '%';
             this.saveSettings();
             this.updateAudioVolume(this.settings.volume / 100);
           });
-
 
           this.graphicsQuality.addEventListener('change', (e) => {
             const oldQuality = this.settings.graphicsQuality;
@@ -3136,9 +3163,9 @@
             if (e.target.value !== 'custom') {
               this.updateGraphicsQuality(e.target.value);
 
-
               const qualitySettings = this.getQualitySettings();
-              const oldSettings = qualitySettings[oldQuality] || this.getCustomSettings();
+              const oldSettings =
+                qualitySettings[oldQuality] || this.getCustomSettings();
               const newSettings = qualitySettings[e.target.value];
 
               if (
@@ -3149,11 +3176,9 @@
                 this.showReloadBanner();
               }
             } else {
-
               this.applyCustomSettings();
             }
           });
-
 
           document.addEventListener('keydown', (e) => {
             if (
@@ -3166,11 +3191,9 @@
         }
 
         setupMusicControlListener() {
-
           const musicControlButton = document.getElementById('music-control');
           if (musicControlButton) {
             musicControlButton.addEventListener('click', () => {
-
               setTimeout(() => {
                 this.syncVolumeWithMusicState();
               }, 100);
@@ -3184,8 +3207,6 @@
               window.gameInstance.musicControlUI.isMusicEnabled;
 
             if (!isMusicEnabled) {
-
-
               if (this.settings.volume > 0) {
                 this.previousVolume = this.settings.volume;
               }
@@ -3193,7 +3214,6 @@
               this.volumeSlider.value = 0;
               this.volumeValue.textContent = '0%';
             } else {
-
               const volumeToRestore =
                 this.previousVolume !== undefined ? this.previousVolume : 50;
 
@@ -3201,12 +3221,9 @@
               this.volumeSlider.value = volumeToRestore;
               this.volumeValue.textContent = volumeToRestore + '%';
 
-
               this.updateAudioVolume(volumeToRestore / 100);
 
-
               this.saveSettings();
-
 
               this.previousVolume = undefined;
             }
@@ -3214,20 +3231,16 @@
         }
 
         initializeVolumeFromGame() {
-
           if (window.gameInstance && window.gameInstance.audioManager) {
             const currentVolume = window.gameInstance.audioManager.masterVolume;
             const volumePercent = Math.round(currentVolume * 100);
 
-
             if (!window.gameInstance.withMusic) {
-
               this.previousVolume = 50;
               this.settings.volume = 0;
               this.volumeSlider.value = 0;
               this.volumeValue.textContent = '0%';
             } else {
-
               const initialVolume = volumePercent > 0 ? volumePercent : 50;
               this.settings.volume = initialVolume;
               this.volumeSlider.value = initialVolume;
@@ -3259,11 +3272,9 @@
         }
 
         switchTab(tabName) {
-
           this.tabButtons.forEach((btn) => {
             btn.classList.toggle('active', btn.dataset.tab === tabName);
           });
-
 
           this.tabContents.forEach((content) => {
             content.classList.toggle('active', content.id === tabName + '-tab');
@@ -3271,19 +3282,16 @@
         }
 
         updateAudioVolume(volume) {
-
           if (window.gameInstance && window.gameInstance.audioManager) {
             window.gameInstance.audioManager.setMasterVolume(volume);
           }
         }
 
         updateGraphicsQuality(quality) {
-
           const settings = this.getQualitySettings();
 
           if (window.gameInstance) {
             const gameSettings = settings[quality];
-
 
             if (
               window.gameInstance.world &&
@@ -3294,12 +3302,10 @@
                 window.gameInstance.world.ground.grassManager;
               grassManager.GRASS_PER_TILE = gameSettings.grassPerTile;
 
-
               if (typeof grassManager.regenerateGrass === 'function') {
                 grassManager.regenerateGrass();
               }
             }
-
 
             if (window.gameInstance.world && window.gameInstance.world.fire) {
               const fire = window.gameInstance.world.fire;
@@ -3320,7 +3326,6 @@
               }
             }
 
-
             const graphicsChangeEvent = new CustomEvent(
               'graphicsQualityChanged',
               {
@@ -3330,7 +3335,6 @@
             window.dispatchEvent(graphicsChangeEvent);
           }
         }
-
 
         loadSettings() {
           try {
@@ -3342,7 +3346,6 @@
           }
         }
 
-
         saveSettings() {
           try {
             localStorage.setItem('gameSettings', JSON.stringify(this.settings));
@@ -3350,7 +3353,6 @@
             console.warn('Failed to save settings to localStorage:', error);
           }
         }
-
 
         getQualitySettings() {
           return {
@@ -3393,42 +3395,47 @@
           };
         }
 
-
         getPresetDescriptions() {
           return {
             low: 'Reduced grass density, basic shadows, lower particle effects. \nBest for older devices or battery saving.',
-            medium: 'Balanced grass density, standard shadows, moderate particle effects. \nGood for most devices.',
+            medium:
+              'Balanced grass density, standard shadows, moderate particle effects. \nGood for most devices.',
             high: 'Dense grass, soft shadows, antialiasing enabled, rich particle effects. \nFor capable hardware.',
-            ultra: 'Super high grass density, highest quality shadows, full antialiasing, denser particles. \nOnly For high-end devices.',
-            custom: 'Fine-tune individual settings below to match your hardware and preferences.',
+            ultra:
+              'Super high grass density, highest quality shadows, full antialiasing, denser particles. \nOnly For high-end devices.',
+            custom:
+              'Fine-tune individual settings below to match your hardware and preferences.',
           };
         }
-
 
         updatePresetDescription(quality) {
           if (this.presetDetails) {
             const descriptions = this.getPresetDescriptions();
-            this.presetDetails.textContent = descriptions[quality] || descriptions.medium;
+            this.presetDetails.textContent =
+              descriptions[quality] || descriptions.medium;
           }
         }
 
-
         initCustomGraphicsControls() {
-          this.customOptionsContainer = document.getElementById('custom-graphics-options');
+          this.customOptionsContainer = document.getElementById(
+            'custom-graphics-options'
+          );
           this.grassSlider = document.getElementById('grass-density');
           this.grassValue = document.getElementById('grass-density-value');
           this.particleSlider = document.getElementById('particle-density');
-          this.particleValue = document.getElementById('particle-density-value');
+          this.particleValue = document.getElementById(
+            'particle-density-value'
+          );
           this.shadowSelect = document.getElementById('shadow-quality');
           this.shadowValue = document.getElementById('shadow-quality-value');
           this.pixelRatioSlider = document.getElementById('pixel-ratio');
           this.pixelRatioValue = document.getElementById('pixel-ratio-value');
           this.antialiasToggle = document.getElementById('antialias-toggle');
 
-
           if (this.grassSlider) {
             this.grassSlider.value = this.settings.customGrass;
-            this.grassValue.textContent = this.settings.customGrass.toLocaleString();
+            this.grassValue.textContent =
+              this.settings.customGrass.toLocaleString();
           }
           if (this.particleSlider) {
             this.particleSlider.value = this.settings.customParticles;
@@ -3440,17 +3447,16 @@
           }
           if (this.pixelRatioSlider) {
             this.pixelRatioSlider.value = this.settings.customPixelRatio;
-            this.pixelRatioValue.textContent = this.settings.customPixelRatio + 'x';
+            this.pixelRatioValue.textContent =
+              this.settings.customPixelRatio + 'x';
           }
           if (this.antialiasToggle) {
             this.antialiasToggle.checked = this.settings.customAntialias;
           }
 
-
           if (this.settings.graphicsQuality === 'custom') {
             this.toggleCustomOptions(true);
           }
-
 
           this.grassSlider?.addEventListener('input', (e) => {
             const value = parseInt(e.target.value);
@@ -3497,9 +3503,9 @@
 
         updateShadowValueLabel(value) {
           const labels = {
-            'BasicShadowMap': 'Basic',
-            'PCFShadowMap': 'Standard',
-            'PCFSoftShadowMap': 'Soft'
+            BasicShadowMap: 'Basic',
+            PCFShadowMap: 'Standard',
+            PCFSoftShadowMap: 'Soft',
           };
           if (this.shadowValue) {
             this.shadowValue.textContent = labels[value] || 'Standard';
@@ -3530,52 +3536,55 @@
           const customSettings = this.getCustomSettings();
 
           if (window.gameInstance) {
-
             if (
               window.gameInstance.world &&
               window.gameInstance.world.ground &&
               window.gameInstance.world.ground.grassManager
             ) {
-              const grassManager = window.gameInstance.world.ground.grassManager;
+              const grassManager =
+                window.gameInstance.world.ground.grassManager;
               grassManager.GRASS_PER_TILE = customSettings.grassPerTile;
               if (typeof grassManager.regenerateGrass === 'function') {
                 grassManager.regenerateGrass();
               }
             }
 
-
             if (window.gameInstance.world && window.gameInstance.world.fire) {
               const fire = window.gameInstance.world.fire;
               if (fire.fireEmitterParams) {
                 fire.originalFireEmissionRate = customSettings.fireEmissionRate;
-                fire.fireEmitterParams.emissionRate = customSettings.fireEmissionRate;
+                fire.fireEmitterParams.emissionRate =
+                  customSettings.fireEmissionRate;
               }
               if (fire.smokeEmitterParams) {
-                fire.originalSmokeEmissionRate = customSettings.smokeEmissionRate;
-                fire.smokeEmitterParams.emissionRate = customSettings.smokeEmissionRate;
+                fire.originalSmokeEmissionRate =
+                  customSettings.smokeEmissionRate;
+                fire.smokeEmitterParams.emissionRate =
+                  customSettings.smokeEmissionRate;
               }
               if (fire.amberEmitterParams) {
-                fire.originalAmberEmissionRate = customSettings.amberEmissionRate;
-                fire.amberEmitterParams.emissionRate = customSettings.amberEmissionRate;
+                fire.originalAmberEmissionRate =
+                  customSettings.amberEmissionRate;
+                fire.amberEmitterParams.emissionRate =
+                  customSettings.amberEmissionRate;
               }
             }
 
-
-            const graphicsChangeEvent = new CustomEvent('graphicsQualityChanged', {
-              detail: { quality: 'custom', settings: customSettings },
-            });
+            const graphicsChangeEvent = new CustomEvent(
+              'graphicsQualityChanged',
+              {
+                detail: { quality: 'custom', settings: customSettings },
+              }
+            );
             window.dispatchEvent(graphicsChangeEvent);
           }
         }
 
-
         showReloadBanner() {
-
           const existingBanner = document.getElementById('reload-banner');
           if (existingBanner) {
             existingBanner.remove();
           }
-
 
           const banner = document.createElement('div');
           banner.id = 'reload-banner';
@@ -3604,7 +3613,6 @@
               </button>
             </div>
           `;
-
 
           if (!document.getElementById('reload-banner-styles')) {
             const styles = document.createElement('style');
@@ -3821,12 +3829,10 @@
 
           document.body.appendChild(banner);
 
-
           const dismissBanner = () => {
             banner.classList.add('hiding');
             setTimeout(() => banner.remove(), 300);
           };
-
 
           document
             .getElementById('reload-now-btn')
@@ -3842,7 +3848,6 @@
             .getElementById('banner-close-btn')
             .addEventListener('click', dismissBanner);
 
-
           setTimeout(() => {
             if (document.getElementById('reload-banner')) {
               dismissBanner();
@@ -3851,17 +3856,14 @@
         }
       }
 
-
       document.addEventListener('DOMContentLoaded', () => {
         window.settingsManager = new SettingsManager();
-
 
         const savedQuality = window.settingsManager.settings.graphicsQuality;
         const qualitySettings = window.settingsManager.getQualitySettings();
         const currentSettings = qualitySettings[savedQuality];
 
         if (currentSettings) {
-
           localStorage.setItem(
             'graphicsAntialias',
             currentSettings.antialias.toString()
@@ -3876,7 +3878,6 @@
           );
         }
 
-
         setTimeout(() => {
           if (window.settingsManager) {
             const currentQuality =
@@ -3885,6 +3886,6 @@
           }
         }, 1000);
       });
-</script>
+    </script>
   </body>
 </html>
