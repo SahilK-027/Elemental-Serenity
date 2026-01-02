@@ -40,26 +40,20 @@ export default class Lightning {
     this.handleResize = this.updateBoundsForAspectRatio.bind(this);
     window.addEventListener('resize', this.handleResize);
 
-
     this.nextLightningTime = this.getRandomDelay();
     this.elapsedTime = 0;
-
 
     this.cameraShakeDuration = 0.65;
     this.cameraShakeIntensity = 0.85;
     this.cameraShakeFrequency = 25;
     this.cameraShakeDecay = 2.5;
 
-
     this.colorA = new THREE.Color(0xff8117);
     this.colorB = new THREE.Color(0xffd500);
     this.intensity = 3;
 
-
     this.colorLightningA = new THREE.Color(0x0000ff);
     this.colorLightningB = new THREE.Color(0x00ffff);
-
-
 
     this.explosionParticles = {
       count: 100,
@@ -74,13 +68,10 @@ export default class Lightning {
       positionRadiusVariance: 0,
     };
 
-
     this._createParticleStops();
-
 
     this.setupArc();
     this.createExplosionMaterial();
-
 
     this.isDebugMode = this.game.isDebugMode;
     if (this.isDebugMode) {
@@ -206,7 +197,6 @@ export default class Lightning {
       points.push(point);
     }
 
-
     const curve = new THREE.CatmullRomCurve3(points);
     const geometry = new THREE.TubeGeometry(curve, 18, 0.07, 8, false);
 
@@ -254,7 +244,6 @@ export default class Lightning {
     params.gravityStrength = this.explosionParticles.gravityStrength;
     params.dragCoefficient = this.explosionParticles.dragCoefficient;
 
-
     const rendererParams = new ParticleRendererParams();
     rendererParams.maxParticles = this.explosionParticles.count;
     rendererParams.group = new THREE.Group();
@@ -280,7 +269,6 @@ export default class Lightning {
     const originalPosition = camera.position.clone();
     const shakeStart = performance.now();
 
-
     let shakeDirection = new THREE.Vector3(0, 0, 1);
     if (strikePosition) {
       shakeDirection = new THREE.Vector3()
@@ -293,19 +281,16 @@ export default class Lightning {
       const progress = Math.min(elapsed / this.cameraShakeDuration, 1);
 
       if (progress < 1) {
-
         const easeIn = progress < 0.1 ? Math.pow(progress / 0.1, 2) : 1;
         const decayFactor = Math.pow(1 - progress, this.cameraShakeDecay);
         const currentIntensity =
           this.cameraShakeIntensity * decayFactor * easeIn;
-
 
         const time = elapsed * this.cameraShakeFrequency;
         const noise1 = Math.sin(time * 1.0) * 0.6;
         const noise2 = Math.sin(time * 2.3) * 0.3;
         const noise3 = Math.sin(time * 4.7) * 0.1;
         const combinedNoise = noise1 + noise2 + noise3;
-
 
         const randomX = (Math.random() - 0.5) * 2;
         const randomY = (Math.random() - 0.5) * 2;
@@ -335,17 +320,14 @@ export default class Lightning {
     this.createExplosionParticles(position);
     this.triggerCameraShake(position);
 
-
     if (this.game.ambientSoundManager) {
       this.game.ambientSoundManager.playThunderStrike();
     }
-
 
     setTimeout(() => {
       this.scene.remove(arcMesh);
       arcMesh.geometry.dispose();
       arcMesh.material.dispose();
-
 
       const index = this.#activeLightningArcs.indexOf(arcMesh);
       if (index > -1) {
@@ -355,7 +337,6 @@ export default class Lightning {
   }
 
   strikeRandom() {
-
     const x =
       this.groundBounds.minX +
       Math.random() * (this.groundBounds.maxX - this.groundBounds.minX);
@@ -390,8 +371,10 @@ export default class Lightning {
       const shrinkFactor = aspectRatio / idealRatio;
 
       // Calculate center and half-width for X
-      const centerX = (this.baseGroundBounds.minX + this.baseGroundBounds.maxX) / 2;
-      const halfWidthX = (this.baseGroundBounds.maxX - this.baseGroundBounds.minX) / 2;
+      const centerX =
+        (this.baseGroundBounds.minX + this.baseGroundBounds.maxX) / 2;
+      const halfWidthX =
+        (this.baseGroundBounds.maxX - this.baseGroundBounds.minX) / 2;
 
       // Apply shrink to X bounds
       this.groundBounds.minX = centerX - halfWidthX * shrinkFactor;
@@ -399,8 +382,10 @@ export default class Lightning {
 
       // For very portrait screens (phones held vertically), also shrink Z a bit
       if (aspectRatio < 1) {
-        const centerZ = (this.baseGroundBounds.minZ + this.baseGroundBounds.maxZ) / 2;
-        const halfWidthZ = (this.baseGroundBounds.maxZ - this.baseGroundBounds.minZ) / 2;
+        const centerZ =
+          (this.baseGroundBounds.minZ + this.baseGroundBounds.maxZ) / 2;
+        const halfWidthZ =
+          (this.baseGroundBounds.maxZ - this.baseGroundBounds.minZ) / 2;
         const zShrink = 0.7 + aspectRatio * 0.3; // Range from 0.7 to 1.0
 
         this.groundBounds.minZ = centerZ - halfWidthZ * zShrink;
@@ -416,20 +401,17 @@ export default class Lightning {
   update(delta) {
     this.elapsedTime += delta;
 
-
     const currentTime = this.game.time?.elapsedTime || performance.now() / 1000;
 
     if (this.#explosionMaterial) {
       this.#explosionMaterial.uniforms.uTime.value = currentTime;
     }
 
-
     for (const arc of this.#activeLightningArcs) {
       if (arc.material?.uniforms?.uTime) {
         arc.material.uniforms.uTime.value = currentTime;
       }
     }
-
 
     if (this.isRainySeason() && this.elapsedTime >= this.nextLightningTime) {
       this.strikeRandom();
@@ -521,7 +503,6 @@ export default class Lightning {
       { min: 0, max: 5, step: 0.1, label: 'Position Radius Variance' },
       folder
     );
-
 
     const shakeFolder = 'Lightning/Camera Shake';
     this.game.debug.add(

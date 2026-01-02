@@ -19,11 +19,9 @@ varying float vWorldY;
 varying vec3 vDebugColor;
 
 uniform float uTime;
-
 uniform float uBreezeSpeed;
 uniform float uBreezeScale;
 uniform float uBreezeStrength;
-
 uniform float uSquallSpeed;
 uniform float uSquallScale;
 uniform float uSquallStrength;
@@ -72,7 +70,6 @@ void main() {
     float Squall = noise(windPos * uSquallScale * 0.5 + uTime * uSquallSpeed) - 0.5;
 
     float wind = (Breeze * uBreezeStrength + Squall * uSquallStrength) * heightMask;
-
 
     vec3 windOffset = cameraRight * wind * 0.25 + cameraUp * wind * 0.1;
 

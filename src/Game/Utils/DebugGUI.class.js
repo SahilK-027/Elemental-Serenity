@@ -36,17 +36,13 @@ import * as THREE from 'three';
  */
 export default class DebugGUI {
   constructor() {
-
     if (DebugGUI.instance) {
       return DebugGUI.instance;
     }
 
-
-
     this.gui = null;
     this.folders = new Map();
     this.controllers = new Map();
-
 
     DebugGUI.instance = this;
 
@@ -54,8 +50,6 @@ export default class DebugGUI {
   }
 
   _initializeGUI() {
-
-
     this.gui = new GUI();
   }
 
@@ -74,10 +68,13 @@ export default class DebugGUI {
     const value = targetObject[targetProperty];
     const label = options.label || targetProperty;
 
-
     if (value instanceof THREE.Vector2 || value instanceof THREE.Vector3) {
       const vecFolder = controllerTarget.addFolder(label);
-      const axes = ['x', 'y', value instanceof THREE.Vector3 ? 'z' : null].filter(Boolean);
+      const axes = [
+        'x',
+        'y',
+        value instanceof THREE.Vector3 ? 'z' : null,
+      ].filter(Boolean);
 
       axes.forEach((axis) => {
         const controller = vecFolder
@@ -89,7 +86,6 @@ export default class DebugGUI {
             options.step !== undefined ? options.step : 0.01
           )
           .name(axis);
-
 
         if (typeof options.onChange === 'function') {
           controller.onChange(() => {
@@ -105,11 +101,8 @@ export default class DebugGUI {
       return vecFolder;
     }
 
-
     const isPlainVec =
-      value &&
-      typeof value === 'object' &&
-      ('x' in value && 'y' in value);
+      value && typeof value === 'object' && 'x' in value && 'y' in value;
 
     if (isPlainVec) {
       const vecFolder = controllerTarget.addFolder(label);
@@ -140,7 +133,6 @@ export default class DebugGUI {
       return vecFolder;
     }
 
-
     if (options.options && typeof options.options === 'object') {
       const controller = controllerTarget.add(
         targetObject,
@@ -153,7 +145,6 @@ export default class DebugGUI {
       return controller;
     }
 
-
     if (typeof value === 'boolean') {
       const controller = controllerTarget
         .add(targetObject, targetProperty)
@@ -163,7 +154,6 @@ export default class DebugGUI {
       return controller;
     }
 
-
     const isColor =
       options.color ||
       value instanceof THREE.Color ||
@@ -171,10 +161,8 @@ export default class DebugGUI {
 
     let controller;
     if (isColor) {
-
       controller = controllerTarget.addColor(targetObject, targetProperty);
     } else {
-
       controller = controllerTarget.add(
         targetObject,
         targetProperty,
@@ -190,7 +178,6 @@ export default class DebugGUI {
     return controller;
   }
 
-
   static getInstance() {
     if (!DebugGUI.instance) {
       DebugGUI.instance = new DebugGUI();
@@ -198,10 +185,8 @@ export default class DebugGUI {
     return DebugGUI.instance;
   }
 
-
   static destroy() {
     if (DebugGUI.instance) {
-
       if (DebugGUI.instance.gui) {
         DebugGUI.instance.gui.destroy();
       }

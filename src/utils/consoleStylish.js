@@ -1,7 +1,3 @@
-
-
-
-
 const pad = (n) => String(n).padStart(2, '0');
 
 function timeStamp() {
@@ -11,13 +7,11 @@ function timeStamp() {
   )}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
 
-/** Helper to build CSS string */
 const css = (obj) =>
   Object.entries(obj)
     .map(([k, v]) => `${k}:${v}`)
     .join(';');
 
-/** Pretty tag log with enhanced styling */
 function styled(level, label, message) {
   const colors = {
     info: { fg: '#0c4a6e', bg: '#7dd3fc', border: '#38bdf8' },
@@ -57,7 +51,6 @@ function styled(level, label, message) {
   );
 }
 
-/** Display ASCII art banner */
 function asciiArt() {
   const art = `
 %c███████╗██╗     ███████╗███╗   ███╗███████╗███╗   ██╗████████╗ █████╗ ██╗
@@ -93,19 +86,15 @@ function asciiArt() {
   console.log(art, ...gradient);
 }
 
-/** Display main banner with project info */
 function banner({
   title = 'Elemental Serenity',
   subtitle = 'Interactive 3D Nature Experience',
   version = '1.0.0',
   github = 'https://github.com/SahilK-027/elemental-serenity',
 } = {}) {
-
   console.clear();
 
-
   asciiArt();
-
 
   console.log(
     `%c✨ ${subtitle} %c v${version}`,
@@ -124,7 +113,6 @@ function banner({
       'margin-left': '8px',
     })
   );
-
 
   console.log(
     `%c%c Code on GitHub %c ${github} %c →`,
@@ -163,7 +151,6 @@ function banner({
   console.log('');
 }
 
-/** Section header */
 function section(title, icon = '◆') {
   console.log(
     `\n%c ${icon} ${title.toUpperCase()} `,
@@ -180,13 +167,11 @@ function section(title, icon = '◆') {
   );
 }
 
-/** Print tech stack as a styled table */
 function techTable(techObjectOrArray) {
   section('Tech Stack', '⚡');
   console.table(techObjectOrArray);
 }
 
-/** Open group (not collapsed) */
 function groupOpen(title, icon = '') {
   console.group(
     `%c ${title}`,
@@ -202,7 +187,6 @@ function groupOpen(title, icon = '') {
   );
 }
 
-/** Collapsed group */
 function group(title, callback, icon = '📁') {
   console.groupCollapsed(
     `%c ${icon} ${title}`,
@@ -222,12 +206,10 @@ function group(title, callback, icon = '📁') {
   }
 }
 
-/** End open group */
 function groupEnd() {
   console.groupEnd();
 }
 
-/** Divider line */
 function divider(char = '─', length = 50) {
   console.log(
     `%c${char.repeat(length)}`,
@@ -235,7 +217,6 @@ function divider(char = '─', length = 50) {
   );
 }
 
-/** Key-value log */
 function keyValue(key, value, color = '#67e8f9') {
   console.log(
     `%c  ${key}: %c${value}`,
@@ -244,7 +225,6 @@ function keyValue(key, value, color = '#67e8f9') {
   );
 }
 
-/** Credits/links section */
 function credits(links = []) {
   section('Links & Credits', '🔗');
   links.forEach(({ label, url }) => {
@@ -260,12 +240,10 @@ function credits(links = []) {
   });
 }
 
-/** Performance metric */
 function perf(label, value, unit = 'ms') {
   styled('perf', 'PERF', `${label}: ${value}${unit}`);
 }
 
-/** Log current game state */
 function logGameState(game) {
   const renderer = game.renderer?.rendererInstance;
   const seasonManager = game.seasonManager;
@@ -274,7 +252,6 @@ function logGameState(game) {
   const musicManager = game.musicManager;
 
   section('Current State', '📊');
-
 
   groupOpen('🖥️ Graphics Settings');
 
@@ -287,7 +264,9 @@ function logGameState(game) {
   keyValue('Quality Preset', storedQuality.toUpperCase(), '#facc15');
   keyValue(
     'Pixel Ratio',
-    `${renderer?.getPixelRatio()?.toFixed(1) || storedPixelRatio} (cap: ${storedPixelRatio})`,
+    `${
+      renderer?.getPixelRatio()?.toFixed(1) || storedPixelRatio
+    } (cap: ${storedPixelRatio})`,
     '#67e8f9'
   );
   keyValue('Shadow Map', storedShadowMap, '#c084fc');
@@ -314,7 +293,6 @@ function logGameState(game) {
   }
   groupEnd();
 
-
   groupOpen('🌍 World State');
   const currentSeason = seasonManager?.currentSeason || 'unknown';
   const currentTime = envTimeManager?.envTime || 'unknown';
@@ -337,7 +315,6 @@ function logGameState(game) {
     timeColors[currentTime] || '#94a3b8'
   );
   groupEnd();
-
 
   groupOpen('🔊 Audio State');
   const musicEnabled = game.withMusic;
@@ -363,7 +340,6 @@ function logGameState(game) {
   }
   groupEnd();
 
-
   groupOpen('💻 Viewport');
   keyValue('Window', `${window.innerWidth} × ${window.innerHeight}`, '#67e8f9');
   keyValue('Device Pixel Ratio', `${window.devicePixelRatio}x`, '#facc15');
@@ -373,7 +349,6 @@ function logGameState(game) {
     '#c084fc'
   );
   groupEnd();
-
 
   divider('─', 60);
   const debugHintStyle = css({
@@ -395,7 +370,6 @@ function logGameState(game) {
   divider('═', 60);
 }
 
-/** Log season change */
 function logSeasonChange(newSeason, oldSeason) {
   const seasonEmojis = {
     spring: '🌸',
@@ -413,7 +387,9 @@ function logSeasonChange(newSeason, oldSeason) {
   const color = seasonColors[newSeason] || '#94a3b8';
 
   console.log(
-    `%c${emoji} SEASON%c ${oldSeason?.toUpperCase() || '?'} → ${newSeason.toUpperCase()}`,
+    `%c${emoji} SEASON%c ${
+      oldSeason?.toUpperCase() || '?'
+    } → ${newSeason.toUpperCase()}`,
     css({
       background: color,
       color: '#0f172a',
@@ -431,7 +407,6 @@ function logSeasonChange(newSeason, oldSeason) {
   );
 }
 
-/** Log time of day change */
 function logTimeChange(newTime, oldTime) {
   const timeEmojis = { day: '☀️', night: '🌙' };
   const timeColors = { day: '#fde047', night: '#a78bfa' };
@@ -439,7 +414,9 @@ function logTimeChange(newTime, oldTime) {
   const color = timeColors[newTime] || '#94a3b8';
 
   console.log(
-    `%c${emoji} TIME%c ${oldTime?.toUpperCase() || '?'} → ${newTime.toUpperCase()}`,
+    `%c${emoji} TIME%c ${
+      oldTime?.toUpperCase() || '?'
+    } → ${newTime.toUpperCase()}`,
     css({
       background: color,
       color: '#0f172a',
@@ -457,7 +434,6 @@ function logTimeChange(newTime, oldTime) {
   );
 }
 
-/** Log music state change */
 function logMusicChange(action, trackName = null) {
   const actions = {
     play: { emoji: '▶️', label: 'PLAYING', color: '#4ade80' },
@@ -489,7 +465,6 @@ function logMusicChange(action, trackName = null) {
   );
 }
 
-/** Log audio toggle (mute/unmute) */
 function logAudioToggle(enabled) {
   const emoji = enabled ? '🔊' : '🔇';
   const label = enabled ? 'UNMUTED' : 'MUTED';
@@ -514,7 +489,6 @@ function logAudioToggle(enabled) {
   );
 }
 
-/** Log graphics quality change */
 function logGraphicsChange(quality) {
   const qualityColors = {
     low: '#f87171',

@@ -7,9 +7,7 @@ import reveal from './reveal.js';
 import ToastManager from './Game/UI/ToastManager.class.js';
 import { Console } from './utils/consoleStylish.js';
 
-// Haptic feedback utilities for iOS Brrrowser and Android
 const Haptics = {
-  // Light tap for button presses
   buttonTap() {
     if (navigator.haptic) {
       navigator.haptic([{ intensity: 0.7, sharpness: 0.1 }]);
@@ -18,7 +16,6 @@ const Haptics = {
     }
   },
 
-  // Strong impact for thunder/lightning
   thunder() {
     if (navigator.haptic) {
       navigator.haptic('error');
@@ -32,24 +29,35 @@ const isDebugMode =
   typeof window !== 'undefined' &&
   new URLSearchParams(window.location.search).get('mode') === 'debug';
 
-
-
-
-
 Console.banner({
   title: 'Elemental Serenity',
   subtitle: 'Interactive 3D Nature Experience',
   version: '0.0.0',
 });
 
-
 Console.techTable([
   { Layer: 'Build', Technology: 'Vite 6.0', Details: 'ES Modules, HMR' },
-  { Layer: '3D Engine', Technology: 'Three.js 0.182', Details: 'WebGLRenderer' },
-  { Layer: 'Animation', Technology: 'GSAP 3.14.2', Details: 'Tweening & Timelines' },
+  {
+    Layer: '3D Engine',
+    Technology: 'Three.js 0.182',
+    Details: 'WebGLRenderer',
+  },
+  {
+    Layer: 'Animation',
+    Technology: 'GSAP 3.14.2',
+    Details: 'Tweening & Timelines',
+  },
   { Layer: 'Shaders', Technology: 'GLSL', Details: 'vite-plugin-glsl 1.3.1' },
-  { Layer: 'Debug UI', Technology: 'lil-gui 0.21', Details: 'Runtime controls (?mode=debug)' },
-  { Layer: 'Perf Monitor', Technology: 'three-perf 1.0.11', Details: 'FPS & draw calls' },
+  {
+    Layer: 'Debug UI',
+    Technology: 'lil-gui 0.21',
+    Details: 'Runtime controls (?mode=debug)',
+  },
+  {
+    Layer: 'Perf Monitor',
+    Technology: 'three-perf 1.0.11',
+    Details: 'FPS & draw calls',
+  },
   { Layer: 'Styles', Technology: 'Sass 1.97', Details: 'SCSS preprocessing' },
 ]);
 
@@ -72,10 +80,8 @@ const dayNightToggle = document.getElementById('daynight-toggle');
 const dayNightButtons = document.querySelectorAll('.daynight-button');
 const controlPanel = document.getElementById('control-panel');
 const pageTitle = document.getElementById('page-title');
-
 const seasonManager = SeasonManager.getInstance();
 const environmentTimeManager = EnvironmentTimeManager.getInstance();
-
 const shaderReveal = new reveal(shaderCanvas);
 
 const setProgressBarWidth = () => {
@@ -199,19 +205,14 @@ resources.on('loaded', () => {
         withMusic
       );
 
-
       window.gameInstance = game;
-
-
       Console.logGameState(game);
-
 
       if (game.musicManager) {
         game.musicManager.on('trackChanged', (track) => {
           Console.logMusicChange('track', track.name);
         });
       }
-
 
       window.addEventListener('graphicsQualityChanged', (event) => {
         Console.logGraphicsChange(event.detail.quality);
@@ -298,7 +299,6 @@ seasonManager.onChange((newSeason, oldSeason) => {
     }
   });
 
-
   Console.logSeasonChange(newSeason, oldSeason);
 
   window.dispatchEvent(
@@ -357,7 +357,6 @@ environmentTimeManager.onChange((newTime, oldTime) => {
       button.classList.add('active');
     }
   });
-
 
   Console.logTimeChange(newTime, oldTime);
 

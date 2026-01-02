@@ -5,7 +5,6 @@ export default class SeasonManager extends EventEmitter {
   constructor(initialSeason = 'spring') {
     super();
 
-
     if (SeasonManager.instance) {
       return SeasonManager.instance;
     }
@@ -27,7 +26,6 @@ export default class SeasonManager extends EventEmitter {
   createSeasonConfigs() {
     return {
       spring: {
-
         bush: {
           day: {
             shadowColor: [0.003, 0.074, 0.003],

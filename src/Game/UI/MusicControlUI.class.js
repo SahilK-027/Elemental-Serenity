@@ -53,7 +53,6 @@ export default class MusicControlUI {
 
     this.isMusicEnabled = !this.isMusicEnabled;
 
-
     Console.logAudioToggle(this.isMusicEnabled);
 
     if (this.isMusicEnabled) {
@@ -101,11 +100,8 @@ export default class MusicControlUI {
 
     window.addEventListener('blur', this.handleWindowBlur);
     window.addEventListener('focus', this.handleWindowFocus);
-
     window.addEventListener('beforeunload', this.handleBeforeUnload);
-
     window.addEventListener('pagehide', this.handlePageHide);
-
     window.addEventListener('unload', this.handleUnload);
   }
 

@@ -253,8 +253,6 @@ export default class Ground {
       },
       uPerlinNoise: { value: perlinNoise },
       uWaterDepthTexture: { value: waterDepthTexture },
-
-
       uRipplesRatio: { value: 0.0 },
       uDensityMaskMin: { value: 0.05 },
       uDensityMaskMax: { value: 0.15 },
@@ -274,8 +272,6 @@ export default class Ground {
       uWaterDepthFade: { value: 0.1 },
       uDiscardThreshold: { value: 0.45 },
       uRippleOpacity: { value: 2.5 },
-
-
       uSplashesRatio: { value: 0.0 },
       uSplashesNoiseFrequency: { value: 0.33 },
       uSplashesTimeFrequency: { value: 6.0 },
@@ -284,8 +280,6 @@ export default class Ground {
       uSplashesEdgeAttenuationHigh: { value: 1.0 },
       uSplashesCenterMin: { value: 0.0 },
       uSplashesCenterMax: { value: 0.5 },
-
-
       uIceRatio: { value: 0.0 },
       uIceNoiseFrequency: { value: 0.3 },
       uIceColor: { value: new THREE.Color(0.9, 0.95, 1.0) },
@@ -323,7 +317,6 @@ export default class Ground {
     this.ripples.position.set(-0.2, 0.1, 1.3);
     this.scene.add(this.ripples);
   }
-
 
   initGUI() {
     this.debugGUI.add(
@@ -370,7 +363,6 @@ export default class Ground {
       'Water'
     );
 
-
     this.debugGUI.add(
       this.customWaterRipplesUniforms.uRipplesRatio,
       'value',
@@ -395,7 +387,6 @@ export default class Ground {
       { min: 0.0, max: 5.0, step: 0.1, label: 'Ripple Opacity' },
       'Water'
     );
-
 
     this.debugGUI.add(
       this.customWaterRipplesUniforms.uSplashesRatio,
@@ -428,7 +419,6 @@ export default class Ground {
       'Water Effects'
     );
 
-
     this.debugGUI.add(
       this.customWaterRipplesUniforms.uIceRatio,
       'value',
@@ -454,12 +444,9 @@ export default class Ground {
       this.grassManager.update();
     }
 
-
     this.customWaterRipplesUniforms.uTime.value += 0.001;
 
-
     const currentSeason = this.seasonManager.currentSeason;
-
 
     if (currentSeason === 'rainy') {
       this.customWaterRipplesUniforms.uRipplesRatio.value =
@@ -479,9 +466,7 @@ export default class Ground {
         0.0,
         0.02
       );
-    }
-
-    else if (currentSeason === 'winter') {
+    } else if (currentSeason === 'winter') {
       this.customWaterRipplesUniforms.uRipplesRatio.value =
         THREE.MathUtils.lerp(
           this.customWaterRipplesUniforms.uRipplesRatio.value,
@@ -499,9 +484,7 @@ export default class Ground {
         1.0,
         0.05
       );
-    }
-
-    else {
+    } else {
       this.customWaterRipplesUniforms.uRipplesRatio.value =
         THREE.MathUtils.lerp(
           this.customWaterRipplesUniforms.uRipplesRatio.value,

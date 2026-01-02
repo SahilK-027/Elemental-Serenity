@@ -37,7 +37,6 @@ export default class Fire {
     this.smokeEmitterParams = null;
     this.amberEmitterParams = null;
 
-
     const particleSettings = this.getInitialParticleSettings();
     this.originalFireEmissionRate = particleSettings.fireEmissionRate;
     this.originalAmberEmissionRate = particleSettings.amberEmissionRate;
@@ -79,7 +78,6 @@ export default class Fire {
     this.updateFireEffectsForSeason();
   }
 
-
   getInitialParticleSettings() {
     const defaults = {
       fireEmissionRate: 500,
@@ -94,7 +92,6 @@ export default class Fire {
       const settings = JSON.parse(savedSettings);
       const quality = settings.graphicsQuality || 'medium';
 
-
       if (quality === 'custom') {
         const customParticles = settings.customParticles || 500;
         return {
@@ -104,23 +101,40 @@ export default class Fire {
         };
       }
 
-
       const presetSettings = {
-        low: { fireEmissionRate: 350, smokeEmissionRate: 35, amberEmissionRate: 20 },
-        medium: { fireEmissionRate: 500, smokeEmissionRate: 50, amberEmissionRate: 30 },
-        high: { fireEmissionRate: 650, smokeEmissionRate: 65, amberEmissionRate: 40 },
-        ultra: { fireEmissionRate: 800, smokeEmissionRate: 80, amberEmissionRate: 50 },
+        low: {
+          fireEmissionRate: 350,
+          smokeEmissionRate: 35,
+          amberEmissionRate: 20,
+        },
+        medium: {
+          fireEmissionRate: 500,
+          smokeEmissionRate: 50,
+          amberEmissionRate: 30,
+        },
+        high: {
+          fireEmissionRate: 650,
+          smokeEmissionRate: 65,
+          amberEmissionRate: 40,
+        },
+        ultra: {
+          fireEmissionRate: 800,
+          smokeEmissionRate: 80,
+          amberEmissionRate: 50,
+        },
       };
 
       return presetSettings[quality] || defaults;
     } catch (error) {
-      console.warn('Failed to load particle settings from localStorage:', error);
+      console.warn(
+        'Failed to load particle settings from localStorage:',
+        error
+      );
       return defaults;
     }
   }
 
   _createDefaultStops() {
-
     this.fireSizeStops = [
       { time: 0.0, value: 15 },
       { time: 0.5, value: 60 },
@@ -144,7 +158,6 @@ export default class Fire {
       { time: 1.0, value: 1.0 },
     ];
 
-
     this.smokeSizeStops = [
       { time: 0.0, value: 15 },
       { time: 0.5, value: 60 },
@@ -167,7 +180,6 @@ export default class Fire {
       { time: 0.0, value: 0.0 },
       { time: 1.0, value: 0.0 },
     ];
-
 
     this.amberSizeStops = [
       { time: 0.0, value: 0 },
@@ -934,11 +946,15 @@ export default class Fire {
     const isRainySeason = this.currentSeason === 'rainy';
 
     if (this.fireEmitterParams) {
-      this.fireEmitterParams.emissionRate = isRainySeason ? 0 : this.originalFireEmissionRate;
+      this.fireEmitterParams.emissionRate = isRainySeason
+        ? 0
+        : this.originalFireEmissionRate;
     }
 
     if (this.amberEmitterParams) {
-      this.amberEmitterParams.emissionRate = isRainySeason ? 0 : this.originalAmberEmissionRate;
+      this.amberEmitterParams.emissionRate = isRainySeason
+        ? 0
+        : this.originalAmberEmissionRate;
     }
 
     if (this.smokeEmitterParams) {
@@ -946,8 +962,14 @@ export default class Fire {
         ? this.rainySmokeEmissionRate
         : this.originalSmokeEmissionRate;
 
-      const smokePos = isRainySeason ? this.rainySmokePosition : this.originalSmokePosition;
-      this.smokeEmitterParams.shape.position.set(smokePos.x, smokePos.y, smokePos.z);
+      const smokePos = isRainySeason
+        ? this.rainySmokePosition
+        : this.originalSmokePosition;
+      this.smokeEmitterParams.shape.position.set(
+        smokePos.x,
+        smokePos.y,
+        smokePos.z
+      );
     }
 
     this.updateSmokeColorForSeason(isRainySeason);
@@ -970,7 +992,9 @@ export default class Fire {
   }
 
   updateSmokeColorForSeason(isRainySeason) {
-    const colorStops = isRainySeason ? this.rainySmokeColorStops : this.originalSmokeColorStops;
+    const colorStops = isRainySeason
+      ? this.rainySmokeColorStops
+      : this.originalSmokeColorStops;
 
     this.smokeColorStops.forEach((stop, index) => {
       if (colorStops[index]) {

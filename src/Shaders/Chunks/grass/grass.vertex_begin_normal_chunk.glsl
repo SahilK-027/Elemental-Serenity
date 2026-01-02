@@ -25,8 +25,8 @@ float heightFactor = position.y;
 float bendAngle = windMagnitude * heightFactor * heightFactor * 2.0;
 
 if(windMagnitude > 0.001) {
-mat3 bendRotation = rotateAxis(rotationAxis, bendAngle);
-terrainNormal = bendRotation * terrainNormal;
+  mat3 bendRotation = rotateAxis(rotationAxis, bendAngle);
+  terrainNormal = bendRotation * terrainNormal;
 }
 
 #include <beginnormal_vertex>

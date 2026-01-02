@@ -9,7 +9,6 @@ export default class RainSystem {
     this.bounds = bounds;
     this.seasonManager = SeasonManager.getInstance();
 
-
     this.count = 800;
     this.visible = false;
 
@@ -20,14 +19,15 @@ export default class RainSystem {
   }
 
   createRainGeometry() {
-
     this.geometry = new THREE.BufferGeometry();
-
 
     const positions = new Float32Array(this.count * 6);
     const colors = new Float32Array(this.count * 6);
 
-    this.geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    this.geometry.setAttribute(
+      'position',
+      new THREE.BufferAttribute(positions, 3)
+    );
     this.geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
   }
 
@@ -60,18 +60,19 @@ export default class RainSystem {
       this.respawnParticle(this.particles[i]);
 
       this.particles[i].pos.y =
-        this.bounds.yMin + Math.random() * (this.bounds.yMax - this.bounds.yMin + 10);
+        this.bounds.yMin +
+        Math.random() * (this.bounds.yMax - this.bounds.yMin + 10);
     }
 
     this.updateGeometry();
   }
 
   respawnParticle(particle) {
-
-    particle.pos.x = this.bounds.originX + (Math.random() - 0.5) * this.bounds.xRange;
+    particle.pos.x =
+      this.bounds.originX + (Math.random() - 0.5) * this.bounds.xRange;
     particle.pos.y = this.bounds.yMax + Math.random() * 5.0;
-    particle.pos.z = this.bounds.originZ + (Math.random() - 0.5) * this.bounds.zRange;
-
+    particle.pos.z =
+      this.bounds.originZ + (Math.random() - 0.5) * this.bounds.zRange;
 
     particle.vel.set(
       (Math.random() - 0.5) * 0.2,
@@ -91,9 +92,7 @@ export default class RainSystem {
       const particle = this.particles[i];
       const i6 = i * 6;
 
-
       if (particle.spawnDelay > 0) {
-
         positions[i6] = positions[i6 + 3] = 0;
         positions[i6 + 1] = positions[i6 + 4] = -100;
         positions[i6 + 2] = positions[i6 + 5] = 0;
@@ -103,30 +102,24 @@ export default class RainSystem {
         continue;
       }
 
-
       const dropLength = Math.min(particle.vel.length() * 0.08, 0.4);
       const direction = particle.vel.clone().normalize();
-
 
       positions[i6] = particle.pos.x;
       positions[i6 + 1] = particle.pos.y;
       positions[i6 + 2] = particle.pos.z;
 
-
       positions[i6 + 3] = particle.pos.x - direction.x * dropLength;
       positions[i6 + 4] = particle.pos.y - direction.y * dropLength;
       positions[i6 + 5] = particle.pos.z - direction.z * dropLength;
-
 
       const rainColor = this.getRainColor();
       const baseAlpha = 0.8;
       const fadeAlpha = 0.3;
 
-
       colors[i6] = rainColor.r * baseAlpha;
       colors[i6 + 1] = rainColor.g * baseAlpha;
       colors[i6 + 2] = rainColor.b * baseAlpha;
-
 
       colors[i6 + 3] = rainColor.r * fadeAlpha;
       colors[i6 + 4] = rainColor.g * fadeAlpha;
@@ -138,7 +131,6 @@ export default class RainSystem {
   }
 
   getRainColor() {
-
     const season = this.seasonManager.currentSeason;
 
     switch (season) {
@@ -168,20 +160,22 @@ export default class RainSystem {
     for (let i = 0; i < this.count; i++) {
       const particle = this.particles[i];
 
-
       if (particle.spawnDelay > 0) {
         particle.spawnDelay -= cappedDt;
         continue;
       }
 
-
       particle.pos.add(particle.vel.clone().multiplyScalar(cappedDt));
 
-
       const windStrength = 0.02;
-      particle.pos.x += Math.sin(elapsedTime * 1.5 + particle.pos.z * 0.05) * windStrength * cappedDt;
-      particle.pos.z += Math.cos(elapsedTime * 1.2 + particle.pos.x * 0.03) * windStrength * cappedDt;
-
+      particle.pos.x +=
+        Math.sin(elapsedTime * 1.5 + particle.pos.z * 0.05) *
+        windStrength *
+        cappedDt;
+      particle.pos.z +=
+        Math.cos(elapsedTime * 1.2 + particle.pos.x * 0.03) *
+        windStrength *
+        cappedDt;
 
       if (particle.pos.y < -2.0) {
         this.respawnParticle(particle);

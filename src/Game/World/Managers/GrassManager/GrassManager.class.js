@@ -37,7 +37,6 @@ export class GrassManager {
     this.gridSpacing = gridSpacing;
     this.grassSize = 1.185;
 
-
     this.GRASS_PER_TILE = this.getInitialGrassDensity();
 
     this.FLOWERS_PER_TILE = 20;
@@ -72,7 +71,6 @@ export class GrassManager {
     this.createFlowers();
   }
 
-
   getInitialGrassDensity() {
     const defaultDensity = 12500;
 
@@ -83,11 +81,9 @@ export class GrassManager {
       const settings = JSON.parse(savedSettings);
       const quality = settings.graphicsQuality || 'medium';
 
-
       if (quality === 'custom') {
         return settings.customGrass || defaultDensity;
       }
-
 
       const presetDensities = {
         low: 10000,
@@ -493,23 +489,18 @@ export class GrassManager {
     }
   }
 
-
   regenerateGrass() {
-
-
     if (this.grassInstancedMesh) {
       this.scene.remove(this.grassInstancedMesh);
       this.grassInstancedMesh.dispose();
       this.grassInstancedMesh = null;
     }
 
-
     if (this.flowerInstancedMesh) {
       this.scene.remove(this.flowerInstancedMesh);
       this.flowerInstancedMesh.dispose();
       this.flowerInstancedMesh = null;
     }
-
 
     this.createAllGrassInSingleMesh();
     this.createFlowers();

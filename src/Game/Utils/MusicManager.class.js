@@ -8,7 +8,7 @@ export default class MusicManager extends EventEmitter {
     this.musicTracks = [
       { id: 'morningPetalsMusic', name: 'Morning Petals' },
       { id: 'windowLightMusic', name: 'Window Light' },
-      { id: 'forestDreamsMusic', name: 'Forest Dreams' }
+      { id: 'forestDreamsMusic', name: 'Forest Dreams' },
     ];
 
     this.currentTrackIndex = -1;
@@ -22,8 +22,7 @@ export default class MusicManager extends EventEmitter {
     this.init();
   }
 
-  init() {
-  }
+  init() {}
 
   startRandomMusic() {
     if (this.isPlaying) return;
@@ -39,7 +38,10 @@ export default class MusicManager extends EventEmitter {
     this.isPaused = true;
     this.isPlaying = false;
 
-    if (this.audioManager.currentMusic && this.audioManager.currentMusic.isPlaying) {
+    if (
+      this.audioManager.currentMusic &&
+      this.audioManager.currentMusic.isPlaying
+    ) {
       this.pausedTrackId = this.getCurrentTrack()?.id;
       this.audioManager.stopMusic(true, this.fadeOutDuration);
     }
@@ -90,7 +92,10 @@ export default class MusicManager extends EventEmitter {
     let nextIndex;
     do {
       nextIndex = Math.floor(Math.random() * this.musicTracks.length);
-    } while (nextIndex === this.currentTrackIndex && this.musicTracks.length > 1);
+    } while (
+      nextIndex === this.currentTrackIndex &&
+      this.musicTracks.length > 1
+    );
 
     this.currentTrackIndex = nextIndex;
     const track = this.musicTracks[this.currentTrackIndex];
@@ -99,14 +104,17 @@ export default class MusicManager extends EventEmitter {
 
     this.trigger('trackChanged', {
       name: track.name,
-      id: track.id
+      id: track.id,
     });
 
     this.startTrackMonitoring(track.id);
   }
 
   playTrackWithoutLoop(track) {
-    if (this.audioManager.currentMusic && this.audioManager.currentMusic.isPlaying) {
+    if (
+      this.audioManager.currentMusic &&
+      this.audioManager.currentMusic.isPlaying
+    ) {
       this.audioManager.stopMusic(false);
     }
 
@@ -121,7 +129,11 @@ export default class MusicManager extends EventEmitter {
 
     music.setVolume(0);
     music.play();
-    this.audioManager.fadeVolume(music, this.audioManager.musicVolume * this.audioManager.masterVolume, this.fadeInDuration);
+    this.audioManager.fadeVolume(
+      music,
+      this.audioManager.musicVolume * this.audioManager.masterVolume,
+      this.fadeInDuration
+    );
   }
 
   startTrackMonitoring(trackId) {
@@ -168,6 +180,6 @@ export default class MusicManager extends EventEmitter {
   }
 
   removeTrack(id) {
-    this.musicTracks = this.musicTracks.filter(track => track.id !== id);
+    this.musicTracks = this.musicTracks.filter((track) => track.id !== id);
   }
 }

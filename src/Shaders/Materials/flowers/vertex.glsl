@@ -14,8 +14,8 @@ float noise(vec2 p) {
 }
 
 void main() {
-          #include <begin_vertex>
-          #include <project_vertex>
+    #include <begin_vertex>
+    #include <project_vertex>
 
     vUv = uv * vec2(0.5, 1.0) + aTexOffset;
 
@@ -33,5 +33,6 @@ void main() {
     vec3 billboardPos = worldPos.xyz + cameraRight * position.x + cameraUp * position.y + windOffset;
 
     gl_Position = projectionMatrix * viewMatrix * vec4(billboardPos, 1.0);
-          #include <fog_vertex>
+
+    #include <fog_vertex>
 }

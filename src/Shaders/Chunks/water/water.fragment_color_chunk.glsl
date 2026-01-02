@@ -9,10 +9,7 @@ float waterDepth = waterDepthMap.b;
 float finalAlpha = 0.0;
 vec3 finalColor = vec3(1.0);
 
-
 float shoreMask = smoothstep(uShoreMaskThreshold, 0.0, waterDepth);
-
-
 float centerMask = smoothstep(uSplashesCenterMin, uSplashesCenterMax, waterDepth);
 
 
@@ -100,5 +97,5 @@ if ( finalAlpha < uDiscardThreshold ) {
 discard ;
 }
 
-diffuseColor . rgb = finalColor;
-diffuseColor . a = finalAlpha;
+diffuseColor.rgb = finalColor;
+diffuseColor.a = finalAlpha;

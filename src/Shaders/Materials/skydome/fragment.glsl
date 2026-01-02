@@ -1,7 +1,6 @@
 uniform vec3 uZenithColor;
 uniform vec3 uHorizonColor;
 uniform vec3 uGroundColor;
-
 uniform vec3 uSunPosition;
 uniform vec3 uSunColor;
 uniform vec3 uSunGlowColor;
@@ -10,17 +9,14 @@ uniform float uSunGlowSize;
 uniform float uSunRayCount;
 uniform float uSunRayLength;
 uniform float uSunRaySharpness;
-
 uniform vec3 uMoonPosition;
 uniform vec3 uMoonColor;
 uniform vec3 uMoonGlowColor;
 uniform float uMoonSize;
 uniform float uMoonGlowSize;
-
 uniform vec3 uStarColor;
 uniform float uStarDensity;
 uniform float uStarBrightness;
-
 uniform float uTime;
 uniform float uIsNight;
 uniform float uSeason;
@@ -44,15 +40,23 @@ float noise(vec2 p) {
     vec2 f = fract(p);
 
     vec2 u = f * f * (3.0 - 2.0 * f);
-    return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x),
-        mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);
+    return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x), mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);
 }
 
-vec3 animeSun(vec3 direction, vec3 sunDir, vec3 sunColor, vec3 glowColor,
-    float sunSize, float glowSize, float rayCount, float rayLength, float raySharpness) {
+vec3 animeSun(
+    vec3 direction,
+    vec3 sunDir,
+    vec3 sunColor,
+    vec3 glowColor,
+    float sunSize,
+    float glowSize,
+    float rayCount,
+    float rayLength,
+    float raySharpness
+) {
     float sunDot = dot(direction, sunDir);
 
-    if (sunDot < 0.85) {
+    if(sunDot < 0.85) {
         float distFromSun = acos(clamp(sunDot, -1.0, 1.0));
         float outerGlow = smoothstep(glowSize * 2.0, 0.0, distFromSun);
         return glowColor * (outerGlow * outerGlow * 0.3) * vec3(1.0, 0.8, 0.6);
@@ -75,11 +79,11 @@ vec3 animeSun(vec3 direction, vec3 sunDir, vec3 sunColor, vec3 glowColor,
     float rayStart = sunSize * 0.8;
     float rayEnd = sunSize + rayLength;
     float rayMask = smoothstep(rayEnd, rayStart, distFromSun) *
-            smoothstep(sunSize * 0.5, rayStart, distFromSun);
+        smoothstep(sunSize * 0.5, rayStart, distFromSun);
     result += mix(sunColor, glowColor, 0.5) * (rayPattern * rayMask * 0.8);
 
     float midGlow = smoothstep(glowSize, sunSize * 0.5, distFromSun) *
-            smoothstep(sunSize * 0.3, sunSize * 0.8, distFromSun);
+        smoothstep(sunSize * 0.3, sunSize * 0.8, distFromSun);
     float innerGlow = smoothstep(sunSize * 1.5, sunSize * 0.9, distFromSun);
     innerGlow *= innerGlow;
 
@@ -89,7 +93,7 @@ vec3 animeSun(vec3 direction, vec3 sunDir, vec3 sunColor, vec3 glowColor,
     float discMask = smoothstep(sunSize, sunSize * 0.85, distFromSun);
     float discGradient = smoothstep(sunSize, 0.0, distFromSun);
     vec3 discColor = mix(sunColor * 0.95, sunColor * 1.2, discGradient) +
-            vec3(0.1, 0.05, 0.0) * (1.0 - discGradient);
+        vec3(0.1, 0.05, 0.0) * (1.0 - discGradient);
 
     result = mix(result, discColor, discMask);
 
@@ -106,13 +110,13 @@ float stars(vec2 uv, float density) {
 
     float star = 0.0;
 
-    for (int x = 0; x <= 1; x++) {
-        for (int y = 0; y <= 1; y++) {
+    for(int x = 0; x <= 1; x++) {
+        for(int y = 0; y <= 1; y++) {
             vec2 cellId = starId + vec2(float(x), float(y));
 
             float cellHash = hash(cellId);
 
-            if (cellHash < density * 0.12) {
+            if(cellHash < density * 0.12) {
                 vec2 starCenter = fract(sin(cellId * vec2(12.9898, 78.233)) * 43758.5453) * 0.8 + 0.1;
                 vec2 starLocalPos = starPos - vec2(float(x), float(y)) - starCenter;
                 float dist = length(starLocalPos);
@@ -136,7 +140,7 @@ void main() {
 
     vec3 skyColor;
 
-    if (altitude > 0.0) {
+    if(altitude > 0.0) {
         float factor = altitude * altitude * sqrt(altitude);
         skyColor = mix(uHorizonColor, uZenithColor, factor);
     } else {
@@ -146,22 +150,12 @@ void main() {
 
     vec3 finalColor = skyColor;
 
-    if (uIsNight < 0.5) {
+    if(uIsNight < 0.5) {
         bool showSun = uSeason < 0.5 || (uSeason > 1.5 && uSeason < 2.5);
 
-        if (showSun) {
+        if(showSun) {
             vec3 sunDir = normalize(uSunPosition);
-            vec3 sunContribution = animeSun(
-                    direction,
-                    sunDir,
-                    uSunColor,
-                    uSunGlowColor,
-                    uSunSize,
-                    uSunGlowSize,
-                    uSunRayCount,
-                    uSunRayLength,
-                    uSunRaySharpness
-                );
+            vec3 sunContribution = animeSun(direction, sunDir, uSunColor, uSunGlowColor, uSunSize, uSunGlowSize, uSunRayCount, uSunRayLength, uSunRaySharpness);
 
             finalColor += sunContribution;
         }
@@ -187,7 +181,7 @@ void main() {
         vec3 haloColor = mix(uMoonGlowColor, uMoonColor, 0.5);
         finalColor += haloColor * innerHalo * 0.4;
 
-        if (distFromMoon < uMoonSize) {
+        if(distFromMoon < uMoonSize) {
             float moonMask = smoothstep(uMoonSize, uMoonSize * 0.85, distFromMoon);
 
             vec2 moonUv = (direction.xy - moonDir.xy) * 20.0;
@@ -205,11 +199,8 @@ void main() {
 
         float starVisibility = smoothstep(-0.3, 0.2, direction.y);
 
-        if (starVisibility > 0.01) {
-            vec2 starUv = vec2(
-                    atan(direction.z, direction.x) * 0.15915 + 0.5,
-                    acos(clamp(direction.y, -1.0, 1.0)) * 0.31831
-                );
+        if(starVisibility > 0.01) {
+            vec2 starUv = vec2(atan(direction.z, direction.x) * 0.15915 + 0.5, acos(clamp(direction.y, -1.0, 1.0)) * 0.31831);
 
             float starField = stars(starUv, uStarDensity);
             finalColor += uStarColor * starField * uStarBrightness * starVisibility;

@@ -235,7 +235,6 @@ export default class Lighting {
     this.environmentMap.current = this.environmentMap[timeOfDay];
     this.environmentMap.intensity = envSettings.intensity;
 
-
     this.scene.environment = this.environmentMap.current;
     this.scene.background = null;
     this.scene.environmentIntensity = envSettings.intensity;

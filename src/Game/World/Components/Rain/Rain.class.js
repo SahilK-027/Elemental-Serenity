@@ -7,7 +7,6 @@ export default class Rain {
     this.game = Game.getInstance();
     this.seasonManager = SeasonManager.getInstance();
 
-
     const rainBounds = {
       yMin: 15.0,
       yMax: 20.0,
@@ -19,11 +18,9 @@ export default class Rain {
 
     this.rainSystem = new RainSystem(rainBounds);
 
-
     this.seasonManager.onChange((newSeason, oldSeason) => {
       this.onSeasonChanged(newSeason, oldSeason);
     });
-
 
     this.updateVisibility();
   }

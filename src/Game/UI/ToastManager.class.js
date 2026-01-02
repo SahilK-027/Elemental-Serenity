@@ -33,7 +33,6 @@ export default class ToastManager {
     }
   }
 
-
   getBaseToastStyles() {
     return `
       background: linear-gradient(145deg, #f5f0ec, #ede8e4);

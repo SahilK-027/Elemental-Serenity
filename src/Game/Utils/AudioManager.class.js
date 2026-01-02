@@ -17,13 +17,11 @@ export default class AudioManager extends EventEmitter {
   }
 
   init() {
-
     this.createAudioObjects();
   }
 
   createAudioObjects() {
     const audioAssets = [
-
       'morningPetalsMusic',
       'windowLightMusic',
       'forestDreamsMusic',
@@ -51,7 +49,6 @@ export default class AudioManager extends EventEmitter {
         const audio = new THREE.Audio(this.listener);
         audio.setBuffer(this.resources.items[assetId]);
 
-
         if (assetId.includes('Music')) {
           audio.setVolume(this.musicVolume * this.masterVolume);
         } else {
@@ -62,7 +59,6 @@ export default class AudioManager extends EventEmitter {
       }
     });
   }
-
 
   playMusic(musicId, fadeIn = true, fadeDuration = 2000) {
     if (this.currentMusic && this.currentMusic.isPlaying) {
@@ -111,9 +107,7 @@ export default class AudioManager extends EventEmitter {
     }
   }
 
-
   forceStopAllMusic() {
-
     if (this.currentMusic) {
       try {
         this.currentMusic.stop();
@@ -122,7 +116,6 @@ export default class AudioManager extends EventEmitter {
       }
       this.currentMusic = null;
     }
-
 
     Object.keys(this.sounds).forEach((soundId) => {
       if (soundId.includes('Music')) {
@@ -138,14 +131,12 @@ export default class AudioManager extends EventEmitter {
     });
   }
 
-
   playSound(soundId, volume = null, loop = false) {
     const sound = this.sounds[soundId];
     if (!sound) {
       console.warn(`Sound ${soundId} not found`);
       return;
     }
-
 
     if (sound.isPlaying) {
       sound.stop();
@@ -169,7 +160,6 @@ export default class AudioManager extends EventEmitter {
     }
   }
 
-
   stopAllAmbientSounds() {
     const ambientSoundIds = [
       'birds1Sound',
@@ -190,7 +180,6 @@ export default class AudioManager extends EventEmitter {
       this.stopSound(soundId);
     });
   }
-
 
   setMasterVolume(volume) {
     this.masterVolume = Math.max(0, Math.min(1, volume));
@@ -220,7 +209,6 @@ export default class AudioManager extends EventEmitter {
     });
   }
 
-
   fadeVolume(audio, targetVolume, duration, onComplete = null) {
     const startVolume = audio.getVolume();
     const volumeDiff = targetVolume - startVolume;
@@ -243,11 +231,9 @@ export default class AudioManager extends EventEmitter {
     fade();
   }
 
-
   addListenerToCamera(camera) {
     camera.cameraInstance.add(this.listener);
   }
-
 
   getRandomBirdSound() {
     const birdSounds = [
@@ -258,7 +244,6 @@ export default class AudioManager extends EventEmitter {
     ];
     return birdSounds[Math.floor(Math.random() * birdSounds.length)];
   }
-
 
   dispose() {
     Object.values(this.sounds).forEach((sound) => {

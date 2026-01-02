@@ -13,16 +13,13 @@ export default class Fog {
     this.currentSeason = this.seasonManager.currentSeason;
     this.debugGUI = this.game.debug;
 
-
     this.worldSize = worldSize;
     this.fogNear = 47;
     this.fogFar = 57;
 
-
     this.fogColors = this.createFogColorPresets();
 
     this.initialize();
-
 
     this.environmentTimeManager.onChange((newValue) => {
       this.onEnvTimeChanged(newValue);

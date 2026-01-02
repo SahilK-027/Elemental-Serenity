@@ -13,17 +13,14 @@ export default class LightningButtonUI {
   }
 
   init() {
-
     this.wrapper = document.createElement('div');
     this.wrapper.className = 'lightning-btn-wrapper';
-
 
     this.button = document.createElement('button');
     this.button.id = 'lightning-strike';
     this.button.className = 'lightning-btn';
     this.button.title = 'Strike Lightning';
     this.button.innerHTML = '<i class="fas fa-bolt"></i>';
-
 
     const arcs = document.createElement('div');
     arcs.className = 'electric-arcs';
@@ -34,10 +31,8 @@ export default class LightningButtonUI {
       <span class="arc arc-4"></span>
     `;
 
-
     this.wrapper.appendChild(this.button);
     this.wrapper.appendChild(arcs);
-
 
     const controlPanel = document.getElementById('control-panel');
     if (controlPanel) {
@@ -49,10 +44,8 @@ export default class LightningButtonUI {
       }
     }
 
-
     this.handleClick = this.handleClick.bind(this);
     this.button.addEventListener('click', this.handleClick);
-
 
     this.updateVisibility(this.seasonManager.currentSeason);
   }

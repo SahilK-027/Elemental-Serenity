@@ -4,7 +4,6 @@ export default class EnvironmentTimeManager extends EventEmitter {
   constructor(initialTime = null) {
     super();
 
-
     if (EnvironmentTimeManager.instance) {
       return EnvironmentTimeManager.instance;
     }

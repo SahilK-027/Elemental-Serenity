@@ -173,7 +173,6 @@ export default class ShaderReveal {
           text-align: right;
         }
 
-        /* Small phones */
         @media (max-width: 380px) {
           .reveal-content {
             padding: 0.5rem;
@@ -188,7 +187,6 @@ export default class ShaderReveal {
           }
         }
 
-        /* Landscape mobile - reduce text for limited height */
         @media (max-height: 500px) and (orientation: landscape) {
           .reveal-content {
             max-width: min(700px, 85vw);
@@ -215,7 +213,6 @@ export default class ShaderReveal {
           }
         }
 
-        /* Very short landscape (iPhone SE landscape, etc) */
         @media (max-height: 380px) and (orientation: landscape) {
           .reveal-title {
             font-size: 1.2rem;
@@ -227,7 +224,6 @@ export default class ShaderReveal {
           }
         }
 
-        /* Tablets */
         @media (min-width: 768px) and (min-height: 600px) {
           .reveal-content {
             max-width: 550px;
@@ -242,7 +238,6 @@ export default class ShaderReveal {
           }
         }
 
-        /* Large screens */
         @media (min-width: 1200px) {
           .reveal-content {
             max-width: 620px;

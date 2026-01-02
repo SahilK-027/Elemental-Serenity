@@ -24,14 +24,12 @@ export default class Renderer {
       this.onEnvTimeChanged(newValue, oldValue);
     });
 
-
     this.onGraphicsQualityChanged = this.onGraphicsQualityChanged.bind(this);
     window.addEventListener(
       'graphicsQualityChanged',
       this.onGraphicsQualityChanged
     );
   }
-
 
   getInitialGraphicsSettings() {
     const defaults = {
@@ -47,7 +45,6 @@ export default class Renderer {
       const settings = JSON.parse(savedSettings);
       const quality = settings.graphicsQuality || 'medium';
 
-
       if (quality === 'custom') {
         return {
           antialias: settings.customAntialias || false,
@@ -56,17 +53,35 @@ export default class Renderer {
         };
       }
 
-
       const presetSettings = {
-        low: { antialias: false, shadowMapType: 'BasicShadowMap', pixelRatioCap: 2 },
-        medium: { antialias: false, shadowMapType: 'PCFShadowMap', pixelRatioCap: 2 },
-        high: { antialias: true, shadowMapType: 'PCFSoftShadowMap', pixelRatioCap: 2 },
-        ultra: { antialias: true, shadowMapType: 'PCFSoftShadowMap', pixelRatioCap: 3 },
+        low: {
+          antialias: false,
+          shadowMapType: 'BasicShadowMap',
+          pixelRatioCap: 2,
+        },
+        medium: {
+          antialias: false,
+          shadowMapType: 'PCFShadowMap',
+          pixelRatioCap: 2,
+        },
+        high: {
+          antialias: true,
+          shadowMapType: 'PCFSoftShadowMap',
+          pixelRatioCap: 2,
+        },
+        ultra: {
+          antialias: true,
+          shadowMapType: 'PCFSoftShadowMap',
+          pixelRatioCap: 3,
+        },
       };
 
       return presetSettings[quality] || defaults;
     } catch (error) {
-      console.warn('Failed to load graphics settings from localStorage:', error);
+      console.warn(
+        'Failed to load graphics settings from localStorage:',
+        error
+      );
       return defaults;
     }
   }
@@ -81,7 +96,6 @@ export default class Renderer {
       AgXToneMapping: THREE.AgXToneMapping,
       NeutralToneMapping: THREE.NeutralToneMapping,
     };
-
 
     const graphicsSettings = this.getInitialGraphicsSettings();
     const useAntialias = graphicsSettings.antialias;
@@ -112,7 +126,6 @@ export default class Renderer {
     this.rendererInstance.toneMappingExposure = 1.75;
     this.rendererInstance.shadowMap.enabled = true;
 
-
     const shadowMapTypes = {
       BasicShadowMap: THREE.BasicShadowMap,
       PCFShadowMap: THREE.PCFShadowMap,
@@ -122,7 +135,6 @@ export default class Renderer {
       shadowMapTypes[graphicsSettings.shadowMapType] || THREE.PCFShadowMap;
 
     this.rendererInstance.setSize(this.sizes.width, this.sizes.height);
-
 
     this.rendererInstance.setPixelRatio(
       Math.min(this.sizes.pixelRatio, graphicsSettings.pixelRatioCap)
@@ -148,7 +160,6 @@ export default class Renderer {
   onGraphicsQualityChanged(event) {
     const { quality, settings } = event.detail;
 
-
     const shadowMapTypes = {
       BasicShadowMap: THREE.BasicShadowMap,
       PCFShadowMap: THREE.PCFShadowMap,
@@ -160,7 +171,6 @@ export default class Renderer {
         shadowMapTypes[settings.shadowMapType];
     }
 
-
     if (this.sizes && settings.pixelRatioCap) {
       const newPixelRatio = Math.min(
         this.sizes.pixelRatio,
@@ -168,7 +178,6 @@ export default class Renderer {
       );
       this.rendererInstance.setPixelRatio(newPixelRatio);
     }
-
 
     localStorage.setItem('graphicsAntialias', settings.antialias.toString());
     localStorage.setItem('graphicsShadowMapType', settings.shadowMapType);
@@ -184,7 +193,6 @@ export default class Renderer {
 
   resize() {
     this.rendererInstance.setSize(this.sizes.width, this.sizes.height);
-
 
     const graphicsSettings = this.getInitialGraphicsSettings();
     this.rendererInstance.setPixelRatio(

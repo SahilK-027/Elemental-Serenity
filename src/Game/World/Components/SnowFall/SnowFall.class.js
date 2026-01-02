@@ -7,7 +7,6 @@ export default class SnowFall {
     this.game = Game.getInstance();
     this.seasonManager = SeasonManager.getInstance();
 
-
     const snowBounds = {
       yMin: 15.0,
       yMax: 20.0,
@@ -19,11 +18,9 @@ export default class SnowFall {
 
     this.snowSystem = new SnowSystem(snowBounds);
 
-
     this.seasonManager.onChange((newSeason, oldSeason) => {
       this.onSeasonChanged(newSeason, oldSeason);
     });
-
 
     this.updateVisibility();
   }

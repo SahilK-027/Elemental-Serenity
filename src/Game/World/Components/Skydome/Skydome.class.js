@@ -22,7 +22,6 @@ export default class Skydome {
 
     this.initialize();
 
-
     this.environmentTimeManager.onChange((newValue) => {
       this.onEnvTimeChanged(newValue);
     });
@@ -108,24 +107,19 @@ export default class Skydome {
   initialize() {
     this.createSkydome();
 
-
     setTimeout(() => {
       this.updateSkyColors();
     }, 0);
   }
 
   createSkydome() {
-
     const geometry = new THREE.SphereGeometry(150, 32, 16);
-
 
     this.skydomeMaterial = new THREE.ShaderMaterial({
       uniforms: {
-
         uZenithColor: { value: new THREE.Color(0.2, 0.5, 0.9) },
         uHorizonColor: { value: new THREE.Color(0.7, 0.85, 0.95) },
         uGroundColor: { value: new THREE.Color(0.95, 0.9, 0.85) },
-
 
         uSunPosition: { value: new THREE.Vector3(-0.846, -0.085, -1.0) },
         uSunColor: { value: new THREE.Color(1.0, 0.95, 0.8) },
@@ -136,18 +130,15 @@ export default class Skydome {
         uSunRayLength: { value: 0.0352 },
         uSunRaySharpness: { value: 8.0 },
 
-
         uMoonPosition: { value: new THREE.Vector3(-0.5, -0.085, -1.0) },
         uMoonColor: { value: new THREE.Color(0.95, 0.95, 1.0) },
         uMoonGlowColor: { value: new THREE.Color(0.7, 0.8, 1.0) },
         uMoonSize: { value: 0.0268665 },
         uMoonGlowSize: { value: 0.0266345 },
 
-
         uStarColor: { value: new THREE.Color(1.0, 1.0, 1.0) },
         uStarDensity: { value: 10.0 },
         uStarBrightness: { value: 2.5 },
-
 
         uTime: { value: 0 },
         uIsNight: { value: 0.0 },
@@ -161,7 +152,6 @@ export default class Skydome {
 
     this.skydome = new THREE.Mesh(geometry, this.skydomeMaterial);
     this.scene.add(this.skydome);
-
 
     if (this.game.isDebugMode) {
       this.initGUI();
@@ -182,22 +172,18 @@ export default class Skydome {
     const colors = this.skyColors[this.currentSeason][this.envTime];
 
     if (this.skydomeMaterial && this.skydomeMaterial.uniforms) {
-
       this.skydomeMaterial.uniforms.uZenithColor.value.copy(colors.zenithColor);
       this.skydomeMaterial.uniforms.uHorizonColor.value.copy(
         colors.horizonColor
       );
       this.skydomeMaterial.uniforms.uGroundColor.value.copy(colors.groundColor);
 
-
       this.skydomeMaterial.uniforms.uIsNight.value =
         this.envTime === 'night' ? 1.0 : 0.0;
-
 
       const seasonMap = { spring: 0, winter: 1, autumn: 2, rainy: 3 };
       this.skydomeMaterial.uniforms.uSeason.value =
         seasonMap[this.currentSeason] || 0;
-
 
       if (this.envTime === 'day') {
         this.skydomeMaterial.uniforms.uSunColor.value.copy(colors.sunColor);
@@ -215,7 +201,6 @@ export default class Skydome {
   }
 
   update(elapsedTime) {
-
     if (this.skydomeMaterial && this.skydomeMaterial.uniforms) {
       this.skydomeMaterial.uniforms.uTime.value = elapsedTime;
     }
@@ -231,7 +216,6 @@ export default class Skydome {
 
     const skyFolder = this.debugGUI.addFolder('Skydome');
 
-
     skyFolder
       .addColor(this.skydomeMaterial.uniforms.uZenithColor, 'value')
       .name('Zenith Color');
@@ -242,7 +226,6 @@ export default class Skydome {
       .addColor(this.skydomeMaterial.uniforms.uGroundColor, 'value')
       .name('Ground Color');
 
-
     skyFolder
       .add(this.skydomeMaterial.uniforms.uIsNight, 'value', 0, 1)
       .name('Night Mode');
@@ -252,7 +235,6 @@ export default class Skydome {
     skyFolder
       .add(this.skydomeMaterial.uniforms.uAtmosphereIntensity, 'value', 0, 3.0)
       .name('Atmosphere');
-
 
     const sunFolder = skyFolder.addFolder('Sun');
     sunFolder
@@ -287,7 +269,6 @@ export default class Skydome {
       .add(this.skydomeMaterial.uniforms.uSunRaySharpness, 'value', 1, 8)
       .name('Ray Sharpness');
 
-
     const moonFolder = skyFolder.addFolder('Moon');
     moonFolder
       .add(this.skydomeMaterial.uniforms.uMoonPosition.value, 'x', -1, 1)
@@ -310,7 +291,6 @@ export default class Skydome {
     moonFolder
       .add(this.skydomeMaterial.uniforms.uMoonGlowSize, 'value', 0.0005, 0.2)
       .name('Moon Glow Size');
-
 
     const starsFolder = skyFolder.addFolder('Stars');
     starsFolder

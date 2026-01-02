@@ -9,7 +9,6 @@ export default class SnowSystem {
     this.bounds = bounds;
     this.seasonManager = SeasonManager.getInstance();
 
-
     this.count = 600;
     this.visible = false;
 
@@ -20,7 +19,6 @@ export default class SnowSystem {
   }
 
   createSnowGeometry() {
-
     this.geometry = new THREE.BufferGeometry();
 
     const positions = new Float32Array(this.count * 3);
@@ -36,12 +34,10 @@ export default class SnowSystem {
   }
 
   createSnowMaterial() {
-
     const canvas = document.createElement('canvas');
     canvas.width = 8;
     canvas.height = 8;
     const context = canvas.getContext('2d');
-
 
     const gradient = context.createRadialGradient(2, 2, 0, 2, 2, 2);
     gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
@@ -94,13 +90,11 @@ export default class SnowSystem {
   }
 
   respawnParticle(particle) {
-
     particle.pos.x =
       this.bounds.originX + (Math.random() - 0.5) * this.bounds.xRange;
     particle.pos.y = this.bounds.yMax + Math.random() * 8.0;
     particle.pos.z =
       this.bounds.originZ + (Math.random() - 0.5) * this.bounds.zRange;
-
 
     particle.vel.set(
       (Math.random() - 0.5) * 0.5,
@@ -121,9 +115,7 @@ export default class SnowSystem {
       const particle = this.particles[i];
       const i3 = i * 3;
 
-
       if (particle.spawnDelay > 0) {
-
         positions[i3] = 0;
         positions[i3 + 1] = -100;
         positions[i3 + 2] = 0;
@@ -133,17 +125,14 @@ export default class SnowSystem {
         continue;
       }
 
-
       positions[i3] = particle.pos.x;
       positions[i3 + 1] = particle.pos.y;
       positions[i3 + 2] = particle.pos.z;
-
 
       const brightness = 0.9 + Math.random() * 0.1;
       colors[i3] = brightness;
       colors[i3 + 1] = brightness;
       colors[i3 + 2] = 1.0;
-
 
       sizes[i] = particle.size;
     }
@@ -168,15 +157,12 @@ export default class SnowSystem {
     for (let i = 0; i < this.count; i++) {
       const particle = this.particles[i];
 
-
       if (particle.spawnDelay > 0) {
         particle.spawnDelay -= cappedDt;
         continue;
       }
 
-
       particle.pos.add(particle.vel.clone().multiplyScalar(cappedDt));
-
 
       const swayStrength = 0.3;
       const timeOffset = particle.pos.z * 0.1 + particle.pos.x * 0.05;
@@ -185,10 +171,8 @@ export default class SnowSystem {
       particle.pos.z +=
         Math.cos(elapsedTime * 0.6 + timeOffset) * swayStrength * cappedDt;
 
-
       particle.pos.y +=
         Math.sin(elapsedTime * 2.0 + particle.pos.x * 0.1) * 0.05 * cappedDt;
-
 
       if (particle.pos.y < -2.0) {
         this.respawnParticle(particle);

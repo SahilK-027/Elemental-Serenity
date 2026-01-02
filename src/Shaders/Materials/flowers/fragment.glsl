@@ -12,7 +12,5 @@ void main() {
     texColor.a *= uTimeColorAlpha;
     gl_FragColor = texColor;
 
-
-
     #include <fog_fragment>
 }

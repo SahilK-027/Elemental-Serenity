@@ -16,7 +16,6 @@ import SeasonManager from './World/Managers/SeasonManager/SeasonManager.class';
 
 export default class Game {
   constructor(canvas, resources, isDebugMode, withMusic = true) {
-
     if (Game.instance) {
       return Game.instance;
     }
@@ -39,21 +38,24 @@ export default class Game {
     this.camera = new Camera();
     this.renderer = new Renderer();
 
-
     this.audioManager = new AudioManager(this.resources);
     this.audioManager.addListenerToCamera(this.camera);
-
 
     this.toastManager = new ToastManager();
     this.musicManager = new MusicManager(this.audioManager);
 
-
-    this.musicControlUI = new MusicControlUI(this.musicManager, this.toastManager);
+    this.musicControlUI = new MusicControlUI(
+      this.musicManager,
+      this.toastManager
+    );
     this.musicControlUI.setInitialState(this.withMusic);
 
-
-    this.ambientSoundManager = new AmbientSoundManager(this.environmentTimeManager, this.seasonManager, this.audioManager, this.musicControlUI);
-
+    this.ambientSoundManager = new AmbientSoundManager(
+      this.environmentTimeManager,
+      this.seasonManager,
+      this.audioManager,
+      this.musicControlUI
+    );
 
     this.musicManager.on('trackChanged', (track) => {
       this.toastManager.showMusicToast(track.name);
@@ -61,9 +63,7 @@ export default class Game {
 
     this.world = new World();
 
-
     this.lightningButtonUI = new LightningButtonUI(this.world.lightning);
-
 
     if (this.withMusic) {
       this.musicManager.startRandomMusic();
@@ -104,7 +104,6 @@ export default class Game {
     this.camera.update();
     this.world.update(this.time.delta, this.time.elapsedTime);
     this.renderer.update();
-
 
     if (this.ambientSoundManager) {
       this.ambientSoundManager.update();
@@ -156,22 +155,20 @@ export default class Game {
       'Environment'
     );
 
-
     const seasonControls = {
       toggleSeason: () => {
         this.seasonManager.toggle();
-      }
+      },
     };
 
     this.debug.add(
       seasonControls,
       'toggleSeason',
       {
-        label: 'Toggle Season'
+        label: 'Toggle Season',
       },
       'Environment'
     );
-
 
     const audioControls = {
       masterVolume: this.audioManager.masterVolume,
@@ -179,69 +176,153 @@ export default class Game {
       soundVolume: this.audioManager.soundVolume,
       startRandomMusic: () => this.musicManager.startRandomMusic(),
       stopMusic: () => this.musicManager.stopMusic(),
-      playMorningPetals: () => this.audioManager.playMusic('morningPetalsMusic'),
+      playMorningPetals: () =>
+        this.audioManager.playMusic('morningPetalsMusic'),
       playWindowLight: () => this.audioManager.playMusic('windowLightMusic'),
       playForestDreams: () => this.audioManager.playMusic('forestDreamsMusic'),
       playRain: () => this.audioManager.playSound('rainSound', null, true),
-      playFire: () => this.audioManager.playSound('fireBurningSound', null, true),
-      playBirds: () => this.audioManager.playSound(this.audioManager.getRandomBirdSound()),
+      playFire: () =>
+        this.audioManager.playSound('fireBurningSound', null, true),
+      playBirds: () =>
+        this.audioManager.playSound(this.audioManager.getRandomBirdSound()),
       stopAllSounds: () => {
-        Object.keys(this.audioManager.sounds).forEach(soundId => {
+        Object.keys(this.audioManager.sounds).forEach((soundId) => {
           if (!soundId.includes('Music')) {
             this.audioManager.stopSound(soundId);
           }
         });
-      }
+      },
     };
 
-    this.debug.add(audioControls, 'masterVolume', {
-      min: 0, max: 1, step: 0.1,
-      onChange: (value) => this.audioManager.setMasterVolume(value)
-    }, 'Audio');
+    this.debug.add(
+      audioControls,
+      'masterVolume',
+      {
+        min: 0,
+        max: 1,
+        step: 0.1,
+        onChange: (value) => this.audioManager.setMasterVolume(value),
+      },
+      'Audio'
+    );
 
-    this.debug.add(audioControls, 'musicVolume', {
-      min: 0, max: 1, step: 0.1,
-      onChange: (value) => this.audioManager.setMusicVolume(value)
-    }, 'Audio');
+    this.debug.add(
+      audioControls,
+      'musicVolume',
+      {
+        min: 0,
+        max: 1,
+        step: 0.1,
+        onChange: (value) => this.audioManager.setMusicVolume(value),
+      },
+      'Audio'
+    );
 
-    this.debug.add(audioControls, 'soundVolume', {
-      min: 0, max: 1, step: 0.1,
-      onChange: (value) => this.audioManager.setSoundVolume(value)
-    }, 'Audio');
+    this.debug.add(
+      audioControls,
+      'soundVolume',
+      {
+        min: 0,
+        max: 1,
+        step: 0.1,
+        onChange: (value) => this.audioManager.setSoundVolume(value),
+      },
+      'Audio'
+    );
 
-    this.debug.add(audioControls, 'startRandomMusic', { label: 'Start Random Music' }, 'Audio');
-    this.debug.add(audioControls, 'stopMusic', { label: 'Stop Music' }, 'Audio');
-    this.debug.add(audioControls, 'playMorningPetals', { label: 'Play Morning Petals' }, 'Audio');
-    this.debug.add(audioControls, 'playWindowLight', { label: 'Play Window Light' }, 'Audio');
-    this.debug.add(audioControls, 'playForestDreams', { label: 'Play Forest Dreams' }, 'Audio');
-    this.debug.add(audioControls, 'playRain', { label: 'Play Rain (Loop)' }, 'Audio');
-    this.debug.add(audioControls, 'playFire', { label: 'Play Fire (Loop)' }, 'Audio');
-    this.debug.add(audioControls, 'playBirds', { label: 'Play Random Birds' }, 'Audio');
-    this.debug.add(audioControls, 'stopAllSounds', { label: 'Stop All Sounds' }, 'Audio');
-
+    this.debug.add(
+      audioControls,
+      'startRandomMusic',
+      { label: 'Start Random Music' },
+      'Audio'
+    );
+    this.debug.add(
+      audioControls,
+      'stopMusic',
+      { label: 'Stop Music' },
+      'Audio'
+    );
+    this.debug.add(
+      audioControls,
+      'playMorningPetals',
+      { label: 'Play Morning Petals' },
+      'Audio'
+    );
+    this.debug.add(
+      audioControls,
+      'playWindowLight',
+      { label: 'Play Window Light' },
+      'Audio'
+    );
+    this.debug.add(
+      audioControls,
+      'playForestDreams',
+      { label: 'Play Forest Dreams' },
+      'Audio'
+    );
+    this.debug.add(
+      audioControls,
+      'playRain',
+      { label: 'Play Rain (Loop)' },
+      'Audio'
+    );
+    this.debug.add(
+      audioControls,
+      'playFire',
+      { label: 'Play Fire (Loop)' },
+      'Audio'
+    );
+    this.debug.add(
+      audioControls,
+      'playBirds',
+      { label: 'Play Random Birds' },
+      'Audio'
+    );
+    this.debug.add(
+      audioControls,
+      'stopAllSounds',
+      { label: 'Stop All Sounds' },
+      'Audio'
+    );
 
     const ambientControls = {
       ambientVolume: this.ambientSoundManager.config.baseVolume,
       stopAllAmbient: () => this.ambientSoundManager.stopAllAmbientSounds(),
-      updateAmbient: () => this.ambientSoundManager.updateAmbientSounds()
+      updateAmbient: () => this.ambientSoundManager.updateAmbientSounds(),
     };
 
-    this.debug.add(ambientControls, 'ambientVolume', {
-      min: 0, max: 1, step: 0.1,
-      onChange: (value) => {
-        this.ambientSoundManager.config.baseVolume = value;
-        this.ambientSoundManager.setMasterVolume(1.0);
-      }
-    }, 'Ambient Sounds');
+    this.debug.add(
+      ambientControls,
+      'ambientVolume',
+      {
+        min: 0,
+        max: 1,
+        step: 0.1,
+        onChange: (value) => {
+          this.ambientSoundManager.config.baseVolume = value;
+          this.ambientSoundManager.setMasterVolume(1.0);
+        },
+      },
+      'Ambient Sounds'
+    );
 
-    this.debug.add(ambientControls, 'stopAllAmbient', { label: 'Stop All Ambient' }, 'Ambient Sounds');
-    this.debug.add(ambientControls, 'updateAmbient', { label: 'Update Ambient' }, 'Ambient Sounds');
+    this.debug.add(
+      ambientControls,
+      'stopAllAmbient',
+      { label: 'Stop All Ambient' },
+      'Ambient Sounds'
+    );
+    this.debug.add(
+      ambientControls,
+      'updateAmbient',
+      { label: 'Update Ambient' },
+      'Ambient Sounds'
+    );
   }
 
   destroy() {
     this.sizes.off('resize');
     this.time.off('animate');
-
 
     if (this.ambientSoundManager) {
       this.ambientSoundManager.dispose();
