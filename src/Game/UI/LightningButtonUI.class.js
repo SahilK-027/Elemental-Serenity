@@ -85,7 +85,6 @@ export default class LightningButtonUI {
 
   handleClick() {
     if (this.lightning) {
-      // Thunder haptic feedback
       if (navigator.haptic) {
         navigator.haptic('error');
       } else if (navigator.vibrate) {
