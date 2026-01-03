@@ -3,12 +3,12 @@ const ASSETS = [
     id: 'environmentMapDayTexture',
     type: 'cubeMap',
     path: [
-      '/map/day2/px.png',
-      '/map/day2/nx.png',
-      '/map/day2/py.png',
-      '/map/day2/ny.png',
-      '/map/day2/pz.png',
-      '/map/day2/nz.png',
+      '/map/day/px.png',
+      '/map/day/nx.png',
+      '/map/day/py.png',
+      '/map/day/ny.png',
+      '/map/day/pz.png',
+      '/map/day/nz.png',
     ],
   },
   {
@@ -31,7 +31,7 @@ const ASSETS = [
   {
     id: 'grassPathDensityDataTexture',
     type: 'texture',
-    path: ['/textures/grass/path_data_rgb_768x768_test.png'],
+    path: ['/textures/grass/path_data_rgb_768x768.png'],
   },
   {
     id: 'displacedNormalMap',
@@ -66,7 +66,7 @@ const ASSETS = [
   {
     id: 'tentModel',
     type: 'gltfModelCompressed',
-    path: ['/models/tent_2.glb'],
+    path: ['/models/tent.glb'],
   },
   {
     id: 'bridgeModel',
