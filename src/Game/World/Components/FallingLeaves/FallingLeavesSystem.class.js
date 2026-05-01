@@ -102,4 +102,11 @@ export default class FallingLeavesSystem {
     }
     this.mesh.instanceMatrix.needsUpdate = true;
   }
+
+  dispose() {
+    this.seasonManager.offChange();
+    this.scene.remove(this.mesh);
+    this.mesh.geometry.dispose();
+    this.material.dispose();
+  }
 }

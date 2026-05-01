@@ -37,4 +37,9 @@ export default class Rain {
   update(delta, elapsedTime) {
     this.rainSystem.update(delta, elapsedTime);
   }
+
+  dispose() {
+    this.seasonManager.offChange();
+    this.rainSystem.dispose();
+  }
 }

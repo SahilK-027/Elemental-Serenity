@@ -9,7 +9,8 @@ export default class Sizes extends EventEmitter {
     this.pixelRatio = Math.min(window.devicePixelRatio, 2);
     this.resizeTimeout = null;
 
-    window.addEventListener('resize', () => this.handleResizeDebounced());
+    this._onResize = () => this.handleResizeDebounced();
+    window.addEventListener('resize', this._onResize);
   }
 
   handleResizeDebounced() {
@@ -28,5 +29,12 @@ export default class Sizes extends EventEmitter {
     this.pixelRatio = Math.min(window.devicePixelRatio, 2);
 
     this.trigger('resize');
+  }
+
+  dispose() {
+    if (this.resizeTimeout) {
+      clearTimeout(this.resizeTimeout);
+    }
+    window.removeEventListener('resize', this._onResize);
   }
 }

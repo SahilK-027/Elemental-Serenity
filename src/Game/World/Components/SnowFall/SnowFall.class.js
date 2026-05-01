@@ -37,4 +37,9 @@ export default class SnowFall {
   update(delta, elapsedTime) {
     this.snowSystem.update(delta, elapsedTime);
   }
+
+  dispose() {
+    this.seasonManager.offChange();
+    this.snowSystem.dispose();
+  }
 }

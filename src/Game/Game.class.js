@@ -324,6 +324,9 @@ export default class Game {
     this.sizes.off('resize');
     this.time.off('animate');
 
+    if (this.world) {
+      this.world.dispose();
+    }
     if (this.ambientSoundManager) {
       this.ambientSoundManager.dispose();
     }
@@ -370,8 +373,11 @@ export default class Game {
       }
     });
 
-    this.camera.controls.dispose();
-    this.renderer.rendererInstance.dispose();
+    this.camera.dispose();
+    this.renderer.destroy();
+    this.time.dispose();
+    this.sizes.dispose();
+
     if (this.debug) {
       this.debug.gui.destroy();
     }
@@ -387,5 +393,7 @@ export default class Game {
     this.musicManager = null;
     this.toastManager = null;
     this.musicControlUI = null;
+
+    Game.instance = null;
   }
 }

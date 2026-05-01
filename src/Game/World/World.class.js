@@ -88,4 +88,20 @@ export default class World {
     this.particleSystem.update(delta, elapsedTime);
     this.lightning.update(delta);
   }
+
+  dispose() {
+    this.lighting.dispose();
+    this.skydome.dispose();
+    this.ground.dispose();
+    this.tent.dispose();
+    this.windLines.dispose();
+    this.fallingLeaves.dispose();
+    this.fire.dispose();
+    this.fireFlies.dispose();
+    this.rain.dispose();
+    this.snowFall.dispose();
+    this.fog.dispose();
+    this.lightning.dispose();
+    this.particleSystem.dispose();
+  }
 }

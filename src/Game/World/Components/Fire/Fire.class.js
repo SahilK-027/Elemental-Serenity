@@ -1056,4 +1056,24 @@ export default class Fire {
     if (this.#amberMaterial)
       this.#amberMaterial.uniforms.uTime.value = totalTime;
   }
+
+  dispose() {
+    this.environmentTimeManager.offChange();
+    this.seasonManager.offChange();
+
+    if (this.#particleSystem) {
+      this.#particleSystem.dispose();
+    }
+
+    [this.#fireMaterial, this.#smokeMaterial, this.#amberMaterial].forEach((mat) => {
+      if (mat) mat.dispose();
+    });
+
+    [this.fireLight, this.fireLight2].forEach((light) => {
+      if (light) {
+        light.dispose();
+        this.scene.remove(light);
+      }
+    });
+  }
 }

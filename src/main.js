@@ -208,6 +208,16 @@ resources.on('loaded', () => {
       window.gameInstance = game;
       Console.logGameState(game);
 
+      window.addEventListener('beforeunload', () => {
+        game.destroy();
+      });
+
+      if (import.meta.hot) {
+        import.meta.hot.dispose(() => {
+          game.destroy();
+        });
+      }
+
       if (game.musicManager) {
         game.musicManager.on('trackChanged', (track) => {
           Console.logMusicChange('track', track.name);

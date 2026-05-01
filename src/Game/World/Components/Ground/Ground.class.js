@@ -512,5 +512,14 @@ export default class Ground {
     if (this.grassManager) {
       this.grassManager.dispose();
     }
+
+    if (this.gridGeometry) this.gridGeometry.dispose();
+    if (this.groundMaterial) this.groundMaterial.dispose();
+
+    if (this.waterRipplesGeo) this.waterRipplesGeo.dispose();
+    if (this.waterRipplesMat) this.waterRipplesMat.dispose();
+    if (this.ripples) this.scene.remove(this.ripples);
+
+    this.scene.remove(this.group);
   }
 }

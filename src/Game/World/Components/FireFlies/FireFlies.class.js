@@ -108,4 +108,14 @@ export default class FireFlies {
 
     this.fireFliesMaterial.uniforms.uTime.value = elapsedTime;
   }
+
+  dispose() {
+    this.environmentTimeManager.offChange();
+
+    if (this.fireFlies) {
+      this.scene.remove(this.fireFlies);
+      this.fireFliesGeometry.dispose();
+      this.fireFliesMaterial.dispose();
+    }
+  }
 }

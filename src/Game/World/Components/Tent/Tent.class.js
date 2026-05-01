@@ -109,4 +109,12 @@ export default class Tent {
       mat.emissiveIntensity = config.emissiveIntensity;
     });
   }
+
+  dispose() {
+    this.envManager.offChange();
+    this.seasonManager.offChange();
+
+    this.lampMeshes.forEach((mesh) => mesh.material.dispose());
+    this.scene.remove(this.tentModel);
+  }
 }

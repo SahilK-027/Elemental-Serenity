@@ -472,5 +472,19 @@ export default class Lighting {
     if (this.shadowCameraHelper) {
       this.scene.remove(this.shadowCameraHelper);
     }
+
+    // Dispose debug helpers
+    ['keyHelper', 'fillHelper', 'rimHelper', 'lampHelper'].forEach((key) => {
+      if (this[key]) {
+        this[key].dispose?.();
+        this.scene.remove(this[key]);
+      }
+    });
+
+    // Dispose environment map textures
+    if (this.scene.environment) {
+      this.scene.environment.dispose();
+      this.scene.environment = null;
+    }
   }
 }

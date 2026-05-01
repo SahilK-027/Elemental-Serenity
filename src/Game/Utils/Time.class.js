@@ -1,6 +1,8 @@
 import EventEmitter from './EventEmitter.class';
 
 export default class Time extends EventEmitter {
+  #rafId = null;
+
   constructor() {
     super();
 
@@ -9,7 +11,7 @@ export default class Time extends EventEmitter {
     this.elapsedTime = 0;
     this.delta = 0;
 
-    window.requestAnimationFrame(() => {
+    this.#rafId = window.requestAnimationFrame(() => {
       this.animate();
     });
   }
@@ -22,8 +24,15 @@ export default class Time extends EventEmitter {
 
     this.trigger('animate');
 
-    window.requestAnimationFrame(() => {
+    this.#rafId = window.requestAnimationFrame(() => {
       this.animate();
     });
+  }
+
+  dispose() {
+    if (this.#rafId) {
+      window.cancelAnimationFrame(this.#rafId);
+      this.#rafId = null;
+    }
   }
 }

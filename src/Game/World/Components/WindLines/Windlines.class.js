@@ -115,6 +115,7 @@ class WindLine {
   }
 
   dispose() {
+    this.seasonManager.offChange();
     this.mesh.geometry.dispose();
     this.material.dispose();
     this.game.scene.remove(this.mesh);

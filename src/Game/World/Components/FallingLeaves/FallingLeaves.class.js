@@ -36,4 +36,9 @@ export default class FallingLeaves {
     this.fallingLeavesSystem_1.update(delta);
     this.fallingLeavesSystem_2.update(delta);
   }
+
+  dispose() {
+    this.fallingLeavesSystem_1.dispose();
+    this.fallingLeavesSystem_2.dispose();
+  }
 }
