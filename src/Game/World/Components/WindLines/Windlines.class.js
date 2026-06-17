@@ -145,7 +145,7 @@ export default class WindLines {
         this.intervalRange.min +
         Math.random() * (this.intervalRange.max - this.intervalRange.min);
 
-      setTimeout(() => displayInterval(), delay);
+      this.intervalTimeout = setTimeout(() => displayInterval(), delay);
     };
 
     displayInterval();
@@ -202,6 +202,10 @@ export default class WindLines {
   }
 
   dispose() {
+    if (this.intervalTimeout) {
+      clearTimeout(this.intervalTimeout);
+      this.intervalTimeout = null;
+    }
     this.pool.forEach((windLine) => windLine.dispose());
   }
 }

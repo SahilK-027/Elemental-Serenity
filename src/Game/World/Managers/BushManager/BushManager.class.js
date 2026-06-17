@@ -241,5 +241,9 @@ void main() {
   dispose() {
     this.scene.remove(this.instancedMesh);
     this.instancedMesh.geometry.dispose();
+
+    if (this.instancedMesh.customDepthMaterial) {
+      this.instancedMesh.customDepthMaterial.dispose();
+    }
   }
 }

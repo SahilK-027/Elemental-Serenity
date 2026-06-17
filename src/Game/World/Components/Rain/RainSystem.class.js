@@ -88,6 +88,9 @@ export default class RainSystem {
     const positions = this.geometry.attributes.position.array;
     const colors = this.geometry.attributes.color.array;
 
+    const direction = new THREE.Vector3();
+    const rainColor = this.getRainColor();
+
     for (let i = 0; i < this.count; i++) {
       const particle = this.particles[i];
       const i6 = i * 6;
@@ -103,7 +106,7 @@ export default class RainSystem {
       }
 
       const dropLength = Math.min(particle.vel.length() * 0.08, 0.4);
-      const direction = particle.vel.clone().normalize();
+      direction.copy(particle.vel).normalize();
 
       positions[i6] = particle.pos.x;
       positions[i6 + 1] = particle.pos.y;
@@ -113,7 +116,6 @@ export default class RainSystem {
       positions[i6 + 4] = particle.pos.y - direction.y * dropLength;
       positions[i6 + 5] = particle.pos.z - direction.z * dropLength;
 
-      const rainColor = this.getRainColor();
       const baseAlpha = 0.8;
       const fadeAlpha = 0.3;
 
@@ -165,7 +167,7 @@ export default class RainSystem {
         continue;
       }
 
-      particle.pos.add(particle.vel.clone().multiplyScalar(cappedDt));
+      particle.pos.addScaledVector(particle.vel, cappedDt);
 
       const windStrength = 0.02;
       particle.pos.x +=

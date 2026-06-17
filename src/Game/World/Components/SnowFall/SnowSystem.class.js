@@ -162,7 +162,7 @@ export default class SnowSystem {
         continue;
       }
 
-      particle.pos.add(particle.vel.clone().multiplyScalar(cappedDt));
+      particle.pos.addScaledVector(particle.vel, cappedDt);
 
       const swayStrength = 0.3;
       const timeOffset = particle.pos.z * 0.1 + particle.pos.x * 0.05;

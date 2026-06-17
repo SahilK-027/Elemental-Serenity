@@ -6,14 +6,14 @@ export default class Time extends EventEmitter {
   constructor() {
     super();
 
+    this.animate = this.animate.bind(this);
+
     this.start = performance.now();
     this.current = this.start;
     this.elapsedTime = 0;
     this.delta = 0;
 
-    this.#rafId = window.requestAnimationFrame(() => {
-      this.animate();
-    });
+    this.#rafId = window.requestAnimationFrame(this.animate);
   }
 
   animate() {
@@ -24,9 +24,7 @@ export default class Time extends EventEmitter {
 
     this.trigger('animate');
 
-    this.#rafId = window.requestAnimationFrame(() => {
-      this.animate();
-    });
+    this.#rafId = window.requestAnimationFrame(this.animate);
   }
 
   dispose() {
